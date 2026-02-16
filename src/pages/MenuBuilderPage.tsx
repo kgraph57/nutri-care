@@ -8,7 +8,8 @@ import {
   calculateNutritionRequirements,
   adjustRequirementsForCondition,
 } from "../services/nutritionCalculation";
-import { Card, Button } from "../components/ui";
+import { Card, Button, AllergyAlert } from "../components/ui";
+import { checkAllergies } from "../services/allergyChecker";
 import type { NutritionType } from "../types";
 import { RequirementsConfig } from "./menu-builder/RequirementsConfig";
 import { ProductSelector } from "./menu-builder/ProductSelector";
@@ -329,6 +330,11 @@ export function MenuBuilderPage() {
     [menuItems],
   );
 
+  const allergyWarnings = useMemo(
+    () => (selectedPatient ? checkAllergies(selectedPatient, menuItems) : []),
+    [selectedPatient, menuItems],
+  );
+
   const addProduct = useCallback((product: Record<string, string | number>) => {
     const newItem: MenuItemState = {
       id: generateItemId(String(product["製剤名"] ?? "")),
@@ -477,6 +483,8 @@ export function MenuBuilderPage() {
           </div>
 
           <div className={styles.rightColumn}>
+            <AllergyAlert warnings={allergyWarnings} />
+
             <MenuComposition
               items={menuItems}
               onRemove={removeProduct}

@@ -9,5 +9,6 @@ export { ToastProvider, useToastContext } from "./ToastProvider";
 export { useToast } from "./useToast";
 export { EmptyState } from "./EmptyState";
 export { NutritionTrendChart } from "./NutritionTrendChart";
+export { AllergyAlert } from "./AllergyAlert";
 
 export type { ToastType, ToastItem } from "./useToast";

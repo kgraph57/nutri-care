@@ -21,11 +21,10 @@
   gap: var(--spacing-4);
 }
 
-.clock {
+.date {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-neutral-500);
-  font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
 }
 
