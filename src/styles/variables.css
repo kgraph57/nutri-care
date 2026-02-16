@@ -1,64 +1,64 @@
 :root {
   /* ========================================
-     Primary - Teal (Medical/Clinical)
+     Primary - Apple Blue
      ======================================== */
-  --color-primary-50: #f0fdfa;
-  --color-primary-100: #ccfbf1;
-  --color-primary-200: #99f6e4;
-  --color-primary-300: #5eead4;
-  --color-primary-400: #2dd4bf;
-  --color-primary-500: #14b8a6;
-  --color-primary-600: #0d9488;
-  --color-primary-700: #0f766e;
-  --color-primary-800: #115e59;
-  --color-primary-900: #134e4a;
+  --color-primary-50: #f5f8ff;
+  --color-primary-100: #e8f0fe;
+  --color-primary-200: #c7d9fa;
+  --color-primary-300: #a0bef5;
+  --color-primary-400: #6699ee;
+  --color-primary-500: #007aff;
+  --color-primary-600: #0066d6;
+  --color-primary-700: #0055b3;
+  --color-primary-800: #004494;
+  --color-primary-900: #003375;
 
   /* ========================================
-     Neutral - Slate
+     Neutral - Pure Gray (Apple SF style)
      ======================================== */
-  --color-neutral-50: #f8fafc;
-  --color-neutral-100: #f1f5f9;
-  --color-neutral-200: #e2e8f0;
-  --color-neutral-300: #cbd5e1;
-  --color-neutral-400: #94a3b8;
-  --color-neutral-500: #64748b;
-  --color-neutral-600: #475569;
-  --color-neutral-700: #334155;
-  --color-neutral-800: #1e293b;
-  --color-neutral-900: #0f172a;
+  --color-neutral-50: #fbfbfd;
+  --color-neutral-100: #f5f5f7;
+  --color-neutral-200: #e8e8ed;
+  --color-neutral-300: #d2d2d7;
+  --color-neutral-400: #aeaeb2;
+  --color-neutral-500: #8e8e93;
+  --color-neutral-600: #636366;
+  --color-neutral-700: #48484a;
+  --color-neutral-800: #2c2c2e;
+  --color-neutral-900: #1c1c1e;
 
   /* ========================================
-     Semantic Colors
+     Semantic Colors (Apple HIG)
      ======================================== */
-  --color-success: #059669;
-  --color-success-light: #d1fae5;
-  --color-success-dark: #047857;
+  --color-success: #34c759;
+  --color-success-light: #e8faf0;
+  --color-success-dark: #248a3d;
 
-  --color-warning: #d97706;
-  --color-warning-light: #fef3c7;
-  --color-warning-dark: #b45309;
+  --color-warning: #ff9500;
+  --color-warning-light: #fff5e6;
+  --color-warning-dark: #c77c00;
 
-  --color-danger: #dc2626;
-  --color-danger-light: #fee2e2;
-  --color-danger-dark: #b91c1c;
+  --color-danger: #ff3b30;
+  --color-danger-light: #fff0ef;
+  --color-danger-dark: #c62828;
 
-  --color-info: #0284c7;
-  --color-info-light: #e0f2fe;
-  --color-info-dark: #0369a1;
+  --color-info: #5ac8fa;
+  --color-info-light: #edf9ff;
+  --color-info-dark: #0891d1;
 
   /* ========================================
      Domain-Specific Colors
      ======================================== */
-  --color-enteral: #059669;
-  --color-enteral-light: #d1fae5;
-  --color-parenteral: #d97706;
-  --color-parenteral-light: #fef3c7;
+  --color-enteral: #34c759;
+  --color-enteral-light: #e8faf0;
+  --color-parenteral: #ff9500;
+  --color-parenteral-light: #fff5e6;
 
   /* ========================================
      Typography
      ======================================== */
-  --font-family: Inter, -apple-system, BlinkMacSystemFont, "Hiragino Sans",
-    "Noto Sans JP", sans-serif;
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Hiragino Sans", "Noto Sans JP", sans-serif;
 
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -96,29 +96,26 @@
   /* ========================================
      Border Radius
      ======================================== */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
 
   /* ========================================
-     Shadows
+     Shadows (soft, diffused Apple style)
      ======================================== */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
-    0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-    0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
-    0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.03);
+  --shadow-md: 0 2px 8px rgb(0 0 0 / 0.06), 0 1px 3px rgb(0 0 0 / 0.04);
+  --shadow-lg: 0 4px 20px rgb(0 0 0 / 0.08), 0 2px 6px rgb(0 0 0 / 0.04);
+  --shadow-xl: 0 8px 32px rgb(0 0 0 / 0.1), 0 4px 12px rgb(0 0 0 / 0.05);
 
   /* ========================================
      Transitions
      ======================================== */
-  --transition-fast: 150ms ease;
-  --transition-normal: 200ms ease;
-  --transition-slow: 300ms ease;
+  --transition-fast: 150ms ease-out;
+  --transition-normal: 250ms ease-out;
+  --transition-slow: 350ms ease-out;
 
   /* ========================================
      Z-Index Scale
