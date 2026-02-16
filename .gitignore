@@ -10,3 +10,5 @@ past used/
 *.backup
 *.backup2
 .claude/
+.env
+.env.local
