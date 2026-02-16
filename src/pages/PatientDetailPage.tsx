@@ -1,6 +1,5 @@
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useCallback } from "react";
 import {
   ArrowLeft,
   Calendar,
@@ -8,17 +7,24 @@ import {
   Stethoscope,
   Plus,
   Printer,
+  FlaskConical,
 } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
+import { useLabData } from "../hooks/useLabData";
+import type { LabData } from "../types/labData";
+import { LAB_REFERENCES } from "../types/labData";
+import { analyzeLabData, getAbnormalFindings } from "../services/labAnalyzer";
 import type { NutritionMenuData } from "../hooks/useNutritionMenus";
 import {
   Card,
   Badge,
   Button,
   EmptyState,
+  Modal,
   NutritionTrendChart,
 } from "../components/ui";
+import { LabDataForm } from "../components/labs/LabDataForm";
 import styles from "./PatientDetailPage.module.css";
 
 function formatDateShort(isoString: string): string {
@@ -137,10 +143,22 @@ function DateGroup({ dateKey, menus }: DateGroupProps) {
   );
 }
 
+const KEY_LAB_PARAMS = [
+  "albumin",
+  "creatinine",
+  "bloodSugar",
+  "crp",
+  "potassium",
+  "sodium",
+  "hemoglobin",
+] as const;
+
 export function PatientDetailPage() {
   const { patientId } = useParams<{ patientId: string }>();
   const { getPatient } = usePatients();
   const { getMenusForPatient } = useNutritionMenus();
+  const { getLabData, saveLabData } = useLabData();
+  const [showLabModal, setShowLabModal] = useState(false);
 
   const patient = patientId ? getPatient(patientId) : undefined;
   const patientMenus = useMemo(
@@ -150,6 +168,26 @@ export function PatientDetailPage() {
 
   const dateGroups = useMemo(() => groupByDate(patientMenus), [patientMenus]);
   const summary = useMemo(() => computeSummary(patientMenus), [patientMenus]);
+
+  const labData = useMemo(
+    () => (patientId ? getLabData(patientId) : undefined),
+    [patientId, getLabData],
+  );
+
+  const labInterpretations = useMemo(
+    () => (labData ? getAbnormalFindings(analyzeLabData(labData)) : []),
+    [labData],
+  );
+
+  const handleLabSave = useCallback(
+    (data: LabData) => {
+      if (patientId) {
+        saveLabData(patientId, data);
+      }
+      setShowLabModal(false);
+    },
+    [patientId, saveLabData],
+  );
 
   const handlePrint = useCallback(() => {
     window.print();
@@ -243,6 +281,102 @@ export function PatientDetailPage() {
         </Card>
       </div>
 
+      <section className={styles.section}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "var(--spacing-3)",
+          }}
+        >
+          <h2 className={styles.sectionTitle} style={{ margin: 0 }}>
+            <FlaskConical size={18} style={{ marginRight: 6 }} />
+            検査値データ
+          </h2>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowLabModal(true)}
+          >
+            {labData ? "編集" : "入力"}
+          </Button>
+        </div>
+        {labData ? (
+          <Card style={{ padding: "var(--spacing-3)" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
+                gap: "var(--spacing-2)",
+              }}
+            >
+              {KEY_LAB_PARAMS.map((key) => {
+                const ref = LAB_REFERENCES.find((r) => r.key === key);
+                const val = labData[key];
+                if (!ref || val === undefined) return null;
+                const abnormal = labInterpretations.some(
+                  (i) => i.parameter === key,
+                );
+                return (
+                  <div key={key} style={{ textAlign: "center" }}>
+                    <div
+                      style={{
+                        fontSize: "var(--font-size-xs)",
+                        color: "var(--color-neutral-500)",
+                      }}
+                    >
+                      {ref.label}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "var(--font-size-lg)",
+                        fontWeight: 600,
+                        color: abnormal
+                          ? "var(--color-danger)"
+                          : "var(--color-neutral-800)",
+                      }}
+                    >
+                      {val}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "10px",
+                        color: "var(--color-neutral-400)",
+                      }}
+                    >
+                      {ref.unit}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {labInterpretations.length > 0 && (
+              <div
+                style={{
+                  marginTop: "var(--spacing-2)",
+                  fontSize: "var(--font-size-xs)",
+                  color: "var(--color-danger)",
+                }}
+              >
+                {labInterpretations.length}件の異常値あり
+              </div>
+            )}
+          </Card>
+        ) : (
+          <Card
+            style={{
+              padding: "var(--spacing-4)",
+              textAlign: "center",
+              color: "var(--color-neutral-400)",
+              fontSize: "var(--font-size-sm)",
+            }}
+          >
+            検査値が未入力です。入力するとAIアドバイザーが栄養推奨を行います。
+          </Card>
+        )}
+      </section>
+
       {patientMenus.length >= 2 && (
         <section className={styles.section}>
           <NutritionTrendChart menus={patientMenus} />
@@ -273,6 +407,21 @@ export function PatientDetailPage() {
           </div>
         )}
       </section>
+
+      <Modal
+        isOpen={showLabModal}
+        title="検査値入力"
+        onClose={() => setShowLabModal(false)}
+      >
+        {patientId && (
+          <LabDataForm
+            patientId={patientId}
+            initialData={labData}
+            onSave={handleLabSave}
+            onCancel={() => setShowLabModal(false)}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

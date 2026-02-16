@@ -1,3 +1,5 @@
+import type { LabData } from "./labData";
+
 // 患者データの型定義
 export interface Patient {
   id: string;
@@ -14,6 +16,7 @@ export interface Patient {
   allergies: string[];
   medications: string[];
   notes: string;
+  labData?: LabData;
 }
 
 // 食品データの型定義
@@ -36,7 +39,7 @@ export interface NutritionCalculation {
 }
 
 // 栄養タイプ
-export type NutritionType = 'enteral' | 'parenteral';
+export type NutritionType = "enteral" | "parenteral";
 
 // 栄養製品
 export interface NutritionProduct {

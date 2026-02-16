@@ -4,17 +4,21 @@ import { Save, Utensils } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { useNutritionDatabase } from "../hooks/useNutritionDatabase";
+import { useLabData } from "../hooks/useLabData";
 import {
   calculateNutritionRequirements,
   adjustRequirementsForCondition,
 } from "../services/nutritionCalculation";
-import { Card, Button, AllergyAlert } from "../components/ui";
+import { Card, Button, AllergyAlert, Modal } from "../components/ui";
 import { checkAllergies } from "../services/allergyChecker";
 import type { NutritionType } from "../types";
+import type { LabData } from "../types/labData";
 import { RequirementsConfig } from "./menu-builder/RequirementsConfig";
 import { ProductSelector } from "./menu-builder/ProductSelector";
 import { MenuComposition } from "./menu-builder/MenuComposition";
 import { NutritionAnalysisPanel } from "./menu-builder/NutritionAnalysisPanel";
+import { AdvisorPanel } from "../components/advisor/AdvisorPanel";
+import { LabDataForm } from "../components/labs/LabDataForm";
 import styles from "./MenuBuilderPage.module.css";
 
 interface MenuItemState {
@@ -234,6 +238,8 @@ export function MenuBuilderPage() {
 
   const { patients, getPatient } = usePatients();
   const { saveMenu, updateMenu, getMenuById } = useNutritionMenus();
+  const { getLabData, saveLabData } = useLabData();
+  const [showLabModal, setShowLabModal] = useState(false);
 
   const editMenuId = searchParams.get("edit");
   const editingMenu = editMenuId ? getMenuById(editMenuId) : undefined;
@@ -333,6 +339,21 @@ export function MenuBuilderPage() {
   const allergyWarnings = useMemo(
     () => (selectedPatient ? checkAllergies(selectedPatient, menuItems) : []),
     [selectedPatient, menuItems],
+  );
+
+  const patientLabData = useMemo(
+    () => (selectedPatientId ? getLabData(selectedPatientId) : undefined),
+    [selectedPatientId, getLabData],
+  );
+
+  const handleLabSave = useCallback(
+    (data: LabData) => {
+      if (selectedPatientId) {
+        saveLabData(selectedPatientId, data);
+      }
+      setShowLabModal(false);
+    },
+    [selectedPatientId, saveLabData],
   );
 
   const addProduct = useCallback((product: Record<string, string | number>) => {
@@ -457,6 +478,15 @@ export function MenuBuilderPage() {
       ) : (
         <div className={styles.twoColumn}>
           <div className={styles.leftColumn}>
+            <AdvisorPanel
+              patient={selectedPatient}
+              labData={patientLabData}
+              nutritionType={nutritionType}
+              products={products}
+              onAddProduct={addProduct}
+              onEditLabs={() => setShowLabModal(true)}
+            />
+
             <RequirementsConfig
               activityLevel={activityLevel}
               stressLevel={stressLevel}
@@ -510,6 +540,21 @@ export function MenuBuilderPage() {
           </div>
         </div>
       )}
+
+      <Modal
+        isOpen={showLabModal}
+        title="検査値入力"
+        onClose={() => setShowLabModal(false)}
+      >
+        {selectedPatientId && (
+          <LabDataForm
+            patientId={selectedPatientId}
+            initialData={patientLabData}
+            onSave={handleLabSave}
+            onCancel={() => setShowLabModal(false)}
+          />
+        )}
+      </Modal>
     </div>
   );
 }
