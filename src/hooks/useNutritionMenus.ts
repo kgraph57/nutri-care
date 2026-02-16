@@ -82,6 +82,29 @@ export function useNutritionMenus() {
     });
   }, []);
 
+  const updateMenu = useCallback(
+    (
+      id: string,
+      updates: Omit<NutritionMenuData, "id" | "createdAt">,
+    ): void => {
+      setMenus((prev) => {
+        const next = prev.map((m) =>
+          m.id === id ? { ...updates, id, createdAt: m.createdAt } : m,
+        );
+        saveMenusToStorage(next);
+        return next;
+      });
+    },
+    [],
+  );
+
+  const getMenuById = useCallback(
+    (id: string): NutritionMenuData | undefined => {
+      return menus.find((m) => m.id === id);
+    },
+    [menus],
+  );
+
   const getMenusForPatient = useCallback(
     (patientId: string): NutritionMenuData[] => {
       return menus.filter((m) => m.patientId === patientId);
@@ -92,7 +115,9 @@ export function useNutritionMenus() {
   return {
     menus,
     saveMenu,
+    updateMenu,
     deleteMenu,
+    getMenuById,
     getMenusForPatient,
   } as const;
 }

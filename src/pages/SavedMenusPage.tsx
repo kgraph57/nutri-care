@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { ClipboardList, Trash2, Plus } from "lucide-react";
+import { ClipboardList, Trash2, Plus, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { Card, Badge, Button, SearchInput, EmptyState } from "../components/ui";
@@ -80,6 +80,11 @@ function MenuCard({
       </div>
 
       <div className={styles.menuCardFooter}>
+        <Link to={`/menu-builder/${menu.patientId}?edit=${menu.id}`}>
+          <Button variant="secondary" size="sm" icon={<Pencil size={14} />}>
+            編集
+          </Button>
+        </Link>
         <Button
           variant="danger"
           size="sm"

@@ -99,6 +99,7 @@
 .menuCardFooter {
   display: flex;
   justify-content: flex-end;
+  gap: var(--spacing-2);
   padding-top: var(--spacing-3);
   border-top: 1px solid var(--color-neutral-200);
 }

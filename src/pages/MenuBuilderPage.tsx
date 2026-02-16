@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { Save, Utensils } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
@@ -232,29 +232,64 @@ export function MenuBuilderPage() {
   const navigate = useNavigate();
 
   const { patients, getPatient } = usePatients();
-  const { saveMenu } = useNutritionMenus();
+  const { saveMenu, updateMenu, getMenuById } = useNutritionMenus();
 
-  const [selectedPatientId, setSelectedPatientId] = useState(patientId ?? "");
+  const editMenuId = searchParams.get("edit");
+  const editingMenu = editMenuId ? getMenuById(editMenuId) : undefined;
+  const isEditMode = editingMenu !== undefined;
+
+  const [selectedPatientId, setSelectedPatientId] = useState(
+    editingMenu?.patientId ?? patientId ?? "",
+  );
   const [nutritionType, setNutritionType] = useState<NutritionType>(
-    (searchParams.get("type") as NutritionType) || "enteral",
+    editingMenu?.nutritionType ??
+      (searchParams.get("type") as NutritionType) ??
+      "enteral",
   );
 
   const [activityLevel, setActivityLevel] = useState(
-    searchParams.get("activity") || "bedrest",
+    editingMenu?.activityLevel ?? searchParams.get("activity") ?? "bedrest",
   );
   const [stressLevel, setStressLevel] = useState(
-    searchParams.get("stress") || "moderate",
+    editingMenu?.stressLevel ?? searchParams.get("stress") ?? "moderate",
   );
   const [medicalCondition, setMedicalCondition] = useState(
-    searchParams.get("condition") || "",
+    editingMenu?.medicalCondition ?? searchParams.get("condition") ?? "",
   );
 
   const [menuItems, setMenuItems] = useState<MenuItemState[]>([]);
-  const [menuName, setMenuName] = useState("");
-  const [notes, setNotes] = useState("");
+  const [menuName, setMenuName] = useState(editingMenu?.menuName ?? "");
+  const [notes, setNotes] = useState(editingMenu?.notes ?? "");
+  const editItemsLoaded = useRef(false);
 
   const { products, categories, isLoading, error } =
     useNutritionDatabase(nutritionType);
+
+  // Load saved items into editor when in edit mode and products are available
+  useEffect(() => {
+    if (!editingMenu || isLoading || editItemsLoaded.current) {
+      return;
+    }
+    editItemsLoaded.current = true;
+
+    const loadedItems: MenuItemState[] = editingMenu.items.map((savedItem) => {
+      const matchedProduct = products.find(
+        (p: Record<string, string | number>) =>
+          String(p["製剤名"] ?? "") === savedItem.productName,
+      );
+      const product: Record<string, string | number> = matchedProduct ?? {
+        製剤名: savedItem.productName,
+        メーカー: savedItem.manufacturer,
+      };
+      return {
+        id: savedItem.id,
+        product,
+        volume: savedItem.volume,
+        frequency: savedItem.frequency,
+      };
+    });
+    setMenuItems(loadedItems);
+  }, [editingMenu, products, isLoading]);
 
   const selectedPatient = useMemo(
     () => (selectedPatientId ? getPatient(selectedPatientId) : undefined),
@@ -328,7 +363,7 @@ export function MenuBuilderPage() {
       nutritionType === "enteral" ? "経腸" : "中心静脈"
     }栄養メニュー`;
 
-    saveMenu({
+    const menuData = {
       patientId: selectedPatient.id,
       patientName: selectedPatient.name,
       nutritionType,
@@ -348,7 +383,13 @@ export function MenuBuilderPage() {
       activityLevel,
       stressLevel,
       medicalCondition,
-    });
+    };
+
+    if (isEditMode && editMenuId) {
+      updateMenu(editMenuId, menuData);
+    } else {
+      saveMenu(menuData);
+    }
 
     navigate("/menus");
   }, [
@@ -363,7 +404,10 @@ export function MenuBuilderPage() {
     activityLevel,
     stressLevel,
     medicalCondition,
+    isEditMode,
+    editMenuId,
     saveMenu,
+    updateMenu,
     navigate,
   ]);
 
@@ -375,7 +419,7 @@ export function MenuBuilderPage() {
         <div className={styles.headerContent}>
           <h1 className={styles.title}>
             {nutritionType === "enteral" ? "経腸栄養" : "中心静脈栄養"}
-            メニュー作成
+            メニュー{isEditMode ? "編集" : "作成"}
           </h1>
           {selectedPatient && (
             <p className={styles.subtitle}>
@@ -453,7 +497,7 @@ export function MenuBuilderPage() {
               disabled={!canSave}
               className={styles.saveButton}
             >
-              メニューを保存
+              {isEditMode ? "変更を保存" : "メニューを保存"}
             </Button>
           </div>
         </div>
