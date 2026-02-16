@@ -1,12 +1,13 @@
-export { Button } from './Button'
-export { Card } from './Card'
-export { Badge } from './Badge'
-export { ProgressBar } from './ProgressBar'
-export { SearchInput } from './SearchInput'
-export { Modal } from './Modal'
-export { ToastContainer } from './Toast'
-export { ToastProvider, useToastContext } from './ToastProvider'
-export { useToast } from './useToast'
-export { EmptyState } from './EmptyState'
+export { Button } from "./Button";
+export { Card } from "./Card";
+export { Badge } from "./Badge";
+export { ProgressBar } from "./ProgressBar";
+export { SearchInput } from "./SearchInput";
+export { Modal } from "./Modal";
+export { ToastContainer } from "./Toast";
+export { ToastProvider, useToastContext } from "./ToastProvider";
+export { useToast } from "./useToast";
+export { EmptyState } from "./EmptyState";
+export { NutritionTrendChart } from "./NutritionTrendChart";
 
-export type { ToastType, ToastItem } from './useToast'
+export type { ToastType, ToastItem } from "./useToast";

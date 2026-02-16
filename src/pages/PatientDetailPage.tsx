@@ -1,74 +1,82 @@
-import { useMemo } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Stethoscope, Plus } from 'lucide-react'
-import { usePatients } from '../hooks/usePatients'
-import { useNutritionMenus } from '../hooks/useNutritionMenus'
-import type { NutritionMenuData } from '../hooks/useNutritionMenus'
-import { Card, Badge, Button, EmptyState } from '../components/ui'
-import styles from './PatientDetailPage.module.css'
+import { useMemo } from "react";
+import { useParams, Link } from "react-router-dom";
+import { ArrowLeft, Calendar, MapPin, Stethoscope, Plus } from "lucide-react";
+import { usePatients } from "../hooks/usePatients";
+import { useNutritionMenus } from "../hooks/useNutritionMenus";
+import type { NutritionMenuData } from "../hooks/useNutritionMenus";
+import {
+  Card,
+  Badge,
+  Button,
+  EmptyState,
+  NutritionTrendChart,
+} from "../components/ui";
+import styles from "./PatientDetailPage.module.css";
 
 function formatDateShort(isoString: string): string {
-  return new Date(isoString).toLocaleDateString('ja-JP', {
-    month: 'short',
-    day: 'numeric',
-  })
+  return new Date(isoString).toLocaleDateString("ja-JP", {
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function formatDateFull(isoString: string): string {
-  return new Date(isoString).toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  return new Date(isoString).toLocaleDateString("ja-JP", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
 
 function groupByDate(
-  menus: readonly NutritionMenuData[]
+  menus: readonly NutritionMenuData[],
 ): Map<string, NutritionMenuData[]> {
   const sorted = [...menus].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  )
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
 
-  const groups = new Map<string, NutritionMenuData[]>()
+  const groups = new Map<string, NutritionMenuData[]>();
   for (const menu of sorted) {
-    const dateKey = new Date(menu.createdAt).toISOString().slice(0, 10)
-    const existing = groups.get(dateKey)
+    const dateKey = new Date(menu.createdAt).toISOString().slice(0, 10);
+    const existing = groups.get(dateKey);
     if (existing) {
-      groups.set(dateKey, [...existing, menu])
+      groups.set(dateKey, [...existing, menu]);
     } else {
-      groups.set(dateKey, [menu])
+      groups.set(dateKey, [menu]);
     }
   }
-  return groups
+  return groups;
 }
 
 function computeSummary(menus: readonly NutritionMenuData[]) {
-  const totalMenus = menus.length
-  const enteralCount = menus.filter((m) => m.nutritionType === 'enteral').length
-  const parenteralCount = totalMenus - enteralCount
+  const totalMenus = menus.length;
+  const enteralCount = menus.filter(
+    (m) => m.nutritionType === "enteral",
+  ).length;
+  const parenteralCount = totalMenus - enteralCount;
 
   const latestMenu = [...menus].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  )[0]
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  )[0];
 
-  const latestEnergy = latestMenu ? Math.round(latestMenu.totalEnergy) : 0
+  const latestEnergy = latestMenu ? Math.round(latestMenu.totalEnergy) : 0;
 
-  return { totalMenus, enteralCount, parenteralCount, latestEnergy }
+  return { totalMenus, enteralCount, parenteralCount, latestEnergy };
 }
 
 interface MenuEntryProps {
-  readonly menu: NutritionMenuData
+  readonly menu: NutritionMenuData;
 }
 
 function MenuEntry({ menu }: MenuEntryProps) {
-  const isEnteral = menu.nutritionType === 'enteral'
+  const isEnteral = menu.nutritionType === "enteral";
 
   return (
     <Card className={styles.menuEntry}>
       <div className={styles.menuEntryHeader}>
         <span className={styles.menuEntryName}>{menu.menuName}</span>
-        <Badge variant={isEnteral ? 'success' : 'warning'}>
-          {isEnteral ? '経腸栄養' : '静脈栄養'}
+        <Badge variant={isEnteral ? "success" : "warning"}>
+          {isEnteral ? "経腸栄養" : "静脈栄養"}
         </Badge>
       </div>
 
@@ -101,12 +109,12 @@ function MenuEntry({ menu }: MenuEntryProps) {
         </ul>
       )}
     </Card>
-  )
+  );
 }
 
 interface DateGroupProps {
-  readonly dateKey: string
-  readonly menus: readonly NutritionMenuData[]
+  readonly dateKey: string;
+  readonly menus: readonly NutritionMenuData[];
 }
 
 function DateGroup({ dateKey, menus }: DateGroupProps) {
@@ -118,22 +126,22 @@ function DateGroup({ dateKey, menus }: DateGroupProps) {
         <MenuEntry key={menu.id} menu={menu} />
       ))}
     </div>
-  )
+  );
 }
 
 export function PatientDetailPage() {
-  const { patientId } = useParams<{ patientId: string }>()
-  const { getPatient } = usePatients()
-  const { getMenusForPatient } = useNutritionMenus()
+  const { patientId } = useParams<{ patientId: string }>();
+  const { getPatient } = usePatients();
+  const { getMenusForPatient } = useNutritionMenus();
 
-  const patient = patientId ? getPatient(patientId) : undefined
+  const patient = patientId ? getPatient(patientId) : undefined;
   const patientMenus = useMemo(
     () => (patientId ? getMenusForPatient(patientId) : []),
-    [patientId, getMenusForPatient]
-  )
+    [patientId, getMenusForPatient],
+  );
 
-  const dateGroups = useMemo(() => groupByDate(patientMenus), [patientMenus])
-  const summary = useMemo(() => computeSummary(patientMenus), [patientMenus])
+  const dateGroups = useMemo(() => groupByDate(patientMenus), [patientMenus]);
+  const summary = useMemo(() => computeSummary(patientMenus), [patientMenus]);
 
   if (!patient) {
     return (
@@ -148,7 +156,7 @@ export function PatientDetailPage() {
           description="患者データが存在しないか、削除された可能性があります。"
         />
       </div>
-    )
+    );
   }
 
   return (
@@ -212,6 +220,12 @@ export function PatientDetailPage() {
         </Card>
       </div>
 
+      {patientMenus.length >= 2 && (
+        <section className={styles.section}>
+          <NutritionTrendChart menus={patientMenus} />
+        </section>
+      )}
+
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>栄養メニュー履歴</h2>
 
@@ -237,5 +251,5 @@ export function PatientDetailPage() {
         )}
       </section>
     </div>
-  )
+  );
 }
