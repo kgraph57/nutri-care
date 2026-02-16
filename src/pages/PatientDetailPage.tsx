@@ -1,6 +1,14 @@
 import { useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Calendar, MapPin, Stethoscope, Plus } from "lucide-react";
+import { useCallback } from "react";
+import {
+  ArrowLeft,
+  Calendar,
+  MapPin,
+  Stethoscope,
+  Plus,
+  Printer,
+} from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import type { NutritionMenuData } from "../hooks/useNutritionMenus";
@@ -143,6 +151,10 @@ export function PatientDetailPage() {
   const dateGroups = useMemo(() => groupByDate(patientMenus), [patientMenus]);
   const summary = useMemo(() => computeSummary(patientMenus), [patientMenus]);
 
+  const handlePrint = useCallback(() => {
+    window.print();
+  }, []);
+
   if (!patient) {
     return (
       <div className={styles.page}>
@@ -198,6 +210,17 @@ export function PatientDetailPage() {
               静脈メニュー作成
             </Button>
           </Link>
+          {patientMenus.length > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<Printer size={14} />}
+              onClick={handlePrint}
+              className={styles.printButton}
+            >
+              PDF出力
+            </Button>
+          )}
         </div>
       </div>
 

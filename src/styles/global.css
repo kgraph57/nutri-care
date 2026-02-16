@@ -139,3 +139,35 @@ table {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-neutral-400);
 }
+
+/* ========================================
+   Print Styles
+   ======================================== */
+@media print {
+  body {
+    background: white;
+    font-size: 11pt;
+  }
+
+  /* Hide sidebar and header */
+  [class*="Sidebar_sidebar"],
+  [class*="Header_header"] {
+    display: none !important;
+  }
+
+  /* Remove sidebar margin from main area */
+  [class*="AppShell_main"] {
+    margin-left: 0 !important;
+  }
+
+  /* Remove page padding for print */
+  [class*="AppShell_content"] {
+    padding: 0 !important;
+  }
+
+  /* Print footer with date */
+  @page {
+    margin: 15mm 10mm;
+    size: A4;
+  }
+}

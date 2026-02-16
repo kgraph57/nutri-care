@@ -190,6 +190,7 @@
   gap: var(--spacing-2);
 }
 
+/* ---- Responsive ---- */
 @media (max-width: 640px) {
   .page {
     padding: var(--spacing-4);
@@ -200,5 +201,67 @@
   .menuStats {
     flex-wrap: wrap;
     gap: var(--spacing-4);
+  }
+}
+
+/* ---- Print styles ---- */
+@media print {
+  .page {
+    padding: 0;
+    max-width: none;
+  }
+
+  .backLink,
+  .actions,
+  .printButton {
+    display: none !important;
+  }
+
+  .patientHeader {
+    margin-bottom: 16px;
+  }
+
+  .patientName {
+    font-size: 20px;
+  }
+
+  .summaryStrip {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .summaryItem {
+    border: 1px solid #ddd;
+    padding: 8px;
+    box-shadow: none;
+  }
+
+  .menuEntry {
+    break-inside: avoid;
+    border: 1px solid #ddd;
+    box-shadow: none;
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+
+  .timeline::before {
+    background: #ccc;
+  }
+
+  .dateDot {
+    background: #333;
+    border-color: white;
+    box-shadow: none;
+  }
+
+  .dateGroup {
+    break-inside: avoid;
+    margin-bottom: 12px;
+  }
+
+  .itemChip {
+    background: #f3f3f3;
+    border: 1px solid #ddd;
   }
 }
