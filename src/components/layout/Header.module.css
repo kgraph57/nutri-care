@@ -43,3 +43,21 @@
   color: var(--color-danger);
   background-color: var(--color-neutral-100);
 }
+
+/* ========================================
+   Mobile: Compact header
+   ======================================== */
+@media (max-width: 640px) {
+  .header {
+    height: 44px;
+    padding: 0 var(--spacing-4);
+  }
+
+  .title {
+    font-size: var(--font-size-md);
+  }
+
+  .date {
+    display: none;
+  }
+}

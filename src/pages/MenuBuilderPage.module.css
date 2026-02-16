@@ -200,15 +200,63 @@
 
 @media (max-width: 640px) {
   .page {
-    padding: var(--spacing-4);
+    padding: 0;
+  }
+
+  .header {
+    margin-bottom: var(--spacing-3);
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .subtitle {
+    font-size: var(--font-size-sm);
   }
 
   .controls {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
   }
 
   .patientSelector {
     min-width: auto;
+  }
+
+  .patientSelect {
+    font-size: 16px;
+  }
+
+  .typeButton {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-xs);
+  }
+
+  .twoColumn {
+    gap: var(--spacing-4);
+  }
+
+  .sectionHeading {
+    font-size: var(--font-size-sm);
+  }
+
+  .menuInfoCard {
+    padding: var(--spacing-3);
+  }
+
+  .menuNameInput,
+  .notesTextarea {
+    font-size: 16px;
+  }
+
+  .promptCard {
+    padding: var(--spacing-5);
+  }
+
+  .promptText {
+    font-size: var(--font-size-sm);
   }
 }

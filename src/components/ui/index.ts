@@ -10,5 +10,6 @@ export { useToast } from "./useToast";
 export { EmptyState } from "./EmptyState";
 export { NutritionTrendChart } from "./NutritionTrendChart";
 export { AllergyAlert } from "./AllergyAlert";
+export { ErrorBoundary } from "./ErrorBoundary";
 
 export type { ToastType, ToastItem } from "./useToast";

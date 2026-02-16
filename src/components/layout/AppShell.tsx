@@ -1,7 +1,8 @@
-import { Outlet } from 'react-router-dom'
-import Sidebar from './Sidebar'
-import Header from './Header'
-import styles from './AppShell.module.css'
+import { Outlet } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
+import BottomNav from "./BottomNav";
+import styles from "./AppShell.module.css";
 
 function AppShell() {
   return (
@@ -13,8 +14,9 @@ function AppShell() {
           <Outlet />
         </div>
       </div>
+      <BottomNav />
     </div>
-  )
+  );
 }
 
-export default AppShell
+export default AppShell;

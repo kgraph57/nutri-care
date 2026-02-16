@@ -151,3 +151,31 @@
   background-color: var(--color-danger-light);
   border-radius: var(--radius-md);
 }
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .heading {
+    font-size: var(--font-size-sm);
+  }
+
+  .productList {
+    max-height: 240px;
+    padding: var(--spacing-1);
+  }
+
+  .productCard {
+    padding: var(--spacing-2);
+  }
+
+  .productName {
+    font-size: var(--font-size-xs);
+  }
+
+  .categorySelect {
+    font-size: 16px;
+  }
+}

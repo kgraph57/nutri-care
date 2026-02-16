@@ -141,6 +141,35 @@ table {
 }
 
 /* ========================================
+   Mobile: Touch & input improvements
+   ======================================== */
+@media (max-width: 640px) {
+  /* Prevent iOS zoom on input focus (requires 16px min) */
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* Better tap targets */
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Disable pull-to-refresh conflict on scroll containers */
+  body {
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* ========================================
    Print Styles
    ======================================== */
 @media print {

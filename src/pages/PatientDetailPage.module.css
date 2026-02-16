@@ -193,14 +193,72 @@
 /* ---- Responsive ---- */
 @media (max-width: 640px) {
   .page {
-    padding: var(--spacing-4);
+    padding: 0;
   }
+
+  .backLink {
+    margin-bottom: var(--spacing-3);
+    font-size: var(--font-size-xs);
+  }
+
   .patientHeader {
     flex-direction: column;
+    margin-bottom: var(--spacing-4);
+    gap: var(--spacing-3);
   }
+
+  .patientName {
+    font-size: var(--font-size-xl);
+  }
+
+  .patientMeta {
+    gap: var(--spacing-3);
+    font-size: var(--font-size-xs);
+  }
+
+  .summaryStrip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-5);
+  }
+
+  .summaryItem {
+    padding: var(--spacing-3);
+  }
+
+  .summaryValue {
+    font-size: var(--font-size-xl);
+  }
+
+  .section {
+    margin-bottom: var(--spacing-5);
+  }
+
+  .sectionTitle {
+    font-size: var(--font-size-md);
+  }
+
+  .timeline {
+    padding-left: var(--spacing-5);
+  }
+
+  .menuEntry {
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-2);
+  }
+
   .menuStats {
     flex-wrap: wrap;
-    gap: var(--spacing-4);
+    gap: var(--spacing-3);
+  }
+
+  .menuStatValue {
+    font-size: var(--font-size-md);
+  }
+
+  .itemChip {
+    font-size: 10px;
+    padding: 2px var(--spacing-2);
   }
 }
 

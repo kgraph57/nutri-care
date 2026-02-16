@@ -286,3 +286,61 @@
     gap: var(--spacing-3);
   }
 }
+
+@media (max-width: 640px) {
+  .page {
+    padding: 0;
+  }
+
+  .header {
+    margin-bottom: var(--spacing-4);
+    padding-bottom: var(--spacing-3);
+    gap: var(--spacing-3);
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  .searchWrapper {
+    margin-bottom: var(--spacing-3);
+  }
+
+  .mobileCards {
+    gap: var(--spacing-2);
+  }
+
+  .mobileCard {
+    padding: var(--spacing-3);
+    border-radius: var(--radius-md);
+  }
+
+  .mobileCardHeader {
+    margin-bottom: var(--spacing-2);
+  }
+
+  .mobileCardDetails {
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+
+  .mobileCardActions {
+    gap: var(--spacing-1);
+  }
+
+  .actionButton {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: 10px;
+    height: 26px;
+    border-radius: var(--radius-sm);
+  }
+
+  .emptyWrapper {
+    padding: var(--spacing-8) var(--spacing-2);
+  }
+}

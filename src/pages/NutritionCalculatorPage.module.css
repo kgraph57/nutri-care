@@ -245,3 +245,55 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  .page {
+    padding: 0;
+  }
+
+  .header {
+    margin-bottom: var(--spacing-4);
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .subtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .layout {
+    gap: var(--spacing-4);
+  }
+
+  .cardContent {
+    padding: var(--spacing-3);
+  }
+
+  .cardTitle {
+    font-size: var(--font-size-md);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .formGroup {
+    margin-bottom: var(--spacing-3);
+  }
+
+  .select,
+  .input {
+    font-size: 16px;
+  }
+
+  .resultsSummary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .resultItem {
+    padding: var(--spacing-2);
+  }
+
+  .resultValue {
+    font-size: var(--font-size-lg);
+  }
+}

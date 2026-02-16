@@ -1,36 +1,37 @@
-import { Routes, Route } from 'react-router-dom'
-import AppShell from './components/layout/AppShell'
-import { AuthProvider, useAuth } from './hooks/useAuth'
-import { isSupabaseConfigured } from './lib/supabase'
-import { AuthPage } from './pages/AuthPage'
-import { DashboardPage } from './pages/DashboardPage'
-import { PatientListPage } from './pages/PatientListPage'
-import { PatientDetailPage } from './pages/PatientDetailPage'
-import { NutritionCalculatorPage } from './pages/NutritionCalculatorPage'
-import { MenuBuilderPage } from './pages/MenuBuilderPage'
-import { SavedMenusPage } from './pages/SavedMenusPage'
+import { Routes, Route } from "react-router-dom";
+import AppShell from "./components/layout/AppShell";
+import { ErrorBoundary } from "./components/ui";
+import { AuthProvider, useAuth } from "./hooks/useAuth";
+import { isSupabaseConfigured } from "./lib/supabase";
+import { AuthPage } from "./pages/AuthPage";
+import { DashboardPage } from "./pages/DashboardPage";
+import { PatientListPage } from "./pages/PatientListPage";
+import { PatientDetailPage } from "./pages/PatientDetailPage";
+import { NutritionCalculatorPage } from "./pages/NutritionCalculatorPage";
+import { MenuBuilderPage } from "./pages/MenuBuilderPage";
+import { SavedMenusPage } from "./pages/SavedMenusPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 function AppRoutes() {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated, isLoading } = useAuth();
 
-  // If Supabase is configured, require auth
   if (isSupabaseConfigured && isLoading) {
     return (
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
         }}
       >
         読み込み中...
       </div>
-    )
+    );
   }
 
   if (isSupabaseConfigured && !isAuthenticated) {
-    return <AuthPage />
+    return <AuthPage />;
   }
 
   return (
@@ -43,17 +44,20 @@ function AppRoutes() {
         <Route path="menu-builder" element={<MenuBuilderPage />} />
         <Route path="menu-builder/:patientId" element={<MenuBuilderPage />} />
         <Route path="menus" element={<SavedMenusPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
-  )
+  );
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <AppRoutes />
-    </AuthProvider>
-  )
+    <ErrorBoundary>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </ErrorBoundary>
+  );
 }
 
-export default App
+export default App;

@@ -148,3 +148,12 @@
     visibility: visible;
   }
 }
+
+/* ========================================
+   Mobile: Hide sidebar (bottom nav used)
+   ======================================== */
+@media (max-width: 640px) {
+  .sidebar {
+    display: none;
+  }
+}

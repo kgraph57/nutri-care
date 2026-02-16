@@ -123,3 +123,42 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  .page {
+    padding: 0;
+  }
+
+  .header {
+    margin-bottom: var(--spacing-4);
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .subtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .toolbar {
+    margin-bottom: var(--spacing-4);
+  }
+
+  .menuGrid {
+    gap: var(--spacing-3);
+  }
+
+  .menuCard {
+    padding: var(--spacing-3);
+    gap: var(--spacing-2);
+  }
+
+  .menuCardName {
+    font-size: var(--font-size-md);
+  }
+
+  .detailRow {
+    font-size: var(--font-size-xs);
+  }
+}

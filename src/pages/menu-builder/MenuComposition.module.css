@@ -99,3 +99,26 @@
   padding-top: var(--spacing-1);
   border-top: 1px solid var(--color-neutral-200);
 }
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .heading {
+    font-size: var(--font-size-sm);
+  }
+
+  .itemCard {
+    padding: var(--spacing-2);
+  }
+
+  .itemName {
+    font-size: var(--font-size-xs);
+  }
+
+  .numberInput {
+    font-size: 16px;
+  }
+}
