@@ -1,21 +1,29 @@
-import { useState, useMemo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Plus, Edit, Trash2, ArrowUp, ArrowDown, Users } from 'lucide-react'
-import type { Patient } from '../types'
-import { usePatients } from '../hooks'
-import { Button, SearchInput, Modal, EmptyState } from '../components/ui'
-import { PatientForm } from './PatientForm'
-import styles from './PatientListPage.module.css'
+import { useState, useMemo, useCallback } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  ArrowUp,
+  ArrowDown,
+  Users,
+  History,
+} from "lucide-react";
+import type { Patient } from "../types";
+import { usePatients } from "../hooks";
+import { Button, SearchInput, Modal, EmptyState } from "../components/ui";
+import { PatientForm } from "./PatientForm";
+import styles from "./PatientListPage.module.css";
 
-type SortField = 'name' | 'age' | 'ward' | 'admissionDate'
-type SortDirection = 'asc' | 'desc'
+type SortField = "name" | "age" | "ward" | "admissionDate";
+type SortDirection = "asc" | "desc";
 
 interface SortColumnProps {
-  readonly field: SortField
-  readonly label: string
-  readonly currentField: SortField
-  readonly currentDirection: SortDirection
-  readonly onSort: (field: SortField) => void
+  readonly field: SortField;
+  readonly label: string;
+  readonly currentField: SortField;
+  readonly currentDirection: SortDirection;
+  readonly onSort: (field: SortField) => void;
 }
 
 function SortColumnHeader({
@@ -34,139 +42,134 @@ function SortColumnHeader({
       >
         {label}
         {currentField === field &&
-          (currentDirection === 'asc' ? (
+          (currentDirection === "asc" ? (
             <ArrowUp size={14} />
           ) : (
             <ArrowDown size={14} />
           ))}
       </button>
     </th>
-  )
+  );
 }
 
-function filterPatients(
-  patients: readonly Patient[],
-  term: string
-): Patient[] {
-  const lowerTerm = term.toLowerCase()
+function filterPatients(patients: readonly Patient[], term: string): Patient[] {
+  const lowerTerm = term.toLowerCase();
   return patients.filter(
     (p) =>
       p.name.toLowerCase().includes(lowerTerm) ||
       p.ward.toLowerCase().includes(lowerTerm) ||
-      p.diagnosis.toLowerCase().includes(lowerTerm)
-  )
+      p.diagnosis.toLowerCase().includes(lowerTerm),
+  );
 }
 
 function sortPatients(
   patients: readonly Patient[],
   field: SortField,
-  direction: SortDirection
+  direction: SortDirection,
 ): Patient[] {
   return [...patients].sort((a, b) => {
-    const aVal = a[field]
-    const bVal = b[field]
+    const aVal = a[field];
+    const bVal = b[field];
 
-    if (typeof aVal === 'string' && typeof bVal === 'string') {
-      return direction === 'asc'
+    if (typeof aVal === "string" && typeof bVal === "string") {
+      return direction === "asc"
         ? aVal.localeCompare(bVal)
-        : bVal.localeCompare(aVal)
+        : bVal.localeCompare(aVal);
     }
 
-    if (typeof aVal === 'number' && typeof bVal === 'number') {
-      return direction === 'asc' ? aVal - bVal : bVal - aVal
+    if (typeof aVal === "number" && typeof bVal === "number") {
+      return direction === "asc" ? aVal - bVal : bVal - aVal;
     }
 
-    return 0
-  })
+    return 0;
+  });
 }
 
 export function PatientListPage() {
-  const { patients, addPatient, updatePatient, deletePatient } = usePatients()
-  const navigate = useNavigate()
+  const { patients, addPatient, updatePatient, deletePatient } = usePatients();
+  const navigate = useNavigate();
 
-  const [searchTerm, setSearchTerm] = useState('')
-  const [sortField, setSortField] = useState<SortField>('name')
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc')
-  const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
-  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState<SortField>("name");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const [editingPatient, setEditingPatient] = useState<Patient | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const displayedPatients = useMemo(() => {
-    const filtered = filterPatients(patients, searchTerm)
-    return sortPatients(filtered, sortField, sortDirection)
-  }, [patients, searchTerm, sortField, sortDirection])
+    const filtered = filterPatients(patients, searchTerm);
+    return sortPatients(filtered, sortField, sortDirection);
+  }, [patients, searchTerm, sortField, sortDirection]);
 
   const handleSort = useCallback(
     (field: SortField) => {
       if (sortField === field) {
-        setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
+        setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
       } else {
-        setSortField(field)
-        setSortDirection('asc')
+        setSortField(field);
+        setSortDirection("asc");
       }
     },
-    [sortField]
-  )
+    [sortField],
+  );
 
   const handleOpenNew = useCallback(() => {
-    setEditingPatient(null)
-    setIsFormOpen(true)
-  }, [])
+    setEditingPatient(null);
+    setIsFormOpen(true);
+  }, []);
 
   const handleOpenEdit = useCallback((patient: Patient) => {
-    setEditingPatient(patient)
-    setIsFormOpen(true)
-  }, [])
+    setEditingPatient(patient);
+    setIsFormOpen(true);
+  }, []);
 
   const handleCloseForm = useCallback(() => {
-    setIsFormOpen(false)
-    setEditingPatient(null)
-  }, [])
+    setIsFormOpen(false);
+    setEditingPatient(null);
+  }, []);
 
   const handleSave = useCallback(
     (patient: Patient) => {
       if (editingPatient) {
-        updatePatient(patient)
+        updatePatient(patient);
       } else {
-        addPatient(patient)
+        addPatient(patient);
       }
-      handleCloseForm()
+      handleCloseForm();
     },
-    [editingPatient, updatePatient, addPatient, handleCloseForm]
-  )
+    [editingPatient, updatePatient, addPatient, handleCloseForm],
+  );
 
   const handleDelete = useCallback(
     (id: string) => {
-      if (window.confirm('この患者を削除しますか？')) {
-        deletePatient(id)
+      if (window.confirm("この患者を削除しますか？")) {
+        deletePatient(id);
       }
     },
-    [deletePatient]
-  )
+    [deletePatient],
+  );
 
   const handleEnteral = useCallback(
     (patientId: string) => {
-      navigate(`/menu-builder/${patientId}?type=enteral`)
+      navigate(`/menu-builder/${patientId}?type=enteral`);
     },
-    [navigate]
-  )
+    [navigate],
+  );
 
   const handleParenteral = useCallback(
     (patientId: string) => {
-      navigate(`/menu-builder/${patientId}?type=parenteral`)
+      navigate(`/menu-builder/${patientId}?type=parenteral`);
     },
-    [navigate]
-  )
+    [navigate],
+  );
 
-  const modalTitle = editingPatient ? '患者情報編集' : '新規患者登録'
+  const modalTitle = editingPatient ? "患者情報編集" : "新規患者登録";
 
   return (
     <div className={styles.page}>
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <h1 className={styles.title}>患者管理</h1>
-          <p className={styles.subtitle}>
-            患者情報の登録・管理・検索
-          </p>
+          <p className={styles.subtitle}>患者情報の登録・管理・検索</p>
         </div>
         <Button icon={<Plus size={18} />} onClick={handleOpenNew}>
           新規患者登録
@@ -188,8 +191,8 @@ export function PatientListPage() {
             title="患者が見つかりません"
             description={
               searchTerm
-                ? '検索条件を変更してお試しください'
-                : '「新規患者登録」から患者を追加してください'
+                ? "検索条件を変更してお試しください"
+                : "「新規患者登録」から患者を追加してください"
             }
             action={
               !searchTerm ? (
@@ -222,11 +225,7 @@ export function PatientListPage() {
         </>
       )}
 
-      <Modal
-        isOpen={isFormOpen}
-        onClose={handleCloseForm}
-        title={modalTitle}
-      >
+      <Modal isOpen={isFormOpen} onClose={handleCloseForm} title={modalTitle}>
         <PatientForm
           patient={editingPatient}
           onSave={handleSave}
@@ -234,21 +233,21 @@ export function PatientListPage() {
         />
       </Modal>
     </div>
-  )
+  );
 }
 
 /* ========================================
    Table Sub-component
    ======================================== */
 interface PatientTableProps {
-  readonly patients: readonly Patient[]
-  readonly sortField: SortField
-  readonly sortDirection: SortDirection
-  readonly onSort: (field: SortField) => void
-  readonly onEdit: (patient: Patient) => void
-  readonly onEnteral: (id: string) => void
-  readonly onParenteral: (id: string) => void
-  readonly onDelete: (id: string) => void
+  readonly patients: readonly Patient[];
+  readonly sortField: SortField;
+  readonly sortDirection: SortDirection;
+  readonly onSort: (field: SortField) => void;
+  readonly onEdit: (patient: Patient) => void;
+  readonly onEnteral: (id: string) => void;
+  readonly onParenteral: (id: string) => void;
+  readonly onDelete: (id: string) => void;
 }
 
 function PatientTable({
@@ -311,18 +310,18 @@ function PatientTable({
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
 /* ========================================
    Row Sub-component
    ======================================== */
 interface PatientRowProps {
-  readonly patient: Patient
-  readonly onEdit: (patient: Patient) => void
-  readonly onEnteral: (id: string) => void
-  readonly onParenteral: (id: string) => void
-  readonly onDelete: (id: string) => void
+  readonly patient: Patient;
+  readonly onEdit: (patient: Patient) => void;
+  readonly onEnteral: (id: string) => void;
+  readonly onParenteral: (id: string) => void;
+  readonly onDelete: (id: string) => void;
 }
 
 function PatientRow({
@@ -334,7 +333,11 @@ function PatientRow({
 }: PatientRowProps) {
   return (
     <tr>
-      <td className={styles.cellName}>{patient.name}</td>
+      <td className={styles.cellName}>
+        <Link to={`/patients/${patient.id}`} className={styles.nameLink}>
+          {patient.name}
+        </Link>
+      </td>
       <td className={styles.cell}>{patient.age}歳</td>
       <td className={styles.cell}>{patient.ward}</td>
       <td className={styles.cell}>{patient.admissionDate}</td>
@@ -348,18 +351,18 @@ function PatientRow({
         />
       </td>
     </tr>
-  )
+  );
 }
 
 /* ========================================
    Action Buttons
    ======================================== */
 interface ActionButtonsProps {
-  readonly patient: Patient
-  readonly onEdit: (patient: Patient) => void
-  readonly onEnteral: (id: string) => void
-  readonly onParenteral: (id: string) => void
-  readonly onDelete: (id: string) => void
+  readonly patient: Patient;
+  readonly onEdit: (patient: Patient) => void;
+  readonly onEnteral: (id: string) => void;
+  readonly onParenteral: (id: string) => void;
+  readonly onDelete: (id: string) => void;
 }
 
 function ActionButtons({
@@ -371,6 +374,13 @@ function ActionButtons({
 }: ActionButtonsProps) {
   return (
     <div className={styles.actionGroup}>
+      <Link
+        to={`/patients/${patient.id}`}
+        className={`${styles.actionButton} ${styles.actionHistory}`}
+      >
+        <History size={12} />
+        履歴
+      </Link>
       <button
         type="button"
         className={`${styles.actionButton} ${styles.actionEdit}`}
@@ -402,18 +412,18 @@ function ActionButtons({
         削除
       </button>
     </div>
-  )
+  );
 }
 
 /* ========================================
    Mobile Cards
    ======================================== */
 interface PatientMobileCardsProps {
-  readonly patients: readonly Patient[]
-  readonly onEdit: (patient: Patient) => void
-  readonly onEnteral: (id: string) => void
-  readonly onParenteral: (id: string) => void
-  readonly onDelete: (id: string) => void
+  readonly patients: readonly Patient[];
+  readonly onEdit: (patient: Patient) => void;
+  readonly onEnteral: (id: string) => void;
+  readonly onParenteral: (id: string) => void;
+  readonly onDelete: (id: string) => void;
 }
 
 function PatientMobileCards({
@@ -436,15 +446,15 @@ function PatientMobileCards({
         />
       ))}
     </div>
-  )
+  );
 }
 
 interface MobilePatientCardProps {
-  readonly patient: Patient
-  readonly onEdit: (patient: Patient) => void
-  readonly onEnteral: (id: string) => void
-  readonly onParenteral: (id: string) => void
-  readonly onDelete: (id: string) => void
+  readonly patient: Patient;
+  readonly onEdit: (patient: Patient) => void;
+  readonly onEnteral: (id: string) => void;
+  readonly onParenteral: (id: string) => void;
+  readonly onDelete: (id: string) => void;
 }
 
 function MobilePatientCard({
@@ -457,7 +467,9 @@ function MobilePatientCard({
   return (
     <div className={styles.mobileCard}>
       <div className={styles.mobileCardHeader}>
-        <span className={styles.mobileCardName}>{patient.name}</span>
+        <Link to={`/patients/${patient.id}`} className={styles.nameLink}>
+          {patient.name}
+        </Link>
       </div>
       <div className={styles.mobileCardDetails}>
         <span className={styles.mobileCardDetail}>
@@ -483,5 +495,5 @@ function MobilePatientCard({
         />
       </div>
     </div>
-  )
+  );
 }

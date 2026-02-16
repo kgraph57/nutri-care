@@ -174,12 +174,32 @@
   background-color: var(--color-warning-dark);
 }
 
+.actionHistory {
+  background-color: var(--color-info);
+  text-decoration: none;
+}
+
+.actionHistory:hover {
+  background-color: var(--color-info-dark);
+}
+
 .actionDelete {
   background-color: var(--color-danger);
 }
 
 .actionDelete:hover {
   background-color: var(--color-danger-dark);
+}
+
+.nameLink {
+  color: var(--color-primary-700);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+}
+
+.nameLink:hover {
+  color: var(--color-primary-500);
+  text-decoration: underline;
 }
 
 /* ========================================

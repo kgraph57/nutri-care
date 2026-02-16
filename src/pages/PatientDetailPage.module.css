@@ -1,0 +1,204 @@
+.page {
+  padding: var(--spacing-6);
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ---- Back link ---- */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--color-primary-600);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  margin-bottom: var(--spacing-4);
+  transition: color var(--transition-fast);
+}
+.backLink:hover {
+  color: var(--color-primary-800);
+}
+
+/* ---- Patient Header ---- */
+.patientHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-6);
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+.patientInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+.patientName {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+.patientMeta {
+  display: flex;
+  gap: var(--spacing-4);
+  color: var(--color-neutral-500);
+  font-size: var(--font-size-sm);
+  flex-wrap: wrap;
+}
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+/* ---- Summary strip ---- */
+.summaryStrip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-8);
+}
+.summaryItem {
+  padding: var(--spacing-4);
+  text-align: center;
+}
+.summaryValue {
+  display: block;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+.summaryLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: var(--spacing-1);
+}
+
+/* ---- Section ---- */
+.section {
+  margin-bottom: var(--spacing-8);
+}
+.sectionTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  margin: 0 0 var(--spacing-4);
+}
+
+/* ---- Timeline ---- */
+.timeline {
+  position: relative;
+  padding-left: var(--spacing-6);
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--color-neutral-200);
+  border-radius: 1px;
+}
+
+/* ---- Date Group ---- */
+.dateGroup {
+  position: relative;
+  margin-bottom: var(--spacing-6);
+}
+.dateDot {
+  position: absolute;
+  left: calc(-1 * var(--spacing-6) + 2px);
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-500);
+  border: 2px solid white;
+  box-shadow: var(--shadow-sm);
+}
+.dateLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-600);
+  margin: 0 0 var(--spacing-3);
+}
+
+/* ---- Menu entry inside timeline ---- */
+.menuEntry {
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-3);
+}
+.menuEntryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-3);
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+.menuEntryName {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  font-size: var(--font-size-md);
+}
+
+.menuStats {
+  display: flex;
+  gap: var(--spacing-6);
+  margin-bottom: var(--spacing-3);
+}
+.menuStat {
+  display: flex;
+  flex-direction: column;
+}
+.menuStatValue {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+.menuStatLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-400);
+}
+
+/* ---- Items list inside menu entry ---- */
+.itemsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+.itemChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-3);
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-full);
+}
+
+/* ---- Actions row ---- */
+.actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--spacing-4);
+  }
+  .patientHeader {
+    flex-direction: column;
+  }
+  .menuStats {
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
+  }
+}
