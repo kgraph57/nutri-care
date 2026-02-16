@@ -71,8 +71,8 @@
 }
 
 .danger:active {
-  background-color: #991b1b;
-  border-color: #991b1b;
+  background-color: var(--color-danger-dark);
+  border-color: var(--color-danger-dark);
 }
 
 .ghost {

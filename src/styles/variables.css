@@ -1,64 +1,64 @@
 :root {
   /* ========================================
-     Primary - Apple Blue
+     Primary - Warm Charcoal (Aman-inspired)
      ======================================== */
-  --color-primary-50: #f5f8ff;
-  --color-primary-100: #e8f0fe;
-  --color-primary-200: #c7d9fa;
-  --color-primary-300: #a0bef5;
-  --color-primary-400: #6699ee;
-  --color-primary-500: #007aff;
-  --color-primary-600: #0066d6;
-  --color-primary-700: #0055b3;
-  --color-primary-800: #004494;
-  --color-primary-900: #003375;
+  --color-primary-50: #faf9f8;
+  --color-primary-100: #f0eeed;
+  --color-primary-200: #ddd9d6;
+  --color-primary-300: #c4bfba;
+  --color-primary-400: #9e968f;
+  --color-primary-500: #6b625a;
+  --color-primary-600: #574e47;
+  --color-primary-700: #463e38;
+  --color-primary-800: #36302b;
+  --color-primary-900: #282320;
 
   /* ========================================
-     Neutral - Pure Gray (Apple SF style)
+     Neutral - Warm Sand / Cream
      ======================================== */
-  --color-neutral-50: #fbfbfd;
-  --color-neutral-100: #f5f5f7;
-  --color-neutral-200: #e8e8ed;
-  --color-neutral-300: #d2d2d7;
-  --color-neutral-400: #aeaeb2;
-  --color-neutral-500: #8e8e93;
-  --color-neutral-600: #636366;
-  --color-neutral-700: #48484a;
-  --color-neutral-800: #2c2c2e;
-  --color-neutral-900: #1c1c1e;
+  --color-neutral-50: #fdfcfb;
+  --color-neutral-100: #f8f6f4;
+  --color-neutral-200: #f0edea;
+  --color-neutral-300: #e0dbd7;
+  --color-neutral-400: #c4bdb6;
+  --color-neutral-500: #a09891;
+  --color-neutral-600: #7a736c;
+  --color-neutral-700: #5c5650;
+  --color-neutral-800: #3d3834;
+  --color-neutral-900: #2a2623;
 
   /* ========================================
-     Semantic Colors (Apple HIG)
+     Semantic Colors (quiet, restrained)
      ======================================== */
-  --color-success: #34c759;
-  --color-success-light: #e8faf0;
-  --color-success-dark: #248a3d;
+  --color-success: #6aab7b;
+  --color-success-light: #f2f8f4;
+  --color-success-dark: #4a8a5c;
 
-  --color-warning: #ff9500;
-  --color-warning-light: #fff5e6;
-  --color-warning-dark: #c77c00;
+  --color-warning: #d4a054;
+  --color-warning-light: #fdf7ef;
+  --color-warning-dark: #b0803a;
 
-  --color-danger: #ff3b30;
-  --color-danger-light: #fff0ef;
-  --color-danger-dark: #c62828;
+  --color-danger: #c76a64;
+  --color-danger-light: #faf2f1;
+  --color-danger-dark: #a8504a;
 
-  --color-info: #5ac8fa;
-  --color-info-light: #edf9ff;
-  --color-info-dark: #0891d1;
+  --color-info: #7ab0c8;
+  --color-info-light: #f2f8fb;
+  --color-info-dark: #5890a8;
 
   /* ========================================
      Domain-Specific Colors
      ======================================== */
-  --color-enteral: #34c759;
-  --color-enteral-light: #e8faf0;
-  --color-parenteral: #ff9500;
-  --color-parenteral-light: #fff5e6;
+  --color-enteral: #6aab7b;
+  --color-enteral-light: #f2f8f4;
+  --color-parenteral: #d4a054;
+  --color-parenteral-light: #fdf7ef;
 
   /* ========================================
      Typography
      ======================================== */
-  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-    "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+    "Noto Sans JP", "SF Pro Display", sans-serif;
 
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -103,12 +103,12 @@
   --radius-full: 9999px;
 
   /* ========================================
-     Shadows (soft, diffused Apple style)
+     Shadows (barely-there, Aman-like)
      ======================================== */
-  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.03);
-  --shadow-md: 0 2px 8px rgb(0 0 0 / 0.06), 0 1px 3px rgb(0 0 0 / 0.04);
-  --shadow-lg: 0 4px 20px rgb(0 0 0 / 0.08), 0 2px 6px rgb(0 0 0 / 0.04);
-  --shadow-xl: 0 8px 32px rgb(0 0 0 / 0.1), 0 4px 12px rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.03);
+  --shadow-md: 0 2px 8px rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.02);
+  --shadow-lg: 0 4px 16px rgb(0 0 0 / 0.05), 0 2px 4px rgb(0 0 0 / 0.02);
+  --shadow-xl: 0 8px 28px rgb(0 0 0 / 0.06), 0 4px 8px rgb(0 0 0 / 0.03);
 
   /* ========================================
      Transitions

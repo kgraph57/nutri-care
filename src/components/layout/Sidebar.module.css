@@ -81,12 +81,13 @@
 }
 
 .navLinkActive {
-  background-color: var(--color-primary-500);
-  color: #ffffff;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
 }
 
 .navLinkActive:hover {
-  background-color: var(--color-primary-600);
+  background-color: var(--color-primary-200);
+  color: var(--color-primary-800);
 }
 
 .navIcon {
