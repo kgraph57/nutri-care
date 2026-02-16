@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.vite/
+*.local
+.DS_Store
+nutri-care-premium/
+past used/
+*.swp
+*.swo
+*.backup
+*.backup2
+.claude/

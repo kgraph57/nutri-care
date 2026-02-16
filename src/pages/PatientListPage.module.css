@@ -1,0 +1,268 @@
+.page {
+  padding: var(--spacing-6);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   Header
+   ======================================== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-6);
+  padding-bottom: var(--spacing-5);
+  border-bottom: 2px solid var(--color-neutral-100);
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-1) 0;
+}
+
+.subtitle {
+  font-size: var(--font-size-md);
+  color: var(--color-neutral-500);
+  margin: 0;
+}
+
+/* ========================================
+   Search
+   ======================================== */
+.searchWrapper {
+  margin-bottom: var(--spacing-5);
+}
+
+/* ========================================
+   Table
+   ======================================== */
+.tableWrapper {
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.table {
+  width: 100%;
+}
+
+.table thead {
+  background-color: var(--color-neutral-50);
+}
+
+.table thead tr {
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.sortButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-3) var(--spacing-4);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sortButton:hover {
+  color: var(--color-primary-700);
+}
+
+.thActions {
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: center;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+}
+
+/* ========================================
+   Table Body
+   ======================================== */
+.table tbody tr {
+  border-bottom: 1px solid var(--color-neutral-100);
+  transition: background-color var(--transition-fast);
+}
+
+.table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: var(--color-neutral-50);
+}
+
+.table tbody tr:hover {
+  background-color: var(--color-primary-50);
+}
+
+.cellName {
+  padding: var(--spacing-3) var(--spacing-4);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-900);
+}
+
+.cell {
+  padding: var(--spacing-3) var(--spacing-4);
+  color: var(--color-neutral-700);
+  font-size: var(--font-size-sm);
+}
+
+.cellActions {
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: center;
+}
+
+.actionGroup {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ========================================
+   Action Buttons
+   ======================================== */
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: #ffffff;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+  line-height: 1;
+  height: 28px;
+}
+
+.actionEdit {
+  background-color: var(--color-primary-600);
+}
+
+.actionEdit:hover {
+  background-color: var(--color-primary-700);
+}
+
+.actionEnteral {
+  background-color: var(--color-enteral);
+}
+
+.actionEnteral:hover {
+  background-color: var(--color-success-dark);
+}
+
+.actionParenteral {
+  background-color: var(--color-parenteral);
+}
+
+.actionParenteral:hover {
+  background-color: var(--color-warning-dark);
+}
+
+.actionDelete {
+  background-color: var(--color-danger);
+}
+
+.actionDelete:hover {
+  background-color: var(--color-danger-dark);
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+.emptyWrapper {
+  padding: var(--spacing-12) var(--spacing-4);
+}
+
+/* ========================================
+   Mobile: Cards
+   ======================================== */
+.mobileCards {
+  display: none;
+}
+
+.mobileCard {
+  background-color: #ffffff;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.mobileCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-3);
+}
+
+.mobileCardName {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  font-size: var(--font-size-md);
+}
+
+.mobileCardDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+.mobileCardDetail {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.mobileCardLabel {
+  color: var(--color-neutral-400);
+}
+
+.mobileCardActions {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 768px) {
+  .page {
+    padding: var(--spacing-4);
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+  }
+
+  .tableWrapper {
+    display: none;
+  }
+
+  .mobileCards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+}

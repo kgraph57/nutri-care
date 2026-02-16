@@ -1,0 +1,121 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  transition: background-color var(--transition-fast),
+    color var(--transition-fast), border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ========================================
+   Variants
+   ======================================== */
+.primary {
+  background-color: var(--color-primary-600);
+  color: #ffffff;
+  border: 1px solid var(--color-primary-600);
+}
+
+.primary:hover {
+  background-color: var(--color-primary-700);
+  border-color: var(--color-primary-700);
+}
+
+.primary:active {
+  background-color: var(--color-primary-800);
+  border-color: var(--color-primary-800);
+}
+
+.secondary {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  border: 1px solid var(--color-neutral-300);
+}
+
+.secondary:hover {
+  background-color: var(--color-neutral-200);
+  border-color: var(--color-neutral-400);
+}
+
+.secondary:active {
+  background-color: var(--color-neutral-300);
+}
+
+.danger {
+  background-color: var(--color-danger);
+  color: #ffffff;
+  border: 1px solid var(--color-danger);
+}
+
+.danger:hover {
+  background-color: var(--color-danger-dark);
+  border-color: var(--color-danger-dark);
+}
+
+.danger:active {
+  background-color: #991b1b;
+  border-color: #991b1b;
+}
+
+.ghost {
+  background-color: transparent;
+  color: var(--color-neutral-600);
+  border: 1px solid transparent;
+}
+
+.ghost:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+}
+
+.ghost:active {
+  background-color: var(--color-neutral-200);
+}
+
+/* ========================================
+   Sizes
+   ======================================== */
+.sm {
+  padding: var(--spacing-1) var(--spacing-3);
+  font-size: var(--font-size-sm);
+  height: 32px;
+}
+
+.md {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-md);
+  height: 40px;
+}
+
+.lg {
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-lg);
+  height: 48px;
+}
+
+/* ========================================
+   Icon
+   ======================================== */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}

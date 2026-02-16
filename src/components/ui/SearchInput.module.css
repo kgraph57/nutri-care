@@ -1,0 +1,39 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.iconWrapper {
+  position: absolute;
+  left: var(--spacing-3);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--color-neutral-400);
+}
+
+.input {
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-4) var(--spacing-2) var(--spacing-10);
+  font-size: var(--font-size-md);
+  color: var(--color-neutral-800);
+  background-color: #ffffff;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input::placeholder {
+  color: var(--color-neutral-400);
+}
+
+.input:hover {
+  border-color: var(--color-neutral-400);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
+}

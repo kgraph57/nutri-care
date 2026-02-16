@@ -1,0 +1,66 @@
+{
+  "name": "icu-picu-nutrition-management",
+  "version": "2.0.0",
+  "description": "ICU・PICU包括的栄養管理システム - 重症患者栄養管理専用ツール",
+  "main": "src/App.tsx",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "ICU",
+    "PICU",
+    "nutrition",
+    "medical",
+    "healthcare",
+    "critical-care",
+    "nutrition-management",
+    "hospital",
+    "patient-care"
+  ],
+  "author": "Manus AI Agent",
+  "license": "Medical Use Only",
+  "dependencies": {
+    "lucide-react": "^0.564.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.13.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.0.3",
+    "typescript": "^5.8.3",
+    "vite": "^4.4.5"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/icu-picu-nutrition-management.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/icu-picu-nutrition-management/issues"
+  },
+  "homepage": "https://your-org.github.io/icu-picu-nutrition-management",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "config": {
+    "database_version": "1.0",
+    "products_count": 379,
+    "nutrition_components": 97
+  }
+}

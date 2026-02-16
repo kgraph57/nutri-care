@@ -1,0 +1,148 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--color-neutral-800);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--transition-slow);
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* ========================================
+   Brand / Logo
+   ======================================== */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-5) var(--spacing-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 72px;
+}
+
+.brandIcon {
+  color: var(--color-primary-400);
+  flex-shrink: 0;
+}
+
+.brandText {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity var(--transition-slow);
+}
+
+/* ========================================
+   Navigation
+   ======================================== */
+.nav {
+  flex: 1;
+  padding: var(--spacing-4) 0;
+  overflow-y: auto;
+}
+
+.navList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.navItem {
+  padding: 0 var(--spacing-2);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-3);
+  border-radius: var(--radius-md);
+  color: var(--color-neutral-300);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: background-color var(--transition-fast),
+    color var(--transition-fast);
+  position: relative;
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.navLinkActive {
+  background-color: var(--color-primary-600);
+  color: #ffffff;
+}
+
+.navLinkActive:hover {
+  background-color: var(--color-primary-700);
+}
+
+.navIcon {
+  flex-shrink: 0;
+}
+
+.navLabel {
+  overflow: hidden;
+  transition: opacity var(--transition-slow);
+}
+
+/* ========================================
+   Tooltip (visible only when collapsed)
+   ======================================== */
+.tooltip {
+  position: absolute;
+  left: calc(var(--sidebar-collapsed-width) + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var(--color-neutral-900);
+  color: #ffffff;
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), visibility var(--transition-fast);
+  z-index: 20;
+}
+
+/* ========================================
+   Responsive: Collapsed sidebar
+   ======================================== */
+@media (max-width: 1023px) {
+  .sidebar {
+    width: var(--sidebar-collapsed-width);
+  }
+
+  .brandText {
+    opacity: 0;
+    width: 0;
+  }
+
+  .navLabel {
+    opacity: 0;
+    width: 0;
+  }
+
+  .navLink {
+    justify-content: center;
+    padding: var(--spacing-3);
+  }
+
+  .navLink:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+}
