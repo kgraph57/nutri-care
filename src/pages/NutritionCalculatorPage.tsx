@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Utensils } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
-import { Card, Badge, ProgressBar } from "../components/ui";
+import { Card, Badge, Button, ProgressBar } from "../components/ui";
 import {
   calculateBasalMetabolicRate,
   calculateNutritionRequirements,
@@ -305,6 +307,7 @@ function ResultsDisplay({
 
 export function NutritionCalculatorPage() {
   const { patients } = usePatients();
+  const navigate = useNavigate();
   const [inputMode, setInputMode] = useState<InputMode>("patient");
   const [selectedPatientId, setSelectedPatientId] = useState("");
   const [manualInput, setManualInput] = useState<ManualInput>({
@@ -478,11 +481,38 @@ export function NutritionCalculatorPage() {
               </div>
 
               {requirements ? (
-                <ResultsDisplay
-                  requirements={requirements}
-                  bmr={bmr}
-                  condition={condition}
-                />
+                <>
+                  <ResultsDisplay
+                    requirements={requirements}
+                    bmr={bmr}
+                    condition={condition}
+                  />
+
+                  {inputMode === "patient" && selectedPatientId && (
+                    <div className={styles.createMenuAction}>
+                      <Button
+                        variant="primary"
+                        size="lg"
+                        icon={<Utensils size={18} />}
+                        onClick={() => {
+                          const params = new URLSearchParams({
+                            type: nutritionType,
+                            activity: activityLevel,
+                            stress: stressLevel,
+                          });
+                          if (condition !== "none") {
+                            params.set("condition", condition);
+                          }
+                          navigate(
+                            `/menu-builder/${selectedPatientId}?${params.toString()}`,
+                          );
+                        }}
+                      >
+                        この条件でメニューを作成
+                      </Button>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className={styles.emptyResults}>
                   患者情報を入力して計算結果を表示

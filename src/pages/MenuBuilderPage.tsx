@@ -1,26 +1,26 @@
-import { useState, useMemo, useCallback } from 'react'
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
-import { Save, Utensils } from 'lucide-react'
-import { usePatients } from '../hooks/usePatients'
-import { useNutritionMenus } from '../hooks/useNutritionMenus'
-import { useNutritionDatabase } from '../hooks/useNutritionDatabase'
+import { useState, useMemo, useCallback } from "react";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { Save, Utensils } from "lucide-react";
+import { usePatients } from "../hooks/usePatients";
+import { useNutritionMenus } from "../hooks/useNutritionMenus";
+import { useNutritionDatabase } from "../hooks/useNutritionDatabase";
 import {
   calculateNutritionRequirements,
   adjustRequirementsForCondition,
-} from '../services/nutritionCalculation'
-import { Card, Button } from '../components/ui'
-import type { NutritionType } from '../types'
-import { RequirementsConfig } from './menu-builder/RequirementsConfig'
-import { ProductSelector } from './menu-builder/ProductSelector'
-import { MenuComposition } from './menu-builder/MenuComposition'
-import { NutritionAnalysisPanel } from './menu-builder/NutritionAnalysisPanel'
-import styles from './MenuBuilderPage.module.css'
+} from "../services/nutritionCalculation";
+import { Card, Button } from "../components/ui";
+import type { NutritionType } from "../types";
+import { RequirementsConfig } from "./menu-builder/RequirementsConfig";
+import { ProductSelector } from "./menu-builder/ProductSelector";
+import { MenuComposition } from "./menu-builder/MenuComposition";
+import { NutritionAnalysisPanel } from "./menu-builder/NutritionAnalysisPanel";
+import styles from "./MenuBuilderPage.module.css";
 
 interface MenuItemState {
-  id: string
-  product: Record<string, string | number>
-  volume: number
-  frequency: number
+  id: string;
+  product: Record<string, string | number>;
+  volume: number;
+  frequency: number;
 }
 
 const INITIAL_INTAKE: Record<string, number> = {
@@ -40,46 +40,87 @@ const INITIAL_INTAKE: Record<string, number> = {
   manganese: 0,
   iodine: 0,
   selenium: 0,
-}
+};
 
-function parseProductValue(product: Record<string, string | number>, key: string): number {
-  const raw = product[key]
-  if (raw === undefined || raw === null || raw === '') {
-    return 0
+function parseProductValue(
+  product: Record<string, string | number>,
+  key: string,
+): number {
+  const raw = product[key];
+  if (raw === undefined || raw === null || raw === "") {
+    return 0;
   }
-  const parsed = typeof raw === 'number' ? raw : parseFloat(String(raw))
-  return Number.isFinite(parsed) ? parsed : 0
+  const parsed = typeof raw === "number" ? raw : parseFloat(String(raw));
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function calculateCurrentIntake(items: MenuItemState[]): Record<string, number> {
-  return items.reduce<Record<string, number>>((total, item) => {
-    const dailyVolume = item.volume * item.frequency
-    const product = item.product
+function calculateCurrentIntake(
+  items: MenuItemState[],
+): Record<string, number> {
+  return items.reduce<Record<string, number>>(
+    (total, item) => {
+      const dailyVolume = item.volume * item.frequency;
+      const product = item.product;
 
-    return {
-      ...total,
-      energy: total['energy'] + parseProductValue(product, 'エネルギー[kcal/ml]') * dailyVolume,
-      protein: total['protein'] + parseProductValue(product, 'タンパク質[g/100ml]') * dailyVolume / 100,
-      fat: total['fat'] + parseProductValue(product, '脂質[g/100ml]') * dailyVolume / 100,
-      carbs: total['carbs'] + parseProductValue(product, '炭水化物[g/100ml]') * dailyVolume / 100,
-      sodium: total['sodium'] + parseProductValue(product, 'Na[mEq/L]') * dailyVolume / 1000,
-      potassium: total['potassium'] + parseProductValue(product, 'K[mEq/L]') * dailyVolume / 1000,
-      calcium: total['calcium'] + parseProductValue(product, 'Ca[mEq/L]') * dailyVolume / 1000,
-      magnesium: total['magnesium'] + parseProductValue(product, 'Mg[mEq/L]') * dailyVolume / 1000,
-      phosphorus: total['phosphorus'] + parseProductValue(product, 'P[mEq/L]') * dailyVolume / 1000,
-      chloride: total['chloride'] + parseProductValue(product, 'Cl[mEq/L]') * dailyVolume / 1000,
-      iron: total['iron'] + parseProductValue(product, 'Fe[mg/100ml]') * dailyVolume / 100,
-      zinc: total['zinc'] + parseProductValue(product, 'Zn[mg/100ml]') * dailyVolume / 100,
-      copper: total['copper'] + parseProductValue(product, 'Cu[mg/100ml]') * dailyVolume / 100,
-      manganese: total['manganese'] + parseProductValue(product, 'Mn[mg/100ml]') * dailyVolume / 100,
-      iodine: total['iodine'] + parseProductValue(product, 'I[μg/100ml]') * dailyVolume / 100,
-      selenium: total['selenium'] + parseProductValue(product, 'Se[μg/100ml]') * dailyVolume / 100,
-    }
-  }, { ...INITIAL_INTAKE })
+      return {
+        ...total,
+        energy:
+          total["energy"] +
+          parseProductValue(product, "エネルギー[kcal/ml]") * dailyVolume,
+        protein:
+          total["protein"] +
+          (parseProductValue(product, "タンパク質[g/100ml]") * dailyVolume) /
+            100,
+        fat:
+          total["fat"] +
+          (parseProductValue(product, "脂質[g/100ml]") * dailyVolume) / 100,
+        carbs:
+          total["carbs"] +
+          (parseProductValue(product, "炭水化物[g/100ml]") * dailyVolume) / 100,
+        sodium:
+          total["sodium"] +
+          (parseProductValue(product, "Na[mEq/L]") * dailyVolume) / 1000,
+        potassium:
+          total["potassium"] +
+          (parseProductValue(product, "K[mEq/L]") * dailyVolume) / 1000,
+        calcium:
+          total["calcium"] +
+          (parseProductValue(product, "Ca[mEq/L]") * dailyVolume) / 1000,
+        magnesium:
+          total["magnesium"] +
+          (parseProductValue(product, "Mg[mEq/L]") * dailyVolume) / 1000,
+        phosphorus:
+          total["phosphorus"] +
+          (parseProductValue(product, "P[mEq/L]") * dailyVolume) / 1000,
+        chloride:
+          total["chloride"] +
+          (parseProductValue(product, "Cl[mEq/L]") * dailyVolume) / 1000,
+        iron:
+          total["iron"] +
+          (parseProductValue(product, "Fe[mg/100ml]") * dailyVolume) / 100,
+        zinc:
+          total["zinc"] +
+          (parseProductValue(product, "Zn[mg/100ml]") * dailyVolume) / 100,
+        copper:
+          total["copper"] +
+          (parseProductValue(product, "Cu[mg/100ml]") * dailyVolume) / 100,
+        manganese:
+          total["manganese"] +
+          (parseProductValue(product, "Mn[mg/100ml]") * dailyVolume) / 100,
+        iodine:
+          total["iodine"] +
+          (parseProductValue(product, "I[μg/100ml]") * dailyVolume) / 100,
+        selenium:
+          total["selenium"] +
+          (parseProductValue(product, "Se[μg/100ml]") * dailyVolume) / 100,
+      };
+    },
+    { ...INITIAL_INTAKE },
+  );
 }
 
 function generateItemId(productName: string): string {
-  return `${productName}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`
+  return `${productName}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 }
 
 function PatientSelector({
@@ -87,9 +128,9 @@ function PatientSelector({
   selectedPatientId,
   onSelect,
 }: {
-  readonly patients: readonly { id: string; name: string; ward: string }[]
-  readonly selectedPatientId: string
-  readonly onSelect: (id: string) => void
+  readonly patients: readonly { id: string; name: string; ward: string }[];
+  readonly selectedPatientId: string;
+  readonly onSelect: (id: string) => void;
 }) {
   return (
     <div className={styles.patientSelector}>
@@ -110,42 +151,44 @@ function PatientSelector({
         ))}
       </select>
     </div>
-  )
+  );
 }
 
 function NutritionTypeToggle({
   nutritionType,
   onTypeChange,
 }: {
-  readonly nutritionType: NutritionType
-  readonly onTypeChange: (type: NutritionType) => void
+  readonly nutritionType: NutritionType;
+  readonly onTypeChange: (type: NutritionType) => void;
 }) {
   return (
     <div className={styles.typeToggle}>
       <button
         className={[
           styles.typeButton,
-          nutritionType === 'enteral' ? styles.typeButtonActiveEnteral : '',
+          nutritionType === "enteral" ? styles.typeButtonActiveEnteral : "",
         ]
           .filter(Boolean)
-          .join(' ')}
-        onClick={() => onTypeChange('enteral')}
+          .join(" ")}
+        onClick={() => onTypeChange("enteral")}
       >
         経腸栄養
       </button>
       <button
         className={[
           styles.typeButton,
-          nutritionType === 'parenteral' ? styles.typeButtonActiveParenteral : '',
+          nutritionType === "parenteral"
+            ? styles.typeButtonActiveParenteral
+            : "",
         ]
           .filter(Boolean)
-          .join(' ')}
-        onClick={() => onTypeChange('parenteral')}
+          .join(" ")}
+        onClick={() => onTypeChange("parenteral")}
       >
         静脈栄養
       </button>
     </div>
-  )
+  );
 }
 
 function MenuInfoSection({
@@ -154,10 +197,10 @@ function MenuInfoSection({
   onMenuNameChange,
   onNotesChange,
 }: {
-  readonly menuName: string
-  readonly notes: string
-  readonly onMenuNameChange: (value: string) => void
-  readonly onNotesChange: (value: string) => void
+  readonly menuName: string;
+  readonly notes: string;
+  readonly onMenuNameChange: (value: string) => void;
+  readonly onNotesChange: (value: string) => void;
 }) {
   return (
     <Card className={styles.menuInfoCard}>
@@ -180,93 +223,110 @@ function MenuInfoSection({
         rows={3}
       />
     </Card>
-  )
+  );
 }
 
 export function MenuBuilderPage() {
-  const { patientId } = useParams<{ patientId?: string }>()
-  const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
+  const { patientId } = useParams<{ patientId?: string }>();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  const { patients, getPatient } = usePatients()
-  const { saveMenu } = useNutritionMenus()
+  const { patients, getPatient } = usePatients();
+  const { saveMenu } = useNutritionMenus();
 
-  const [selectedPatientId, setSelectedPatientId] = useState(patientId ?? '')
+  const [selectedPatientId, setSelectedPatientId] = useState(patientId ?? "");
   const [nutritionType, setNutritionType] = useState<NutritionType>(
-    (searchParams.get('type') as NutritionType) || 'enteral'
-  )
+    (searchParams.get("type") as NutritionType) || "enteral",
+  );
 
-  const [activityLevel, setActivityLevel] = useState('bedrest')
-  const [stressLevel, setStressLevel] = useState('moderate')
-  const [medicalCondition, setMedicalCondition] = useState('')
+  const [activityLevel, setActivityLevel] = useState(
+    searchParams.get("activity") || "bedrest",
+  );
+  const [stressLevel, setStressLevel] = useState(
+    searchParams.get("stress") || "moderate",
+  );
+  const [medicalCondition, setMedicalCondition] = useState(
+    searchParams.get("condition") || "",
+  );
 
-  const [menuItems, setMenuItems] = useState<MenuItemState[]>([])
-  const [menuName, setMenuName] = useState('')
-  const [notes, setNotes] = useState('')
+  const [menuItems, setMenuItems] = useState<MenuItemState[]>([]);
+  const [menuName, setMenuName] = useState("");
+  const [notes, setNotes] = useState("");
 
-  const { products, categories, isLoading, error } = useNutritionDatabase(nutritionType)
+  const { products, categories, isLoading, error } =
+    useNutritionDatabase(nutritionType);
 
   const selectedPatient = useMemo(
     () => (selectedPatientId ? getPatient(selectedPatientId) : undefined),
-    [selectedPatientId, getPatient]
-  )
+    [selectedPatientId, getPatient],
+  );
 
   const requirements = useMemo(() => {
     if (!selectedPatient) {
-      return null
+      return null;
     }
     const base = calculateNutritionRequirements(
       selectedPatient,
       nutritionType,
       activityLevel,
-      stressLevel
-    )
+      stressLevel,
+    );
     if (medicalCondition) {
-      return adjustRequirementsForCondition(base, medicalCondition)
+      return adjustRequirementsForCondition(base, medicalCondition);
     }
-    return base
-  }, [selectedPatient, nutritionType, activityLevel, stressLevel, medicalCondition])
+    return base;
+  }, [
+    selectedPatient,
+    nutritionType,
+    activityLevel,
+    stressLevel,
+    medicalCondition,
+  ]);
 
-  const currentIntake = useMemo(() => calculateCurrentIntake(menuItems), [menuItems])
+  const currentIntake = useMemo(
+    () => calculateCurrentIntake(menuItems),
+    [menuItems],
+  );
 
   const totalVolume = useMemo(
-    () => menuItems.reduce((sum, item) => sum + item.volume * item.frequency, 0),
-    [menuItems]
-  )
+    () =>
+      menuItems.reduce((sum, item) => sum + item.volume * item.frequency, 0),
+    [menuItems],
+  );
 
   const addProduct = useCallback((product: Record<string, string | number>) => {
     const newItem: MenuItemState = {
-      id: generateItemId(String(product['製剤名'] ?? '')),
+      id: generateItemId(String(product["製剤名"] ?? "")),
       product,
       volume: 100,
       frequency: 1,
-    }
-    setMenuItems((prev) => [...prev, newItem])
-  }, [])
+    };
+    setMenuItems((prev) => [...prev, newItem]);
+  }, []);
 
   const removeProduct = useCallback((id: string) => {
-    setMenuItems((prev) => prev.filter((item) => item.id !== id))
-  }, [])
+    setMenuItems((prev) => prev.filter((item) => item.id !== id));
+  }, []);
 
   const updateProduct = useCallback(
-    (id: string, field: 'volume' | 'frequency', value: number) => {
+    (id: string, field: "volume" | "frequency", value: number) => {
       setMenuItems((prev) =>
         prev.map((item) =>
-          item.id === id ? { ...item, [field]: value } : item
-        )
-      )
+          item.id === id ? { ...item, [field]: value } : item,
+        ),
+      );
     },
-    []
-  )
+    [],
+  );
 
   const handleSave = useCallback(() => {
     if (!selectedPatient || menuItems.length === 0) {
-      return
+      return;
     }
 
     const defaultName = `${selectedPatient.name}の${
-      nutritionType === 'enteral' ? '経腸' : '中心静脈'
-    }栄養メニュー`
+      nutritionType === "enteral" ? "経腸" : "中心静脈"
+    }栄養メニュー`;
 
     saveMenu({
       patientId: selectedPatient.id,
@@ -275,12 +335,12 @@ export function MenuBuilderPage() {
       menuName: menuName || defaultName,
       items: menuItems.map((item) => ({
         id: item.id,
-        productName: String(item.product['製剤名'] ?? ''),
-        manufacturer: String(item.product['メーカー'] ?? ''),
+        productName: String(item.product["製剤名"] ?? ""),
+        manufacturer: String(item.product["メーカー"] ?? ""),
         volume: item.volume,
         frequency: item.frequency,
       })),
-      totalEnergy: Math.round(currentIntake['energy'] ?? 0),
+      totalEnergy: Math.round(currentIntake["energy"] ?? 0),
       totalVolume: Math.round(totalVolume),
       requirements,
       currentIntake,
@@ -288,9 +348,9 @@ export function MenuBuilderPage() {
       activityLevel,
       stressLevel,
       medicalCondition,
-    })
+    });
 
-    navigate('/menus')
+    navigate("/menus");
   }, [
     selectedPatient,
     menuItems,
@@ -305,20 +365,22 @@ export function MenuBuilderPage() {
     medicalCondition,
     saveMenu,
     navigate,
-  ])
+  ]);
 
-  const canSave = selectedPatient !== undefined && menuItems.length > 0
+  const canSave = selectedPatient !== undefined && menuItems.length > 0;
 
   return (
     <div className={styles.page}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <h1 className={styles.title}>
-            {nutritionType === 'enteral' ? '経腸栄養' : '中心静脈栄養'}メニュー作成
+            {nutritionType === "enteral" ? "経腸栄養" : "中心静脈栄養"}
+            メニュー作成
           </h1>
           {selectedPatient && (
             <p className={styles.subtitle}>
-              {selectedPatient.name} さん ({selectedPatient.age}歳, {selectedPatient.ward})
+              {selectedPatient.name} さん ({selectedPatient.age}歳,{" "}
+              {selectedPatient.ward})
             </p>
           )}
         </div>
@@ -397,5 +459,5 @@ export function MenuBuilderPage() {
         </div>
       )}
     </div>
-  )
+  );
 }
