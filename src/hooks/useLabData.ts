@@ -10,6 +10,18 @@ const HISTORY_KEY = "nutri-care-lab-history";
  * Old: Record<string, LabData>
  * New: Record<string, LabData[]>
  */
+function mergeWithSampleData(
+  stored: Record<string, LabData[]>,
+): Record<string, LabData[]> {
+  const merged = { ...stored };
+  for (const [patientId, sampleEntries] of Object.entries(sampleLabDataMap)) {
+    if (!merged[patientId] || merged[patientId].length === 0) {
+      merged[patientId] = sampleEntries;
+    }
+  }
+  return merged;
+}
+
 function loadHistoryFromStorage(): Record<string, LabData[]> {
   try {
     // Try new history format first
@@ -17,7 +29,7 @@ function loadHistoryFromStorage(): Record<string, LabData[]> {
     if (historyStored) {
       const parsed: unknown = JSON.parse(historyStored);
       if (typeof parsed === "object" && parsed !== null) {
-        return parsed as Record<string, LabData[]>;
+        return mergeWithSampleData(parsed as Record<string, LabData[]>);
       }
     }
 
@@ -33,7 +45,7 @@ function loadHistoryFromStorage(): Record<string, LabData[]> {
             migrated[key] = [value];
           }
         }
-        return migrated;
+        return mergeWithSampleData(migrated);
       }
     }
   } catch {
