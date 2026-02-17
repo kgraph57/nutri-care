@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { Save, Utensils } from "lucide-react";
+import { Save, Utensils, Download } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { useNutritionDatabase } from "../hooks/useNutritionDatabase";
@@ -9,8 +9,15 @@ import {
   calculateNutritionRequirements,
   adjustRequirementsForCondition,
 } from "../services/nutritionCalculation";
-import { Card, Button, AllergyAlert, Modal } from "../components/ui";
+import {
+  Card,
+  Button,
+  AllergyAlert,
+  DrugInteractionAlert,
+  Modal,
+} from "../components/ui";
 import { checkAllergies } from "../services/allergyChecker";
+import { checkDrugNutrientInteractions } from "../services/drugNutrientChecker";
 import type { NutritionType } from "../types";
 import type { LabData } from "../types/labData";
 import { RequirementsConfig } from "./menu-builder/RequirementsConfig";
@@ -19,6 +26,11 @@ import { MenuComposition } from "./menu-builder/MenuComposition";
 import { NutritionAnalysisPanel } from "./menu-builder/NutritionAnalysisPanel";
 import { AdvisorPanel } from "../components/advisor/AdvisorPanel";
 import { LabDataForm } from "../components/labs/LabDataForm";
+import { FeedingProtocolView } from "../components/protocol/FeedingProtocolView";
+import { TemplateSelector } from "../components/templates/TemplateSelector";
+import { DraftRecoveryBanner } from "../components/ui/DraftRecoveryBanner";
+import { useMenuDraft } from "../hooks/useMenuDraft";
+import { exportMenuCsv } from "../utils/csvExporter";
 import styles from "./MenuBuilderPage.module.css";
 
 interface MenuItemState {
@@ -239,11 +251,20 @@ export function MenuBuilderPage() {
   const { patients, getPatient } = usePatients();
   const { saveMenu, updateMenu, getMenuById } = useNutritionMenus();
   const { getLabData, saveLabData } = useLabData();
+  const {
+    hasDraft,
+    draft,
+    saveDraft: saveDraftFn,
+    clearDraft,
+  } = useMenuDraft();
   const [showLabModal, setShowLabModal] = useState(false);
 
   const editMenuId = searchParams.get("edit");
   const editingMenu = editMenuId ? getMenuById(editMenuId) : undefined;
   const isEditMode = editingMenu !== undefined;
+  const [showDraftBanner, setShowDraftBanner] = useState(
+    !isEditMode && hasDraft,
+  );
 
   const [selectedPatientId, setSelectedPatientId] = useState(
     editingMenu?.patientId ?? patientId ?? "",
@@ -339,6 +360,18 @@ export function MenuBuilderPage() {
   const allergyWarnings = useMemo(
     () => (selectedPatient ? checkAllergies(selectedPatient, menuItems) : []),
     [selectedPatient, menuItems],
+  );
+
+  const drugInteractions = useMemo(
+    () =>
+      selectedPatient
+        ? checkDrugNutrientInteractions(
+            selectedPatient.medications,
+            menuItems,
+            nutritionType,
+          )
+        : [],
+    [selectedPatient, menuItems, nutritionType],
   );
 
   const patientLabData = useMemo(
@@ -438,6 +471,87 @@ export function MenuBuilderPage() {
     navigate,
   ]);
 
+  // Auto-save draft every 30 seconds
+  useEffect(() => {
+    if (isEditMode || menuItems.length === 0 || !selectedPatientId) return;
+    const timer = setInterval(() => {
+      saveDraftFn({
+        patientId: selectedPatientId,
+        nutritionType,
+        menuName,
+        notes,
+        activityLevel,
+        stressLevel,
+        medicalCondition,
+        items: menuItems.map((item) => ({
+          id: item.id,
+          productName: String(item.product["製剤名"] ?? ""),
+          volume: item.volume,
+          frequency: item.frequency,
+        })),
+      });
+    }, 30_000);
+    return () => clearInterval(timer);
+  }, [
+    isEditMode,
+    menuItems,
+    selectedPatientId,
+    nutritionType,
+    menuName,
+    notes,
+    activityLevel,
+    stressLevel,
+    medicalCondition,
+    saveDraftFn,
+  ]);
+
+  const handleRestoreDraft = useCallback(() => {
+    if (!draft) return;
+    setSelectedPatientId(draft.patientId);
+    setNutritionType(draft.nutritionType as NutritionType);
+    setMenuName(draft.menuName);
+    setNotes(draft.notes);
+    setActivityLevel(draft.activityLevel);
+    setStressLevel(draft.stressLevel);
+    setMedicalCondition(draft.medicalCondition);
+    // Items will be restored when products load
+    setShowDraftBanner(false);
+  }, [draft]);
+
+  const handleDiscardDraft = useCallback(() => {
+    clearDraft();
+    setShowDraftBanner(false);
+  }, [clearDraft]);
+
+  const handleApplyTemplate = useCallback(
+    (
+      items: Array<{
+        product: Record<string, string | number>;
+        volume: number;
+        frequency: number;
+      }>,
+    ) => {
+      const newItems: MenuItemState[] = items.map((item) => ({
+        id: generateItemId(String(item.product["製剤名"] ?? "")),
+        product: item.product,
+        volume: item.volume,
+        frequency: item.frequency,
+      }));
+      setMenuItems((prev) => [...prev, ...newItems]);
+    },
+    [],
+  );
+
+  const handleExportCsv = useCallback(() => {
+    if (menuItems.length === 0) return;
+    const items = menuItems.map((item) => ({
+      productName: String(item.product["製剤名"] ?? ""),
+      volume: item.volume,
+      frequency: item.frequency,
+    }));
+    exportMenuCsv(menuName || "栄養メニュー", items, currentIntake);
+  }, [menuItems, menuName, currentIntake]);
+
   const canSave = selectedPatient !== undefined && menuItems.length > 0;
 
   return (
@@ -469,6 +583,14 @@ export function MenuBuilderPage() {
         />
       </div>
 
+      {showDraftBanner && draft && (
+        <DraftRecoveryBanner
+          savedAt={draft.savedAt}
+          onRestore={handleRestoreDraft}
+          onDiscard={handleDiscardDraft}
+        />
+      )}
+
       {!selectedPatient ? (
         <Card className={styles.promptCard}>
           <p className={styles.promptText}>
@@ -496,6 +618,12 @@ export function MenuBuilderPage() {
               onConditionChange={setMedicalCondition}
             />
 
+            <TemplateSelector
+              nutritionType={nutritionType}
+              products={products}
+              onApplyTemplate={handleApplyTemplate}
+            />
+
             <ProductSelector
               products={products}
               categories={categories}
@@ -514,6 +642,7 @@ export function MenuBuilderPage() {
 
           <div className={styles.rightColumn}>
             <AllergyAlert warnings={allergyWarnings} />
+            <DrugInteractionAlert interactions={drugInteractions} />
 
             <MenuComposition
               items={menuItems}
@@ -527,16 +656,32 @@ export function MenuBuilderPage() {
               totalVolume={totalVolume}
             />
 
-            <Button
-              variant="primary"
-              size="lg"
-              icon={<Save size={20} />}
-              onClick={handleSave}
-              disabled={!canSave}
-              className={styles.saveButton}
-            >
-              {isEditMode ? "変更を保存" : "メニューを保存"}
-            </Button>
+            {nutritionType === "enteral" && (
+              <FeedingProtocolView requirements={requirements} />
+            )}
+
+            <div style={{ display: "flex", gap: "var(--spacing-2)" }}>
+              <Button
+                variant="primary"
+                size="lg"
+                icon={<Save size={20} />}
+                onClick={handleSave}
+                disabled={!canSave}
+                className={styles.saveButton}
+              >
+                {isEditMode ? "変更を保存" : "メニューを保存"}
+              </Button>
+              {menuItems.length > 0 && (
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  icon={<Download size={20} />}
+                  onClick={handleExportCsv}
+                >
+                  CSV
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       )}

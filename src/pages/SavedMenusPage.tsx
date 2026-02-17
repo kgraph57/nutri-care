@@ -1,5 +1,11 @@
 import { useState, useMemo } from "react";
-import { ClipboardList, Trash2, Plus, Pencil } from "lucide-react";
+import {
+  ClipboardList,
+  Trash2,
+  Plus,
+  Pencil,
+  GitCompareArrows,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { Card, Badge, Button, SearchInput, EmptyState } from "../components/ui";
@@ -131,6 +137,17 @@ export function SavedMenusPage() {
               onChange={setSearchQuery}
               placeholder="患者名で検索..."
             />
+            {menus.length >= 2 && (
+              <Link to="/compare">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  icon={<GitCompareArrows size={14} />}
+                >
+                  メニュー比較
+                </Button>
+              </Link>
+            )}
           </div>
 
           <p className={styles.resultCount}>

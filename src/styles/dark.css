@@ -1,0 +1,72 @@
+[data-theme="dark"] {
+  /* ── Primary ── */
+  --color-primary-50: #1a1816;
+  --color-primary-100: #252220;
+  --color-primary-200: #36322f;
+  --color-primary-300: #4a4541;
+  --color-primary-400: #6b625a;
+  --color-primary-500: #9e968f;
+  --color-primary-600: #c4bfba;
+  --color-primary-700: #ddd9d6;
+  --color-primary-800: #f0eeed;
+  --color-primary-900: #faf9f8;
+
+  /* ── Neutral ── */
+  --color-neutral-50: #1c1a18;
+  --color-neutral-100: #252321;
+  --color-neutral-200: #33302d;
+  --color-neutral-300: #47433f;
+  --color-neutral-400: #6b645d;
+  --color-neutral-500: #9a938b;
+  --color-neutral-600: #c4bdb6;
+  --color-neutral-700: #e0dbd7;
+  --color-neutral-800: #f0edea;
+  --color-neutral-900: #fdfcfb;
+
+  /* ── Semantic ── */
+  --color-success: #5a9a6b;
+  --color-success-light: #1d2d22;
+  --color-success-dark: #7abb8b;
+
+  --color-warning: #c49048;
+  --color-warning-light: #2d2418;
+  --color-warning-dark: #dab06a;
+
+  --color-danger: #b85a54;
+  --color-danger-light: #2d1c1a;
+  --color-danger-dark: #d88480;
+
+  --color-info: #6a9ab0;
+  --color-info-light: #1a2830;
+  --color-info-dark: #8abcd4;
+
+  /* ── Domain ── */
+  --color-enteral: #5a9a6b;
+  --color-enteral-light: #1d2d22;
+  --color-parenteral: #c49048;
+  --color-parenteral-light: #2d2418;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.15);
+  --shadow-md: 0 2px 8px rgb(0 0 0 / 0.2), 0 1px 2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 4px 16px rgb(0 0 0 / 0.25), 0 2px 4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 8px 28px rgb(0 0 0 / 0.3), 0 4px 8px rgb(0 0 0 / 0.15);
+}
+
+[data-theme="dark"] body {
+  background-color: var(--color-neutral-50);
+  color: var(--color-neutral-800);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  border-color: var(--color-neutral-300);
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--color-neutral-500);
+}

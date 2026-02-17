@@ -1,0 +1,110 @@
+.wrapper {
+  margin-top: var(--spacing-3);
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.tableContainer {
+  overflow-x: auto;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.headerCell {
+  position: sticky;
+  left: 0;
+  background: var(--color-neutral-100);
+  padding: var(--spacing-2) var(--spacing-3);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+  border-bottom: 1px solid var(--color-neutral-200);
+  z-index: 1;
+}
+
+.dateHeader {
+  padding: var(--spacing-2) var(--spacing-3);
+  text-align: center;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+  background: var(--color-neutral-100);
+  border-bottom: 1px solid var(--color-neutral-200);
+  min-width: 80px;
+}
+
+.deleteButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--color-neutral-400);
+  cursor: pointer;
+  padding: 2px;
+  margin-left: 4px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast);
+}
+
+.deleteButton:hover {
+  color: var(--color-danger);
+}
+
+.labelCell {
+  position: sticky;
+  left: 0;
+  background: white;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-bottom: 1px solid var(--color-neutral-100);
+  z-index: 1;
+}
+
+.paramLabel {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-800);
+}
+
+.paramUnit {
+  font-size: 10px;
+  color: var(--color-neutral-400);
+  margin-left: var(--spacing-1);
+}
+
+.valueCell {
+  padding: var(--spacing-1) var(--spacing-3);
+  text-align: center;
+  border-bottom: 1px solid var(--color-neutral-100);
+  font-variant-numeric: tabular-nums;
+}
+
+.cellNormal {
+  color: var(--color-neutral-800);
+}
+
+.cellLow {
+  color: var(--color-info-dark);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cellHigh {
+  color: var(--color-warning-dark);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cellCritical {
+  color: var(--color-danger);
+  font-weight: var(--font-weight-bold);
+  background-color: var(--color-danger-light);
+}

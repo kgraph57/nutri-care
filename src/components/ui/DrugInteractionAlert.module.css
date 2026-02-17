@@ -1,0 +1,88 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.alert {
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--radius-md);
+  border-left: 4px solid;
+}
+
+.alertHigh {
+  background-color: var(--color-danger-light);
+  border-left-color: var(--color-danger);
+}
+
+.alertMedium {
+  background-color: var(--color-warning-light);
+  border-left-color: var(--color-warning);
+}
+
+.alertLow {
+  background-color: var(--color-info-light);
+  border-left-color: var(--color-info);
+}
+
+.alertHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+}
+
+.severityBadge {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px var(--spacing-2);
+  border-radius: var(--radius-full);
+  line-height: 1.4;
+}
+
+.badgeHigh {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+.badgeMedium {
+  background-color: var(--color-warning);
+  color: white;
+}
+
+.badgeLow {
+  background-color: var(--color-info);
+  color: white;
+}
+
+.drugName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+}
+
+.interactionText {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  line-height: var(--line-height-normal);
+  margin: 0 0 var(--spacing-1) 0;
+}
+
+.recommendation {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-normal);
+  margin: 0;
+  padding-top: var(--spacing-1);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-danger-dark);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0 0 var(--spacing-2) 0;
+}

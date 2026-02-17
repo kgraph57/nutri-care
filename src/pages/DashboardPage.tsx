@@ -1,41 +1,62 @@
-import { Link } from 'react-router-dom'
-import { Users, ClipboardList, Plus, TrendingUp } from 'lucide-react'
-import { usePatients } from '../hooks/usePatients'
-import { useNutritionMenus } from '../hooks/useNutritionMenus'
-import { Card, Badge, Button, EmptyState } from '../components/ui'
-import type { NutritionMenuData } from '../hooks/useNutritionMenus'
-import styles from './DashboardPage.module.css'
+import { Link } from "react-router-dom";
+import {
+  Users,
+  ClipboardList,
+  Plus,
+  TrendingUp,
+  Activity,
+  AlertTriangle,
+} from "lucide-react";
+import { usePatients } from "../hooks/usePatients";
+import { useNutritionMenus } from "../hooks/useNutritionMenus";
+import { useLabData } from "../hooks/useLabData";
+import { Card, Badge, Button, EmptyState } from "../components/ui";
+import { PatientStatusGrid } from "../components/dashboard/PatientStatusGrid";
+import { WeeklyNutritionChart } from "../components/dashboard/WeeklyNutritionChart";
+import { CriticalLabAlerts } from "../components/dashboard/CriticalLabAlerts";
+import type { NutritionMenuData } from "../hooks/useNutritionMenus";
+import type { Patient } from "../types";
+import type { LabData } from "../types/labData";
+import { LAB_REFERENCES } from "../types/labData";
+import styles from "./DashboardPage.module.css";
 
 function formatDate(isoString: string): string {
-  const date = new Date(isoString)
-  return date.toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
+  const date = new Date(isoString);
+  return date.toLocaleDateString("ja-JP", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function getNutritionTypeBadge(type: string) {
-  const isEnteral = type === 'enteral'
+  const isEnteral = type === "enteral";
   return (
-    <Badge variant={isEnteral ? 'success' : 'warning'}>
-      {isEnteral ? '経腸栄養' : '静脈栄養'}
+    <Badge variant={isEnteral ? "success" : "warning"}>
+      {isEnteral ? "経腸栄養" : "静脈栄養"}
     </Badge>
-  )
+  );
 }
 
-function getRecentMenus(menus: readonly NutritionMenuData[]): NutritionMenuData[] {
+function getRecentMenus(
+  menus: readonly NutritionMenuData[],
+): NutritionMenuData[] {
   return [...menus]
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 5)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+    .slice(0, 5);
 }
 
 function SummaryCards({
   patientCount,
   menuCount,
+  alertCount,
 }: {
-  readonly patientCount: number
-  readonly menuCount: number
+  readonly patientCount: number;
+  readonly menuCount: number;
+  readonly alertCount: number;
 }) {
   return (
     <div className={styles.summaryGrid}>
@@ -57,16 +78,25 @@ function SummaryCards({
           <span className={styles.summaryValue}>{menuCount}</span>
         </div>
       </Card>
+      <Card className={styles.summaryCard}>
+        <div className={`${styles.summaryIcon} ${styles.summaryIconAlerts}`}>
+          <AlertTriangle size={24} />
+        </div>
+        <div className={styles.summaryContent}>
+          <span className={styles.summaryLabel}>異常検査値</span>
+          <span className={styles.summaryValue}>{alertCount}</span>
+        </div>
+      </Card>
     </div>
-  )
+  );
 }
 
 function RecentMenuList({
   menus,
 }: {
-  readonly menus: readonly NutritionMenuData[]
+  readonly menus: readonly NutritionMenuData[];
 }) {
-  const recentMenus = getRecentMenus(menus)
+  const recentMenus = getRecentMenus(menus);
 
   if (recentMenus.length === 0) {
     return (
@@ -82,7 +112,7 @@ function RecentMenuList({
           </Link>
         }
       />
-    )
+    );
   }
 
   return (
@@ -103,7 +133,7 @@ function RecentMenuList({
         </Card>
       ))}
     </div>
-  )
+  );
 }
 
 function QuickActions() {
@@ -120,12 +150,34 @@ function QuickActions() {
         </Button>
       </Link>
     </div>
-  )
+  );
+}
+
+function countLabAlerts(
+  patients: readonly Patient[],
+  getLabData: (id: string) => LabData | undefined,
+): number {
+  let count = 0;
+  for (const patient of patients) {
+    const lab = getLabData(patient.id);
+    if (!lab) continue;
+    for (const ref of LAB_REFERENCES) {
+      const value = lab[ref.key];
+      if (value === undefined || value === null) continue;
+      if (value < ref.normalMin || value > ref.normalMax) {
+        count++;
+      }
+    }
+  }
+  return count;
 }
 
 export function DashboardPage() {
-  const { patients } = usePatients()
-  const { menus } = useNutritionMenus()
+  const { patients } = usePatients();
+  const { menus } = useNutritionMenus();
+  const { getLabData } = useLabData();
+
+  const alertCount = countLabAlerts(patients, getLabData);
 
   return (
     <div className={styles.page}>
@@ -137,7 +189,42 @@ export function DashboardPage() {
       <SummaryCards
         patientCount={patients.length}
         menuCount={menus.length}
+        alertCount={alertCount}
       />
+
+      <div className={styles.twoColumn}>
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>
+              <Activity size={18} />
+              週間エネルギー推移
+            </h2>
+          </div>
+          <Card>
+            <WeeklyNutritionChart menus={menus} />
+          </Card>
+        </section>
+
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>
+              <AlertTriangle size={18} />
+              検査値アラート
+            </h2>
+          </div>
+          <CriticalLabAlerts patients={patients} getLabData={getLabData} />
+        </section>
+      </div>
+
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>
+            <Users size={18} />
+            患者ステータス
+          </h2>
+        </div>
+        <PatientStatusGrid patients={patients} menus={menus} />
+      </section>
 
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
@@ -153,5 +240,5 @@ export function DashboardPage() {
         <QuickActions />
       </section>
     </div>
-  )
+  );
 }

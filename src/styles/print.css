@@ -1,0 +1,131 @@
+@media print {
+  /* ── Hide non-printable UI ── */
+  nav,
+  .sidebar,
+  .bottomNav,
+  header:not(.printable-header),
+  button:not(.print-keep),
+  .no-print {
+    display: none !important;
+  }
+
+  /* ── Reset for A4 ── */
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+    color: black;
+    font-size: 11pt;
+    line-height: 1.4;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── Page setup ── */
+  @page {
+    size: A4;
+    margin: 15mm 12mm;
+  }
+
+  /* ── Avoid awkward breaks ── */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  table, figure, .card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* ── Ensure borders are visible ── */
+  table {
+    border-collapse: collapse;
+  }
+
+  table th,
+  table td {
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+  }
+
+  table th {
+    background-color: #f5f5f5 !important;
+    font-weight: 600;
+  }
+
+  /* ── Links: show URL in print ── */
+  a[href]::after {
+    content: none;
+  }
+
+  /* ── Remove shadows and decorations ── */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* ── Printable order sheet specifics ── */
+  .print-sheet {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
+  .print-header {
+    text-align: center;
+    border-bottom: 2px solid black;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  .print-header h1 {
+    font-size: 16pt;
+    margin: 0;
+  }
+
+  .print-patient-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 16px;
+    font-size: 10pt;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    padding: 8px;
+  }
+
+  .print-section-title {
+    font-size: 12pt;
+    font-weight: 700;
+    border-bottom: 1px solid #999;
+    padding-bottom: 2px;
+    margin: 12px 0 6px;
+  }
+
+  .print-signature {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 12px;
+    border-top: 1px solid #ccc;
+  }
+
+  .print-signature-box {
+    text-align: center;
+    padding-top: 32px;
+    border-bottom: 1px solid black;
+    font-size: 9pt;
+  }
+
+  .print-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8pt;
+    color: #999;
+    padding-bottom: 4px;
+  }
+}

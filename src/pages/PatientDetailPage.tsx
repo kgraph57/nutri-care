@@ -25,6 +25,8 @@ import {
   NutritionTrendChart,
 } from "../components/ui";
 import { LabDataForm } from "../components/labs/LabDataForm";
+import { LabTrendChart } from "../components/labs/LabTrendChart";
+import { LabHistoryTable } from "../components/labs/LabHistoryTable";
 import styles from "./PatientDetailPage.module.css";
 
 function formatDateShort(isoString: string): string {
@@ -157,7 +159,8 @@ export function PatientDetailPage() {
   const { patientId } = useParams<{ patientId: string }>();
   const { getPatient } = usePatients();
   const { getMenusForPatient } = useNutritionMenus();
-  const { getLabData, saveLabData } = useLabData();
+  const { getLabData, getLabHistory, saveLabData, deleteLabEntry } =
+    useLabData();
   const [showLabModal, setShowLabModal] = useState(false);
 
   const patient = patientId ? getPatient(patientId) : undefined;
@@ -174,6 +177,11 @@ export function PatientDetailPage() {
     [patientId, getLabData],
   );
 
+  const labHistory = useMemo(
+    () => (patientId ? getLabHistory(patientId) : []),
+    [patientId, getLabHistory],
+  );
+
   const labInterpretations = useMemo(
     () => (labData ? getAbnormalFindings(analyzeLabData(labData)) : []),
     [labData],
@@ -187,6 +195,15 @@ export function PatientDetailPage() {
       setShowLabModal(false);
     },
     [patientId, saveLabData],
+  );
+
+  const handleDeleteLabEntry = useCallback(
+    (date: string) => {
+      if (patientId) {
+        deleteLabEntry(patientId, date);
+      }
+    },
+    [patientId, deleteLabEntry],
   );
 
   const handlePrint = useCallback(() => {
@@ -376,6 +393,21 @@ export function PatientDetailPage() {
           </Card>
         )}
       </section>
+
+      {labHistory.length >= 2 && (
+        <section className={styles.section}>
+          <LabTrendChart history={labHistory} />
+        </section>
+      )}
+
+      {labHistory.length > 0 && (
+        <section className={styles.section}>
+          <LabHistoryTable
+            history={labHistory}
+            onDelete={handleDeleteLabEntry}
+          />
+        </section>
+      )}
 
       {patientMenus.length >= 2 && (
         <section className={styles.section}>

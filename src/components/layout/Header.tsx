@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
 import { isSupabaseConfigured } from "../../lib/supabase";
 import styles from "./Header.module.css";
 
@@ -28,9 +29,7 @@ function formatDate(date: Date): string {
 }
 
 function getPageTitle(pathname: string): string {
-  const matched = ROUTE_TITLES.find((route) =>
-    pathname.startsWith(route.path),
-  );
+  const matched = ROUTE_TITLES.find((route) => pathname.startsWith(route.path));
   return matched ? matched.title : DEFAULT_TITLE;
 }
 
@@ -38,6 +37,7 @@ function Header() {
   const location = useLocation();
   const pageTitle = getPageTitle(location.pathname);
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const today = new Date();
 
   return (
@@ -47,6 +47,14 @@ function Header() {
         <time className={styles.date} dateTime={today.toISOString()}>
           {formatDate(today)}
         </time>
+        <button
+          type="button"
+          className={styles.themeToggle}
+          onClick={toggleTheme}
+          title={theme === "light" ? "ダークモード" : "ライトモード"}
+        >
+          {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+        </button>
         {isSupabaseConfigured && user && (
           <button
             type="button"

@@ -1,0 +1,89 @@
+.container {
+  padding: var(--spacing-4);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  margin: 0 0 var(--spacing-3) 0;
+}
+
+.paramButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+  margin-bottom: var(--spacing-3);
+}
+
+.paramButton {
+  font-size: var(--font-size-xs);
+  padding: 4px var(--spacing-2);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-full);
+  background: white;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.paramButton:hover {
+  border-color: var(--color-primary-400);
+  color: var(--color-primary-600);
+}
+
+.paramButtonActive {
+  background: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+  color: white;
+}
+
+.paramButtonActive:hover {
+  background: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+  color: white;
+}
+
+.chartWrapper {
+  margin-bottom: var(--spacing-2);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  font-size: var(--font-size-xs);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  color: var(--color-neutral-700);
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendRange {
+  color: var(--color-neutral-400);
+  margin-left: var(--spacing-1);
+}
+
+@media (max-width: 640px) {
+  .paramButtons {
+    gap: 4px;
+  }
+
+  .paramButton {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}

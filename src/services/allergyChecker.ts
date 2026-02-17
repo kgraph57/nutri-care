@@ -1,4 +1,5 @@
 import type { Patient } from "../types";
+import { normalizeText } from "../utils/textNormalizer";
 
 export interface AllergyWarning {
   productName: string;
@@ -45,13 +46,6 @@ const ALLERGEN_PRODUCT_MAP: ReadonlyMap<string, readonly string[]> = new Map([
   ["トウモロコシ", ["トウモロコシ", "コーン", "マルトデキストリン"]],
   ["コーン", ["コーン", "トウモロコシ", "マルトデキストリン"]],
 ]);
-
-function normalizeText(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[\s\u3000]/g, "")
-    .replace(/[ー−-]/g, "");
-}
 
 function productMatchesAllergen(
   product: Record<string, string | number>,

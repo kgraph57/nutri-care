@@ -11,5 +11,7 @@ export { EmptyState } from "./EmptyState";
 export { NutritionTrendChart } from "./NutritionTrendChart";
 export { AllergyAlert } from "./AllergyAlert";
 export { ErrorBoundary } from "./ErrorBoundary";
+export { AdequacyScoreBadge } from "./AdequacyScoreBadge";
+export { DrugInteractionAlert } from "./DrugInteractionAlert";
 
 export type { ToastType, ToastItem } from "./useToast";

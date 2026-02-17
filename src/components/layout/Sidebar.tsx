@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink } from "react-router-dom";
 import {
   Stethoscope,
   LayoutDashboard,
@@ -6,23 +6,27 @@ import {
   Calculator,
   ClipboardList,
   Archive,
-} from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
-import styles from './Sidebar.module.css'
+  GitCompareArrows,
+  Settings,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import styles from "./Sidebar.module.css";
 
 interface NavItem {
-  readonly icon: LucideIcon
-  readonly label: string
-  readonly path: string
+  readonly icon: LucideIcon;
+  readonly label: string;
+  readonly path: string;
 }
 
 const NAV_ITEMS: readonly NavItem[] = [
-  { icon: LayoutDashboard, label: 'ダッシュボード', path: '/' },
-  { icon: Users, label: '患者管理', path: '/patients' },
-  { icon: Calculator, label: '栄養計算', path: '/calculator' },
-  { icon: ClipboardList, label: 'メニュー作成', path: '/menu-builder' },
-  { icon: Archive, label: '保存メニュー', path: '/menus' },
-] as const
+  { icon: LayoutDashboard, label: "ダッシュボード", path: "/" },
+  { icon: Users, label: "患者管理", path: "/patients" },
+  { icon: Calculator, label: "栄養計算", path: "/calculator" },
+  { icon: ClipboardList, label: "メニュー作成", path: "/menu-builder" },
+  { icon: Archive, label: "保存メニュー", path: "/menus" },
+  { icon: GitCompareArrows, label: "メニュー比較", path: "/compare" },
+  { icon: Settings, label: "設定", path: "/settings" },
+] as const;
 
 function Sidebar() {
   return (
@@ -38,11 +42,11 @@ function Sidebar() {
             <li key={item.path} className={styles.navItem}>
               <NavLink
                 to={item.path}
-                end={item.path === '/'}
+                end={item.path === "/"}
                 className={({ isActive }) =>
-                  [styles.navLink, isActive ? styles.navLinkActive : '']
+                  [styles.navLink, isActive ? styles.navLinkActive : ""]
                     .filter(Boolean)
-                    .join(' ')
+                    .join(" ")
                 }
               >
                 <item.icon className={styles.navIcon} size={20} />
@@ -54,7 +58,7 @@ function Sidebar() {
         </ul>
       </nav>
     </aside>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;
