@@ -1,12 +1,33 @@
-import { Settings, RotateCcw, Moon, Sun } from "lucide-react";
+import { useState, useCallback } from "react";
+import { Settings, RotateCcw, Moon, Sun, Bot, Eye, EyeOff } from "lucide-react";
 import { useSettings } from "../hooks/useSettings";
 import { useTheme } from "../hooks/useTheme";
+import {
+  getStoredApiKey,
+  setStoredApiKey,
+  isApiKeyConfigured,
+} from "../lib/anthropic";
 import { Card, Button } from "../components/ui";
 import styles from "./SettingsPage.module.css";
 
 export function SettingsPage() {
   const { settings, updateSettings, resetSettings } = useSettings();
   const { theme, toggleTheme } = useTheme();
+
+  const [apiKey, setApiKey] = useState(getStoredApiKey);
+  const [showKey, setShowKey] = useState(false);
+  const [keySaved, setKeySaved] = useState(isApiKeyConfigured);
+
+  const handleSaveKey = useCallback(() => {
+    setStoredApiKey(apiKey.trim());
+    setKeySaved(apiKey.trim().length > 0);
+  }, [apiKey]);
+
+  const handleClearKey = useCallback(() => {
+    setStoredApiKey("");
+    setApiKey("");
+    setKeySaved(false);
+  }, []);
 
   return (
     <div className={styles.page}>
@@ -18,6 +39,84 @@ export function SettingsPage() {
       </header>
 
       <div className={styles.sections}>
+        {/* AI Assistant Settings */}
+        <Card className={styles.section}>
+          <h2 className={styles.sectionTitle}>
+            <Bot size={16} />
+            AI アシスタント
+          </h2>
+
+          <div className={styles.settingRow}>
+            <div className={styles.settingInfo}>
+              <span className={styles.settingLabel}>Anthropic API キー</span>
+              <span className={styles.settingDesc}>
+                AIアシスタント機能に必要です。キーはブラウザのlocalStorageに保存されます。
+              </span>
+            </div>
+          </div>
+          <div className={styles.apiKeyRow}>
+            <div className={styles.apiKeyInputWrap}>
+              <input
+                type={showKey ? "text" : "password"}
+                className={styles.apiKeyInput}
+                value={apiKey}
+                onChange={(e) => {
+                  setApiKey(e.target.value);
+                  setKeySaved(false);
+                }}
+                placeholder="sk-ant-..."
+                autoComplete="off"
+              />
+              <button
+                className={styles.eyeButton}
+                onClick={() => setShowKey((v) => !v)}
+                type="button"
+              >
+                {showKey ? <EyeOff size={14} /> : <Eye size={14} />}
+              </button>
+            </div>
+            <div className={styles.apiKeyActions}>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleSaveKey}
+                disabled={keySaved && apiKey === getStoredApiKey()}
+              >
+                保存
+              </Button>
+              {keySaved && (
+                <Button variant="ghost" size="sm" onClick={handleClearKey}>
+                  削除
+                </Button>
+              )}
+            </div>
+          </div>
+          {keySaved && (
+            <p className={styles.apiKeyStatus}>APIキー設定済み</p>
+          )}
+
+          <div className={styles.settingRow}>
+            <div className={styles.settingInfo}>
+              <span className={styles.settingLabel}>AIモデル</span>
+              <span className={styles.settingDesc}>
+                Haiku: 高速・低コスト / Sonnet: 高品質・詳細
+              </span>
+            </div>
+            <select
+              className={styles.select}
+              value={settings.aiModel}
+              onChange={(e) =>
+                updateSettings({
+                  aiModel: e.target.value as "haiku" | "sonnet",
+                })
+              }
+            >
+              <option value="haiku">Claude Haiku (高速)</option>
+              <option value="sonnet">Claude Sonnet (高品質)</option>
+            </select>
+          </div>
+        </Card>
+
         <Card className={styles.section}>
           <h2 className={styles.sectionTitle}>表示設定</h2>
 

@@ -12,6 +12,7 @@ import { MenuBuilderPage } from "./pages/MenuBuilderPage";
 import { SavedMenusPage } from "./pages/SavedMenusPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { ComparisonPage } from "./pages/ComparisonPage";
+import { SimulationPage } from "./pages/SimulationPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 function AppRoutes() {
@@ -47,6 +48,7 @@ function AppRoutes() {
         <Route path="menu-builder/:patientId" element={<MenuBuilderPage />} />
         <Route path="menus" element={<SavedMenusPage />} />
         <Route path="compare" element={<ComparisonPage />} />
+        <Route path="simulation" element={<SimulationPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>

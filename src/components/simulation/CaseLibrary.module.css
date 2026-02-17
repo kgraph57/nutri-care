@@ -1,0 +1,200 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.filters {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.difficultyTabs {
+  display: flex;
+  gap: var(--spacing-1);
+  background-color: var(--color-neutral-100);
+  padding: var(--spacing-1);
+  border-radius: var(--radius-md);
+}
+
+.difficultyTab {
+  padding: var(--spacing-2) var(--spacing-3);
+  border: none;
+  background: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+
+.difficultyTab:hover {
+  color: var(--color-neutral-800);
+}
+
+.difficultyTabActive {
+  background-color: #ffffff;
+  color: var(--color-neutral-900);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-sm);
+}
+
+.categorySelect {
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  background-color: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.categorySelect:focus {
+  outline: none;
+  border-color: var(--color-primary-400);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.caseCard {
+  position: relative;
+  padding: var(--spacing-5);
+  transition: box-shadow var(--transition-fast);
+}
+
+.caseCard:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-3);
+}
+
+.cardTitle {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0;
+  flex: 1;
+  padding-right: var(--spacing-2);
+}
+
+.completedIcon {
+  color: var(--color-success);
+  flex-shrink: 0;
+}
+
+.badgeRow {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+}
+
+.difficultyBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.badgeBeginner {
+  background-color: var(--color-success-light);
+  color: var(--color-success-dark);
+}
+
+.badgeIntermediate {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+.badgeAdvanced {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger-dark);
+}
+
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+}
+
+.patientSummary {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  margin-bottom: var(--spacing-2);
+}
+
+.objectiveCount {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.bestScore {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  margin-top: var(--spacing-3);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-200);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-700);
+  font-weight: var(--font-weight-medium);
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-12) var(--spacing-4);
+  color: var(--color-neutral-500);
+}
+
+.emptyIcon {
+  margin-bottom: var(--spacing-3);
+  color: var(--color-neutral-300);
+}
+
+.emptyTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-700);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.emptyText {
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .difficultyTabs {
+    justify-content: center;
+  }
+}

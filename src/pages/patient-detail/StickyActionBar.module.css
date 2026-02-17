@@ -1,0 +1,30 @@
+.actionBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  background-color: var(--color-neutral-50);
+  border-top: 1px solid var(--color-neutral-200);
+  box-shadow: 0 -2px 8px rgb(0 0 0 / 0.04);
+}
+
+.link {
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .actionBar {
+    padding-bottom: calc(var(--spacing-2) + env(safe-area-inset-bottom));
+  }
+}
+
+@media print {
+  .actionBar {
+    display: none !important;
+  }
+}

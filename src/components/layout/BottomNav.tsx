@@ -2,9 +2,9 @@ import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
-  Calculator,
   ClipboardList,
   Archive,
+  GraduationCap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import styles from "./BottomNav.module.css";
@@ -20,7 +20,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { icon: Users, label: "患者", path: "/patients" },
   { icon: ClipboardList, label: "作成", path: "/menu-builder" },
   { icon: Archive, label: "メニュー", path: "/menus" },
-  { icon: Calculator, label: "計算", path: "/calculator" },
+  { icon: GraduationCap, label: "演習", path: "/simulation" },
 ] as const;
 
 function BottomNav() {

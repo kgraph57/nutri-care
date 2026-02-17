@@ -226,6 +226,37 @@
   font-size: var(--font-size-sm);
 }
 
+.aiButtonWrap {
+  margin-top: var(--spacing-3);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-100);
+}
+
+.aiButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--color-primary-300);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+  justify-content: center;
+}
+
+.aiButton:hover {
+  background: var(--color-primary-100);
+  border-color: var(--color-primary-400);
+}
+
+.aiChatWrap {
+  margin-top: var(--spacing-3);
+}
+
 @media (max-width: 640px) {
   .panel {
     padding: var(--spacing-3);

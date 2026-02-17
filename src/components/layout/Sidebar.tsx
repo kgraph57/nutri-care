@@ -7,6 +7,7 @@ import {
   ClipboardList,
   Archive,
   GitCompareArrows,
+  GraduationCap,
   Settings,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -25,6 +26,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { icon: ClipboardList, label: "メニュー作成", path: "/menu-builder" },
   { icon: Archive, label: "保存メニュー", path: "/menus" },
   { icon: GitCompareArrows, label: "メニュー比較", path: "/compare" },
+  { icon: GraduationCap, label: "症例演習", path: "/simulation" },
   { icon: Settings, label: "設定", path: "/settings" },
 ] as const;
 

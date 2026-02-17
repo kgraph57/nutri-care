@@ -1,0 +1,104 @@
+/* ========================================
+   ChatMessage
+   ======================================== */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+}
+
+.wrapperUser {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.wrapperAssistant {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+/* ── Bubble ── */
+
+.bubble {
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.user {
+  background-color: var(--color-primary-500);
+  color: #ffffff;
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+.assistant {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+/* ── Content formatting ── */
+
+.content {
+  white-space: pre-wrap;
+}
+
+.content strong {
+  font-weight: var(--font-weight-semibold);
+}
+
+.inlineCode {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.85em;
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+}
+
+.user .inlineCode {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.assistant .inlineCode {
+  background-color: var(--color-neutral-200);
+}
+
+/* ── Streaming cursor ── */
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 0.8s step-end infinite;
+}
+
+.user .cursor {
+  background-color: #ffffff;
+}
+
+.assistant .cursor {
+  background-color: var(--color-neutral-600);
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── Timestamp ── */
+
+.timestamp {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-400);
+  margin-top: var(--spacing-1);
+  padding: 0 var(--spacing-1);
+}

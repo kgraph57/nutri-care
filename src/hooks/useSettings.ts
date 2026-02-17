@@ -9,6 +9,7 @@ export interface AppSettings {
   readonly autoSaveEnabled: boolean;
   readonly showAdvancedNutrients: boolean;
   readonly language: "ja" | "en";
+  readonly aiModel: "haiku" | "sonnet";
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
@@ -18,6 +19,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   autoSaveEnabled: true,
   showAdvancedNutrients: true,
   language: "ja",
+  aiModel: "haiku",
 };
 
 function loadSettings(): AppSettings {
@@ -43,12 +45,9 @@ export function useSettings() {
     }
   }, [settings]);
 
-  const updateSettings = useCallback(
-    (updates: Partial<AppSettings>) => {
-      setSettingsState((prev) => ({ ...prev, ...updates }));
-    },
-    [],
-  );
+  const updateSettings = useCallback((updates: Partial<AppSettings>) => {
+    setSettingsState((prev) => ({ ...prev, ...updates }));
+  }, []);
 
   const resetSettings = useCallback(() => {
     setSettingsState(DEFAULT_SETTINGS);

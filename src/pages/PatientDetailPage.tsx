@@ -1,20 +1,10 @@
 import { useMemo, useState, useCallback } from "react";
-import { useParams, Link } from "react-router-dom";
-import {
-  ArrowLeft,
-  Calendar,
-  MapPin,
-  Stethoscope,
-  Plus,
-  Printer,
-  FlaskConical,
-} from "lucide-react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, Calendar, Plus } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { useLabData } from "../hooks/useLabData";
 import type { LabData } from "../types/labData";
-import { LAB_REFERENCES } from "../types/labData";
-import { analyzeLabData, getAbnormalFindings } from "../services/labAnalyzer";
 import type { NutritionMenuData } from "../hooks/useNutritionMenus";
 import {
   Card,
@@ -27,14 +17,13 @@ import {
 import { LabDataForm } from "../components/labs/LabDataForm";
 import { LabTrendChart } from "../components/labs/LabTrendChart";
 import { LabHistoryTable } from "../components/labs/LabHistoryTable";
+import { PatientProfileCard } from "./patient-detail/PatientProfileCard";
+import { LabOverviewGrid } from "./patient-detail/LabOverviewGrid";
+import { NutritionStatusPanel } from "./patient-detail/NutritionStatusPanel";
+import { StickyActionBar } from "./patient-detail/StickyActionBar";
 import styles from "./PatientDetailPage.module.css";
 
-function formatDateShort(isoString: string): string {
-  return new Date(isoString).toLocaleDateString("ja-JP", {
-    month: "short",
-    day: "numeric",
-  });
-}
+/* ---- Helpers ---- */
 
 function formatDateFull(isoString: string): string {
   return new Date(isoString).toLocaleDateString("ja-JP", {
@@ -64,21 +53,13 @@ function groupByDate(
   return groups;
 }
 
-function computeSummary(menus: readonly NutritionMenuData[]) {
-  const totalMenus = menus.length;
-  const enteralCount = menus.filter(
-    (m) => m.nutritionType === "enteral",
-  ).length;
-  const parenteralCount = totalMenus - enteralCount;
-
-  const latestMenu = [...menus].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  )[0];
-
-  const latestEnergy = latestMenu ? Math.round(latestMenu.totalEnergy) : 0;
-
-  return { totalMenus, enteralCount, parenteralCount, latestEnergy };
+function computeDaysAdmitted(admissionDate: string): number {
+  const admission = new Date(admissionDate);
+  const now = new Date();
+  return Math.max(1, Math.ceil((now.getTime() - admission.getTime()) / 86_400_000));
 }
+
+/* ---- Timeline sub-components ---- */
 
 interface MenuEntryProps {
   readonly menu: NutritionMenuData;
@@ -145,18 +126,11 @@ function DateGroup({ dateKey, menus }: DateGroupProps) {
   );
 }
 
-const KEY_LAB_PARAMS = [
-  "albumin",
-  "creatinine",
-  "bloodSugar",
-  "crp",
-  "potassium",
-  "sodium",
-  "hemoglobin",
-] as const;
+/* ---- Page Component ---- */
 
 export function PatientDetailPage() {
   const { patientId } = useParams<{ patientId: string }>();
+  const navigate = useNavigate();
   const { getPatient } = usePatients();
   const { getMenusForPatient } = useNutritionMenus();
   const { getLabData, getLabHistory, saveLabData, deleteLabEntry } =
@@ -170,7 +144,6 @@ export function PatientDetailPage() {
   );
 
   const dateGroups = useMemo(() => groupByDate(patientMenus), [patientMenus]);
-  const summary = useMemo(() => computeSummary(patientMenus), [patientMenus]);
 
   const labData = useMemo(
     () => (patientId ? getLabData(patientId) : undefined),
@@ -182,10 +155,18 @@ export function PatientDetailPage() {
     [patientId, getLabHistory],
   );
 
-  const labInterpretations = useMemo(
-    () => (labData ? getAbnormalFindings(analyzeLabData(labData)) : []),
-    [labData],
+  const daysAdmitted = useMemo(
+    () => (patient ? computeDaysAdmitted(patient.admissionDate) : 0),
+    [patient],
   );
+
+  const latestMenu = useMemo(() => {
+    if (patientMenus.length === 0) return undefined;
+    return [...patientMenus].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )[0];
+  }, [patientMenus]);
 
   const handleLabSave = useCallback(
     (data: LabData) => {
@@ -206,6 +187,16 @@ export function PatientDetailPage() {
     [patientId, deleteLabEntry],
   );
 
+  const handleEditLabs = useCallback(() => {
+    setShowLabModal(true);
+  }, []);
+
+  const handleOpenAdvisor = useCallback(() => {
+    if (patientId) {
+      navigate(`/menu-builder/${patientId}`);
+    }
+  }, [patientId, navigate]);
+
   const handlePrint = useCallback(() => {
     window.print();
   }, []);
@@ -218,7 +209,7 @@ export function PatientDetailPage() {
           患者一覧に戻る
         </Link>
         <EmptyState
-          icon={<Stethoscope size={48} />}
+          icon={<Calendar size={48} />}
           title="患者が見つかりません"
           description="患者データが存在しないか、削除された可能性があります。"
         />
@@ -233,173 +224,47 @@ export function PatientDetailPage() {
         患者一覧に戻る
       </Link>
 
-      <div className={styles.patientHeader}>
-        <div className={styles.patientInfo}>
-          <h1 className={styles.patientName}>{patient.name}</h1>
-          <div className={styles.patientMeta}>
-            <span className={styles.metaItem}>{patient.age}歳</span>
-            <span className={styles.metaItem}>
-              <MapPin size={14} />
-              {patient.ward}
-            </span>
-            <span className={styles.metaItem}>
-              <Calendar size={14} />
-              入院 {formatDateShort(patient.admissionDate)}
-            </span>
-            {patient.diagnosis && (
-              <span className={styles.metaItem}>
-                <Stethoscope size={14} />
-                {patient.diagnosis}
-              </span>
-            )}
-          </div>
+      {/* Section 1: Patient Profile */}
+      <section className={styles.section}>
+        <PatientProfileCard patient={patient} daysAdmitted={daysAdmitted} />
+      </section>
+
+      {/* Section 2: Lab Overview Grid (全18検査値) */}
+      <section className={styles.section}>
+        <LabOverviewGrid
+          labData={labData}
+          labHistory={labHistory}
+          onEditLabs={handleEditLabs}
+        />
+      </section>
+
+      {/* Section 3: Two-Column Layout */}
+      <div className={styles.twoColumn}>
+        <div className={styles.columnLeft}>
+          <NutritionStatusPanel
+            patient={patient}
+            labData={labData}
+            latestMenu={latestMenu}
+            menus={patientMenus}
+          />
         </div>
-        <div className={styles.actions}>
-          <Link to={`/menu-builder/${patientId}?type=enteral`}>
-            <Button variant="primary" size="sm" icon={<Plus size={14} />}>
-              経腸メニュー作成
-            </Button>
-          </Link>
-          <Link to={`/menu-builder/${patientId}?type=parenteral`}>
-            <Button variant="secondary" size="sm" icon={<Plus size={14} />}>
-              静脈メニュー作成
-            </Button>
-          </Link>
-          {patientMenus.length > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              icon={<Printer size={14} />}
-              onClick={handlePrint}
-              className={styles.printButton}
-            >
-              PDF出力
-            </Button>
+
+        <div className={styles.columnRight}>
+          {labHistory.length >= 2 && (
+            <LabTrendChart history={labHistory} />
+          )}
+          {patientMenus.length >= 2 && (
+            <NutritionTrendChart menus={patientMenus} />
+          )}
+          {labHistory.length < 2 && patientMenus.length < 2 && (
+            <Card className={styles.chartsEmpty}>
+              <p>データが2件以上になるとトレンドチャートが表示されます</p>
+            </Card>
           )}
         </div>
       </div>
 
-      <div className={styles.summaryStrip}>
-        <Card className={styles.summaryItem}>
-          <span className={styles.summaryValue}>{summary.totalMenus}</span>
-          <span className={styles.summaryLabel}>総メニュー数</span>
-        </Card>
-        <Card className={styles.summaryItem}>
-          <span className={styles.summaryValue}>{summary.enteralCount}</span>
-          <span className={styles.summaryLabel}>経腸栄養</span>
-        </Card>
-        <Card className={styles.summaryItem}>
-          <span className={styles.summaryValue}>{summary.parenteralCount}</span>
-          <span className={styles.summaryLabel}>静脈栄養</span>
-        </Card>
-        <Card className={styles.summaryItem}>
-          <span className={styles.summaryValue}>{summary.latestEnergy}</span>
-          <span className={styles.summaryLabel}>最新 kcal</span>
-        </Card>
-      </div>
-
-      <section className={styles.section}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: "var(--spacing-3)",
-          }}
-        >
-          <h2 className={styles.sectionTitle} style={{ margin: 0 }}>
-            <FlaskConical size={18} style={{ marginRight: 6 }} />
-            検査値データ
-          </h2>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowLabModal(true)}
-          >
-            {labData ? "編集" : "入力"}
-          </Button>
-        </div>
-        {labData ? (
-          <Card style={{ padding: "var(--spacing-3)" }}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
-                gap: "var(--spacing-2)",
-              }}
-            >
-              {KEY_LAB_PARAMS.map((key) => {
-                const ref = LAB_REFERENCES.find((r) => r.key === key);
-                const val = labData[key];
-                if (!ref || val === undefined) return null;
-                const abnormal = labInterpretations.some(
-                  (i) => i.parameter === key,
-                );
-                return (
-                  <div key={key} style={{ textAlign: "center" }}>
-                    <div
-                      style={{
-                        fontSize: "var(--font-size-xs)",
-                        color: "var(--color-neutral-500)",
-                      }}
-                    >
-                      {ref.label}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "var(--font-size-lg)",
-                        fontWeight: 600,
-                        color: abnormal
-                          ? "var(--color-danger)"
-                          : "var(--color-neutral-800)",
-                      }}
-                    >
-                      {val}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "10px",
-                        color: "var(--color-neutral-400)",
-                      }}
-                    >
-                      {ref.unit}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            {labInterpretations.length > 0 && (
-              <div
-                style={{
-                  marginTop: "var(--spacing-2)",
-                  fontSize: "var(--font-size-xs)",
-                  color: "var(--color-danger)",
-                }}
-              >
-                {labInterpretations.length}件の異常値あり
-              </div>
-            )}
-          </Card>
-        ) : (
-          <Card
-            style={{
-              padding: "var(--spacing-4)",
-              textAlign: "center",
-              color: "var(--color-neutral-400)",
-              fontSize: "var(--font-size-sm)",
-            }}
-          >
-            検査値が未入力です。入力するとAIアドバイザーが栄養推奨を行います。
-          </Card>
-        )}
-      </section>
-
-      {labHistory.length >= 2 && (
-        <section className={styles.section}>
-          <LabTrendChart history={labHistory} />
-        </section>
-      )}
-
+      {/* Section 4: Lab History Table */}
       {labHistory.length > 0 && (
         <section className={styles.section}>
           <LabHistoryTable
@@ -409,12 +274,7 @@ export function PatientDetailPage() {
         </section>
       )}
 
-      {patientMenus.length >= 2 && (
-        <section className={styles.section}>
-          <NutritionTrendChart menus={patientMenus} />
-        </section>
-      )}
-
+      {/* Section 5: Menu Timeline */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>栄養メニュー履歴</h2>
 
@@ -440,6 +300,16 @@ export function PatientDetailPage() {
         )}
       </section>
 
+      {/* Sticky Action Bar */}
+      <StickyActionBar
+        patientId={patientId ?? ""}
+        hasMenus={patientMenus.length > 0}
+        onEditLabs={handleEditLabs}
+        onOpenAdvisor={handleOpenAdvisor}
+        onPrint={handlePrint}
+      />
+
+      {/* Lab Data Entry Modal */}
       <Modal
         isOpen={showLabModal}
         title="検査値入力"

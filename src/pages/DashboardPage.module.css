@@ -155,6 +155,61 @@
   text-decoration: none;
 }
 
+/* Simulation progress */
+.simProgressCard {
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+}
+
+.simProgressHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+  color: var(--color-neutral-800);
+}
+
+.simProgressTitle {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.simProgressStats {
+  display: flex;
+  gap: var(--spacing-6);
+}
+
+.simProgressStat {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-1);
+}
+
+.simStatValue {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-600);
+}
+
+.simStatLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+.simWeakCategories {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
+  flex-wrap: wrap;
+}
+
+.simWeakLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
 @media (max-width: 768px) {
   .page {
     padding: var(--spacing-4);

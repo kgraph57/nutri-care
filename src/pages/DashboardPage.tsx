@@ -6,6 +6,7 @@ import {
   TrendingUp,
   Activity,
   AlertTriangle,
+  GraduationCap,
 } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
@@ -14,6 +15,8 @@ import { Card, Badge, Button, EmptyState } from "../components/ui";
 import { PatientStatusGrid } from "../components/dashboard/PatientStatusGrid";
 import { WeeklyNutritionChart } from "../components/dashboard/WeeklyNutritionChart";
 import { CriticalLabAlerts } from "../components/dashboard/CriticalLabAlerts";
+import { SIMULATION_CASES } from "../data/simulationCases";
+import { useSimulationProgress } from "../hooks/useSimulationProgress";
 import type { NutritionMenuData } from "../hooks/useNutritionMenus";
 import type { Patient } from "../types";
 import type { LabData } from "../types/labData";
@@ -176,6 +179,7 @@ export function DashboardPage() {
   const { patients } = usePatients();
   const { menus } = useNutritionMenus();
   const { getLabData } = useLabData();
+  const { progress, completedCount } = useSimulationProgress(SIMULATION_CASES);
 
   const alertCount = countLabAlerts(patients, getLabData);
 
@@ -191,6 +195,45 @@ export function DashboardPage() {
         menuCount={menus.length}
         alertCount={alertCount}
       />
+
+      {completedCount > 0 && (
+        <Card className={styles.simProgressCard}>
+          <div className={styles.simProgressHeader}>
+            <GraduationCap size={18} />
+            <h3 className={styles.simProgressTitle}>症例演習の進捗</h3>
+          </div>
+          <div className={styles.simProgressStats}>
+            <div className={styles.simProgressStat}>
+              <span className={styles.simStatValue}>{completedCount}</span>
+              <span className={styles.simStatLabel}>
+                / {SIMULATION_CASES.length} 完了
+              </span>
+            </div>
+            <div className={styles.simProgressStat}>
+              <span className={styles.simStatValue}>
+                {progress.averageScore}
+              </span>
+              <span className={styles.simStatLabel}>平均スコア</span>
+            </div>
+            <div className={styles.simProgressStat}>
+              <span className={styles.simStatValue}>
+                {progress.totalAttempts}
+              </span>
+              <span className={styles.simStatLabel}>総試行回数</span>
+            </div>
+          </div>
+          {progress.weakCategories.length > 0 && (
+            <div className={styles.simWeakCategories}>
+              <span className={styles.simWeakLabel}>弱点カテゴリ:</span>
+              {progress.weakCategories.map((cat) => (
+                <Badge key={cat} variant="warning">
+                  {cat}
+                </Badge>
+              ))}
+            </div>
+          )}
+        </Card>
+      )}
 
       <div className={styles.twoColumn}>
         <section className={styles.section}>

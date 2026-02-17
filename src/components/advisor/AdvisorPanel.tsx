@@ -1,11 +1,23 @@
-import { useState, useMemo } from 'react';
-import { Sparkles, ChevronDown, Plus } from 'lucide-react';
-import { Card } from '../ui';
-import type { Patient, NutritionType } from '../../types';
-import type { LabData, NutritionRecommendation } from '../../types/labData';
-import { analyzeLabData, getAbnormalFindings } from '../../services/labAnalyzer';
-import { generateRecommendations, generateStrategySummary } from '../../services/nutritionAdvisor';
-import styles from './AdvisorPanel.module.css';
+import { useState, useMemo } from "react";
+import { Sparkles, ChevronDown, Plus, Bot } from "lucide-react";
+import { Card } from "../ui";
+import { AiChatPanel } from "../ai/AiChatPanel";
+import type { Patient, NutritionType } from "../../types";
+import type { LabData, NutritionRecommendation } from "../../types/labData";
+import {
+  analyzeLabData,
+  getAbnormalFindings,
+} from "../../services/labAnalyzer";
+import {
+  generateRecommendations,
+  generateStrategySummary,
+} from "../../services/nutritionAdvisor";
+import { isApiKeyConfigured } from "../../lib/anthropic";
+import {
+  buildNutritionContext,
+  buildClinicalSystemPrompt,
+} from "../../services/aiContextBuilder";
+import styles from "./AdvisorPanel.module.css";
 
 type Product = Record<string, string | number>;
 
@@ -20,23 +32,23 @@ interface AdvisorPanelProps {
 
 function statusLabel(status: string): { text: string; className: string } {
   switch (status) {
-    case 'critical-high':
-    case 'critical-low':
-      return { text: '要注意', className: styles.labCritical };
-    case 'high':
-      return { text: '高値', className: styles.labHigh };
-    case 'low':
-      return { text: '低値', className: styles.labLow };
+    case "critical-high":
+    case "critical-low":
+      return { text: "要注意", className: styles.labCritical };
+    case "high":
+      return { text: "高値", className: styles.labHigh };
+    case "low":
+      return { text: "低値", className: styles.labLow };
     default:
-      return { text: '正常', className: styles.labNormal };
+      return { text: "正常", className: styles.labNormal };
   }
 }
 
 function priorityBadgeClass(priority: string): string {
   switch (priority) {
-    case 'high':
+    case "high":
       return styles.badgeHigh;
-    case 'medium':
+    case "medium":
       return styles.badgeMedium;
     default:
       return styles.badgeLow;
@@ -45,12 +57,12 @@ function priorityBadgeClass(priority: string): string {
 
 function priorityLabel(priority: string): string {
   switch (priority) {
-    case 'high':
-      return '優先度: 高';
-    case 'medium':
-      return '優先度: 中';
+    case "high":
+      return "優先度: 高";
+    case "medium":
+      return "優先度: 中";
     default:
-      return '優先度: 低';
+      return "優先度: 低";
   }
 }
 
@@ -63,15 +75,16 @@ export function AdvisorPanel({
   onEditLabs,
 }: AdvisorPanelProps) {
   const [isOpen, setIsOpen] = useState(true);
+  const [showAiChat, setShowAiChat] = useState(false);
 
   const interpretations = useMemo(
     () => (labData ? analyzeLabData(labData) : []),
-    [labData]
+    [labData],
   );
 
   const abnormal = useMemo(
     () => getAbnormalFindings(interpretations),
-    [interpretations]
+    [interpretations],
   );
 
   const recommendations = useMemo(
@@ -79,13 +92,58 @@ export function AdvisorPanel({
       labData
         ? generateRecommendations(patient, labData, nutritionType, products)
         : [],
-    [patient, labData, nutritionType, products]
+    [patient, labData, nutritionType, products],
   );
 
   const strategy = useMemo(
-    () => (labData ? generateStrategySummary(labData) : ''),
-    [labData]
+    () => (labData ? generateStrategySummary(labData) : ""),
+    [labData],
   );
+
+  const clinicalPrompt = useMemo(() => {
+    if (!labData) return "";
+    const ctx = buildNutritionContext(
+      patient,
+      labData,
+      {
+        id: "",
+        patientId: patient.id,
+        patientName: patient.name,
+        nutritionType,
+        menuName: "",
+        items: [],
+        totalEnergy: 0,
+        totalVolume: 0,
+        requirements: {
+          energy: 0,
+          protein: 0,
+          fat: 0,
+          carbs: 0,
+          sodium: 0,
+          potassium: 0,
+          calcium: 0,
+          magnesium: 0,
+          phosphorus: 0,
+          chloride: 0,
+          iron: 0,
+          zinc: 0,
+          copper: 0,
+          manganese: 0,
+          iodine: 0,
+          selenium: 0,
+        },
+        currentIntake: {},
+        notes: "",
+        activityLevel: "bed_rest",
+        stressLevel: "moderate",
+        medicalCondition: "",
+        createdAt: new Date().toISOString(),
+      } as any,
+      products,
+      nutritionType,
+    );
+    return buildClinicalSystemPrompt(ctx);
+  }, [patient, labData, nutritionType, products]);
 
   const abnormalCount = abnormal.length;
 
@@ -124,7 +182,7 @@ export function AdvisorPanel({
         </div>
         <ChevronDown
           size={16}
-          className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}
+          className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`}
         />
       </div>
 
@@ -172,6 +230,29 @@ export function AdvisorPanel({
               該当する推奨製品が見つかりませんでした
             </p>
           )}
+
+          {isApiKeyConfigured() && (
+            <div className={styles.aiButtonWrap}>
+              <button
+                className={styles.aiButton}
+                onClick={() => setShowAiChat((prev) => !prev)}
+                type="button"
+              >
+                <Bot size={14} />
+                {showAiChat ? "AIチャットを閉じる" : "AIに聞く"}
+              </button>
+            </div>
+          )}
+
+          {showAiChat && clinicalPrompt && (
+            <div className={styles.aiChatWrap}>
+              <AiChatPanel
+                mode="clinical"
+                systemPrompt={clinicalPrompt}
+                contextId={`advisor-${patient.id}`}
+              />
+            </div>
+          )}
         </div>
       )}
     </Card>
@@ -199,12 +280,12 @@ function RecommendationCategory({
       <div className={styles.productList}>
         {recommendation.products.map((rec) => (
           <div
-            key={String(rec.product['製剤名'])}
+            key={String(rec.product["製剤名"])}
             className={styles.productCard}
           >
             <div className={styles.productInfo}>
               <div className={styles.productName}>
-                {String(rec.product['製剤名'] ?? '不明')}
+                {String(rec.product["製剤名"] ?? "不明")}
               </div>
               <div className={styles.productRationale}>{rec.rationale}</div>
             </div>
