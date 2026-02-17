@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { Activity, Lightbulb } from "lucide-react";
-import { Card, Badge } from "../../components/ui";
+import { Card } from "../../components/ui";
 import { AdequacyScoreBadge } from "../../components/ui/AdequacyScoreBadge";
-import { ProgressBar } from "../../components/ui/ProgressBar";
 import { calculateAdequacyScore } from "../../services/adequacyScorer";
 import type { AdequacyBreakdown } from "../../services/adequacyScorer";
 import { generateStrategySummary } from "../../services/nutritionAdvisor";
+import { NutrientAdequacyGrid } from "./NutrientAdequacyGrid";
 import type { Patient } from "../../types";
 import type { LabData } from "../../types/labData";
 import type { NutritionMenuData } from "../../hooks/useNutritionMenus";
@@ -18,37 +18,10 @@ interface NutritionStatusPanelProps {
   readonly menus: readonly NutritionMenuData[];
 }
 
-function formatDate(isoString: string): string {
-  try {
-    const date = new Date(isoString);
-    return date.toLocaleDateString("ja-JP", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return isoString;
-  }
-}
-
-function nutritionTypeLabel(type: "enteral" | "parenteral"): string {
-  return type === "enteral" ? "経腸栄養" : "静脈栄養";
-}
-
-function nutritionTypeBadgeVariant(
-  type: "enteral" | "parenteral"
-): "info" | "warning" {
-  return type === "enteral" ? "info" : "warning";
-}
-
 function AdequacySection({
   adequacy,
-  latestMenu,
 }: {
   readonly adequacy: AdequacyBreakdown;
-  readonly latestMenu: NutritionMenuData;
 }) {
   return (
     <div className={styles.adequacySection}>
@@ -56,28 +29,7 @@ function AdequacySection({
         <AdequacyScoreBadge score={adequacy.overall} size="lg" />
       </div>
 
-      <div className={styles.progressBars}>
-        <ProgressBar
-          current={adequacy.macroScore}
-          max={100}
-          label="マクロ栄養素"
-        />
-        <ProgressBar
-          current={adequacy.electrolyteScore}
-          max={100}
-          label="電解質"
-        />
-        <ProgressBar
-          current={adequacy.traceElementScore}
-          max={100}
-          label="微量元素"
-        />
-      </div>
-
-      <div className={styles.menuMeta}>
-        <span className={styles.menuName}>{latestMenu.menuName}</span>
-        <span>最終更新: {formatDate(latestMenu.createdAt)}</span>
-      </div>
+      <NutrientAdequacyGrid adequacy={adequacy} />
     </div>
   );
 }
@@ -87,46 +39,6 @@ function StrategySection({ summary }: { readonly summary: string }) {
     <div className={styles.strategySection}>
       <Lightbulb size={18} className={styles.strategyIcon} />
       <p className={styles.strategyText}>{summary}</p>
-    </div>
-  );
-}
-
-function MenuStatsSection({
-  latestMenu,
-}: {
-  readonly latestMenu: NutritionMenuData;
-}) {
-  return (
-    <div className={styles.statsRow}>
-      <div className={styles.statItem}>
-        <span className={styles.statLabel}>エネルギー</span>
-        <span className={styles.statValue}>
-          {latestMenu.totalEnergy}
-          <span className={styles.statUnit}> kcal</span>
-        </span>
-      </div>
-
-      <div className={styles.statItem}>
-        <span className={styles.statLabel}>水分量</span>
-        <span className={styles.statValue}>
-          {latestMenu.totalVolume}
-          <span className={styles.statUnit}> mL</span>
-        </span>
-      </div>
-
-      <div className={styles.statItem}>
-        <span className={styles.statLabel}>品目数</span>
-        <span className={styles.statValue}>
-          {latestMenu.items.length}
-          <span className={styles.statUnit}> 品目</span>
-        </span>
-      </div>
-
-      <div className={styles.typeBadge}>
-        <Badge variant={nutritionTypeBadgeVariant(latestMenu.nutritionType)}>
-          {nutritionTypeLabel(latestMenu.nutritionType)}
-        </Badge>
-      </div>
     </div>
   );
 }
@@ -141,7 +53,7 @@ export function NutritionStatusPanel({
     }
     return calculateAdequacyScore(
       latestMenu.requirements,
-      latestMenu.currentIntake
+      latestMenu.currentIntake,
     );
   }, [latestMenu]);
 
@@ -182,10 +94,8 @@ export function NutritionStatusPanel({
           栄養ステータス
         </h3>
 
-        {/* Section A: Adequacy Score */}
-        {hasAdequacy && latestMenu && (
-          <AdequacySection adequacy={adequacy} latestMenu={latestMenu} />
-        )}
+        {/* Section A: Adequacy Score + Nutrient Grid */}
+        {hasAdequacy && <AdequacySection adequacy={adequacy} />}
 
         {/* Hint when menu exists but no lab data */}
         {hasMenu && !hasLab && (
@@ -209,14 +119,6 @@ export function NutritionStatusPanel({
           <>
             {hasAdequacy && hasLab && <hr className={styles.divider} />}
             <StrategySection summary={strategySummary} />
-          </>
-        )}
-
-        {/* Section C: Menu Summary Stats */}
-        {hasMenu && latestMenu && (
-          <>
-            <hr className={styles.divider} />
-            <MenuStatsSection latestMenu={latestMenu} />
           </>
         )}
       </div>

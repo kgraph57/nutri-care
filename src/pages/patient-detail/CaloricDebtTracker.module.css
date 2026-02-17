@@ -1,0 +1,136 @@
+/* ---- Root ---- */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+}
+
+/* ---- Header ---- */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0;
+}
+
+.headerIcon {
+  color: var(--color-primary-500);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  margin: 0;
+}
+
+/* ---- Stats row ---- */
+.statsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--spacing-3);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  min-width: 0;
+  flex: 1 1 0;
+  gap: var(--spacing-1);
+}
+
+.statLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-medium);
+}
+
+.statValue {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+}
+
+.statUnit {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-400);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ---- Debt coloring ---- */
+.debtNegative {
+  color: var(--color-danger);
+}
+
+.debtPositive {
+  color: var(--color-success);
+}
+
+/* ---- Chart wrapper ---- */
+.chartWrapper {
+  min-height: 200px;
+  width: 100%;
+}
+
+/* ---- Empty state ---- */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-6) var(--spacing-4);
+  text-align: center;
+}
+
+.emptyText {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-400);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---- Tooltip ---- */
+.tooltip {
+  background: var(--color-neutral-900);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-2) var(--spacing-3);
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-50);
+  line-height: 1.5;
+}
+
+.tooltipDate {
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--spacing-1);
+}
+
+.tooltipRow {
+  margin: 0;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .statsRow {
+    gap: var(--spacing-2);
+  }
+
+  .statItem {
+    padding: var(--spacing-2);
+  }
+
+  .statValue {
+    font-size: var(--font-size-sm);
+  }
+
+  .chartWrapper {
+    min-height: 180px;
+  }
+}

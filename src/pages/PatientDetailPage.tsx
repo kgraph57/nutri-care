@@ -4,7 +4,9 @@ import { ArrowLeft, Calendar, Plus } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { useLabData } from "../hooks/useLabData";
+import { useFluidBalance } from "../hooks/useFluidBalance";
 import type { LabData } from "../types/labData";
+import type { FluidBalanceEntry } from "../types/fluidBalance";
 import type { NutritionMenuData } from "../hooks/useNutritionMenus";
 import {
   Card,
@@ -15,11 +17,16 @@ import {
   NutritionTrendChart,
 } from "../components/ui";
 import { LabDataForm } from "../components/labs/LabDataForm";
+import { FluidBalanceForm } from "../components/fluid/FluidBalanceForm";
 import { LabTrendChart } from "../components/labs/LabTrendChart";
 import { LabHistoryTable } from "../components/labs/LabHistoryTable";
 import { PatientProfileCard } from "./patient-detail/PatientProfileCard";
 import { LabOverviewGrid } from "./patient-detail/LabOverviewGrid";
 import { NutritionStatusPanel } from "./patient-detail/NutritionStatusPanel";
+import { ClinicalAlertsPanel } from "./patient-detail/ClinicalAlertsPanel";
+import { ActiveMenuCard } from "./patient-detail/ActiveMenuCard";
+import { CaloricDebtTracker } from "./patient-detail/CaloricDebtTracker";
+import { FluidBalancePanel } from "./patient-detail/FluidBalancePanel";
 import { StickyActionBar } from "./patient-detail/StickyActionBar";
 import styles from "./PatientDetailPage.module.css";
 
@@ -56,7 +63,10 @@ function groupByDate(
 function computeDaysAdmitted(admissionDate: string): number {
   const admission = new Date(admissionDate);
   const now = new Date();
-  return Math.max(1, Math.ceil((now.getTime() - admission.getTime()) / 86_400_000));
+  return Math.max(
+    1,
+    Math.ceil((now.getTime() - admission.getTime()) / 86_400_000),
+  );
 }
 
 /* ---- Timeline sub-components ---- */
@@ -135,7 +145,9 @@ export function PatientDetailPage() {
   const { getMenusForPatient } = useNutritionMenus();
   const { getLabData, getLabHistory, saveLabData, deleteLabEntry } =
     useLabData();
+  const { getFluidHistory, saveFluidBalance } = useFluidBalance();
   const [showLabModal, setShowLabModal] = useState(false);
+  const [showFluidModal, setShowFluidModal] = useState(false);
 
   const patient = patientId ? getPatient(patientId) : undefined;
   const patientMenus = useMemo(
@@ -160,6 +172,11 @@ export function PatientDetailPage() {
     [patient],
   );
 
+  const fluidHistory = useMemo(
+    () => (patientId ? getFluidHistory(patientId) : []),
+    [patientId, getFluidHistory],
+  );
+
   const latestMenu = useMemo(() => {
     if (patientMenus.length === 0) return undefined;
     return [...patientMenus].sort(
@@ -167,6 +184,16 @@ export function PatientDetailPage() {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )[0];
   }, [patientMenus]);
+
+  const todayMenus = useMemo(() => {
+    const todayKey = new Date().toISOString().slice(0, 10);
+    return patientMenus.filter(
+      (m) => new Date(m.createdAt).toISOString().slice(0, 10) === todayKey,
+    );
+  }, [patientMenus]);
+
+  const targetEnergy = latestMenu?.requirements?.energy ?? null;
+  const targetProtein = latestMenu?.requirements?.protein ?? null;
 
   const handleLabSave = useCallback(
     (data: LabData) => {
@@ -201,6 +228,20 @@ export function PatientDetailPage() {
     window.print();
   }, []);
 
+  const handleFluidSave = useCallback(
+    (entry: FluidBalanceEntry) => {
+      if (patientId) {
+        saveFluidBalance(patientId, entry);
+      }
+      setShowFluidModal(false);
+    },
+    [patientId, saveFluidBalance],
+  );
+
+  const handleOpenFluidModal = useCallback(() => {
+    setShowFluidModal(true);
+  }, []);
+
   if (!patient) {
     return (
       <div className={styles.page}>
@@ -229,7 +270,16 @@ export function PatientDetailPage() {
         <PatientProfileCard patient={patient} daysAdmitted={daysAdmitted} />
       </section>
 
-      {/* Section 2: Lab Overview Grid (全18検査値) */}
+      {/* Section 2: Clinical Alerts (shown only when alerts exist) */}
+      <section className={styles.section}>
+        <ClinicalAlertsPanel
+          patient={patient}
+          labData={labData}
+          latestMenu={latestMenu}
+        />
+      </section>
+
+      {/* Section 3: Lab Overview Grid (全18検査値) */}
       <section className={styles.section}>
         <LabOverviewGrid
           labData={labData}
@@ -238,7 +288,7 @@ export function PatientDetailPage() {
         />
       </section>
 
-      {/* Section 3: Two-Column Layout */}
+      {/* Section 4: Two-Column Layout */}
       <div className={styles.twoColumn}>
         <div className={styles.columnLeft}>
           <NutritionStatusPanel
@@ -247,19 +297,28 @@ export function PatientDetailPage() {
             latestMenu={latestMenu}
             menus={patientMenus}
           />
+          <ActiveMenuCard
+            latestMenu={latestMenu}
+            todayMenus={todayMenus}
+            patientId={patientId ?? ""}
+          />
+          <CaloricDebtTracker
+            menus={patientMenus}
+            targetEnergy={targetEnergy}
+            targetProtein={targetProtein}
+            daysAdmitted={daysAdmitted}
+          />
         </div>
 
         <div className={styles.columnRight}>
-          {labHistory.length >= 2 && (
-            <LabTrendChart history={labHistory} />
-          )}
+          <FluidBalancePanel
+            history={fluidHistory}
+            patientWeight={patient.weight}
+            onAddEntry={handleOpenFluidModal}
+          />
+          {labHistory.length >= 2 && <LabTrendChart history={labHistory} />}
           {patientMenus.length >= 2 && (
             <NutritionTrendChart menus={patientMenus} />
-          )}
-          {labHistory.length < 2 && patientMenus.length < 2 && (
-            <Card className={styles.chartsEmpty}>
-              <p>データが2件以上になるとトレンドチャートが表示されます</p>
-            </Card>
           )}
         </div>
       </div>
@@ -321,6 +380,21 @@ export function PatientDetailPage() {
             initialData={labData}
             onSave={handleLabSave}
             onCancel={() => setShowLabModal(false)}
+          />
+        )}
+      </Modal>
+
+      {/* Fluid Balance Entry Modal */}
+      <Modal
+        isOpen={showFluidModal}
+        title="水分出納入力"
+        onClose={() => setShowFluidModal(false)}
+      >
+        {patientId && (
+          <FluidBalanceForm
+            patientId={patientId}
+            onSave={handleFluidSave}
+            onCancel={() => setShowFluidModal(false)}
           />
         )}
       </Modal>

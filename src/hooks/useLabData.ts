@@ -1,8 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
-import type { LabData } from '../types/labData';
+import { useState, useCallback, useEffect } from "react";
+import type { LabData } from "../types/labData";
+import { sampleLabDataMap } from "../data/sampleLabData";
 
-const STORAGE_KEY = 'nutri-care-lab-data';
-const HISTORY_KEY = 'nutri-care-lab-history';
+const STORAGE_KEY = "nutri-care-lab-data";
+const HISTORY_KEY = "nutri-care-lab-history";
 
 /**
  * Migrate old single-record format to array-based history format.
@@ -15,7 +16,7 @@ function loadHistoryFromStorage(): Record<string, LabData[]> {
     const historyStored = localStorage.getItem(HISTORY_KEY);
     if (historyStored) {
       const parsed: unknown = JSON.parse(historyStored);
-      if (typeof parsed === 'object' && parsed !== null) {
+      if (typeof parsed === "object" && parsed !== null) {
         return parsed as Record<string, LabData[]>;
       }
     }
@@ -24,11 +25,11 @@ function loadHistoryFromStorage(): Record<string, LabData[]> {
     const oldStored = localStorage.getItem(STORAGE_KEY);
     if (oldStored) {
       const parsed: unknown = JSON.parse(oldStored);
-      if (typeof parsed === 'object' && parsed !== null) {
+      if (typeof parsed === "object" && parsed !== null) {
         const old = parsed as Record<string, LabData>;
         const migrated: Record<string, LabData[]> = {};
         for (const [key, value] of Object.entries(old)) {
-          if (value && typeof value === 'object' && !Array.isArray(value)) {
+          if (value && typeof value === "object" && !Array.isArray(value)) {
             migrated[key] = [value];
           }
         }
@@ -38,7 +39,8 @@ function loadHistoryFromStorage(): Record<string, LabData[]> {
   } catch {
     // ignore
   }
-  return {};
+  // Seed from sample data when localStorage is empty
+  return { ...sampleLabDataMap };
 }
 
 function saveHistoryToStorage(data: Record<string, LabData[]>): void {
@@ -101,15 +103,12 @@ export function useLabData() {
   );
 
   /** Delete all lab data for a patient. */
-  const deleteLabData = useCallback(
-    (patientId: string): void => {
-      setHistoryMap((prev) => {
-        const { [patientId]: _, ...rest } = prev;
-        return rest;
-      });
-    },
-    [],
-  );
+  const deleteLabData = useCallback((patientId: string): void => {
+    setHistoryMap((prev) => {
+      const { [patientId]: _, ...rest } = prev;
+      return rest;
+    });
+  }, []);
 
   /** Delete a single lab entry by date. */
   const deleteLabEntry = useCallback(

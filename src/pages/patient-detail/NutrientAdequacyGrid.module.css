@@ -1,0 +1,68 @@
+/* ---- Root ---- */
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+/* ---- Section group ---- */
+.sectionGroup {
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3) var(--spacing-4);
+}
+
+.sectionHeader {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-500);
+  margin: 0 0 var(--spacing-3);
+  padding-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+/* ---- Nutrient list ---- */
+.nutrientList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-3);
+}
+
+/* ---- Toggle button ---- */
+.toggleWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.toggleButton {
+  all: unset;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.toggleButton:hover {
+  color: var(--color-neutral-700);
+  background: var(--color-neutral-100);
+}
+
+.toggleButton:focus-visible {
+  outline: 2px solid var(--color-primary-400);
+  outline-offset: 2px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .sectionGroup {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .nutrientList {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2);
+  }
+}

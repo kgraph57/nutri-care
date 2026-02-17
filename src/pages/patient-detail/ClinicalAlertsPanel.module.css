@@ -1,0 +1,207 @@
+/* ---- Container ---- */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  width: 100%;
+}
+
+/* ---- Header ---- */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--color-neutral-800);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.headerIcon {
+  color: var(--color-danger, #dc2626);
+  flex-shrink: 0;
+}
+
+.countBadge {
+  margin-left: auto;
+}
+
+/* ---- Alert List ---- */
+.alertList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+/* ---- Alert Item ---- */
+.alertItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--radius-md);
+  border-left: 4px solid transparent;
+}
+
+.alertItem.critical {
+  background: var(--color-danger-light, #fef2f2);
+  border-left-color: var(--color-danger, #dc2626);
+}
+
+.alertItem.warning {
+  background: var(--color-warning-light, #fffbeb);
+  border-left-color: var(--color-warning, #f59e0b);
+}
+
+.alertItem.info {
+  background: var(--color-info-light, #eff6ff);
+  border-left-color: var(--color-info, #3b82f6);
+}
+
+.alertIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.alertIcon.critical {
+  color: var(--color-danger, #dc2626);
+}
+
+.alertIcon.warning {
+  color: var(--color-warning, #f59e0b);
+}
+
+.alertIcon.info {
+  color: var(--color-info, #3b82f6);
+}
+
+.alertContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+  flex: 1;
+}
+
+.alertMessage {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ---- Severity Badge ---- */
+.severityBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px var(--spacing-2);
+  border-radius: var(--radius-full, 9999px);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.severityCritical {
+  background: var(--color-danger, #dc2626);
+  color: #ffffff;
+}
+
+.severityWarning {
+  background: var(--color-warning, #f59e0b);
+  color: #ffffff;
+}
+
+.severityInfo {
+  background: var(--color-info, #3b82f6);
+  color: #ffffff;
+}
+
+/* ---- Refeeding Section ---- */
+.refeedingSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+  border-left: 4px solid transparent;
+}
+
+.refeedingSection.high {
+  background: var(--color-danger-light, #fef2f2);
+  border-left-color: var(--color-danger, #dc2626);
+}
+
+.refeedingSection.moderate {
+  background: var(--color-warning-light, #fffbeb);
+  border-left-color: var(--color-warning, #f59e0b);
+}
+
+.refeedingHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.refeedingIcon {
+  flex-shrink: 0;
+}
+
+.refeedingIcon.high {
+  color: var(--color-danger, #dc2626);
+}
+
+.refeedingIcon.moderate {
+  color: var(--color-warning, #f59e0b);
+}
+
+.refeedingTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  margin: 0;
+}
+
+.refeedingList {
+  margin: 0;
+  padding-left: var(--spacing-5);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  line-height: 1.6;
+}
+
+.refeedingList li {
+  margin-bottom: var(--spacing-1);
+}
+
+.refeedingSubtitle {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-600);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+/* ---- Section Divider ---- */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-neutral-100);
+  margin: 0;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .alertItem {
+    padding: var(--spacing-2) var(--spacing-3);
+    gap: var(--spacing-2);
+  }
+
+  .refeedingSection {
+    padding: var(--spacing-3);
+  }
+
+  .header {
+    font-size: var(--font-size-md);
+  }
+}
