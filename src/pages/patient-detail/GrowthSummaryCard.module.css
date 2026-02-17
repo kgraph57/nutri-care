@@ -1,0 +1,160 @@
+/* Root */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0;
+}
+
+.headerIcon {
+  color: var(--color-primary-500);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  margin: 0;
+}
+
+.detailLink {
+  margin-left: auto;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-500);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.detailLink:hover {
+  color: var(--color-primary-700);
+  text-decoration: underline;
+}
+
+/* Date */
+.dateLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+/* Measurement grid */
+.measurementGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.measurementItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+}
+
+.measurementHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.measurementIcon {
+  color: var(--color-neutral-500);
+  display: flex;
+  align-items: center;
+}
+
+.measurementLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.measurementValueRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+
+.measurementValue {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-800);
+  line-height: 1.2;
+}
+
+.measurementUnit {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
+}
+
+/* Divider */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-neutral-100);
+  margin: 0;
+}
+
+/* Weight velocity */
+.velocitySection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+}
+
+.velocityLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+}
+
+.velocityValue {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+}
+
+.velocityPositive {
+  color: var(--color-success-dark);
+}
+
+.velocityNegative {
+  color: var(--color-danger-dark);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .measurementGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .velocitySection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-1);
+    padding: var(--spacing-3);
+  }
+}
+
+/* Print */
+@media print {
+  .detailLink {
+    display: none;
+  }
+}

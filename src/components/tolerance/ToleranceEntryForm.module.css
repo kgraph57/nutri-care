@@ -1,0 +1,157 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+}
+
+/* Date/time row */
+.dateTimeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+.dateTimeField {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+.fieldLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  white-space: nowrap;
+}
+.dateInput,
+.timeInput {
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  font-family: var(--font-family);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+.dateInput:focus,
+.timeInput:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 2px var(--color-primary-100);
+}
+
+/* Assessment grid */
+.assessmentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+}
+
+/* Field */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+.label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+.unit {
+  font-weight: var(--font-weight-normal);
+  color: var(--color-neutral-400);
+}
+.input,
+.select {
+  width: 100%;
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  font-family: var(--font-family);
+  box-sizing: border-box;
+  background: var(--color-neutral-0, #fff);
+}
+.input:focus,
+.select:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 2px var(--color-primary-100);
+}
+
+/* Textarea */
+.textarea {
+  width: 100%;
+  padding: var(--spacing-2);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  font-family: var(--font-family);
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 60px;
+}
+.textarea:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 2px var(--color-primary-100);
+}
+
+/* Score display */
+.scoreDisplay {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+  background: var(--color-neutral-50);
+}
+.scoreInfo { display: flex; flex-direction: column; gap: var(--spacing-1); }
+.scoreMainLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+}
+.scoreValueLarge {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
+}
+.scoreGood { color: var(--color-success-dark); }
+.scoreCaution { color: var(--color-warning-dark); }
+.scoreDanger { color: var(--color-danger-dark); }
+
+.scoreUnit {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .assessmentGrid { grid-template-columns: 1fr; }
+  .dateTimeRow { flex-direction: column; align-items: flex-start; gap: var(--spacing-2); }
+  .input,
+  .select,
+  .dateInput,
+  .timeInput,
+  .textarea {
+    font-size: 16px;
+  }
+}

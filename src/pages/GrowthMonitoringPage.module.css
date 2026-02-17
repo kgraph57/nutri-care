@@ -1,0 +1,192 @@
+.page {
+  padding: var(--spacing-6);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* ---- Header ---- */
+.header {
+  margin-bottom: var(--spacing-6);
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
+}
+
+.titleArea {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.headerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  margin: 0;
+}
+
+.addButton {
+  flex-shrink: 0;
+}
+
+/* ---- Patient Grid ---- */
+.patientGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: var(--spacing-5);
+}
+
+/* ---- Patient Card ---- */
+.patientCard {
+  padding: var(--spacing-5);
+}
+
+.patientCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-4);
+}
+
+.patientInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.patientIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-50);
+  color: var(--color-primary-600);
+}
+
+.patientName {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.patientAge {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin: 0;
+}
+
+/* ---- Expandable Chart Section ---- */
+.chartToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
+}
+
+.chartSection {
+  margin-top: var(--spacing-4);
+  border-top: 1px solid var(--color-neutral-200);
+  padding-top: var(--spacing-4);
+}
+
+.chartTabs {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+}
+
+.chartTab {
+  padding: var(--spacing-1) var(--spacing-3);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-neutral-600);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.chartTab:hover {
+  background-color: var(--color-neutral-100);
+}
+
+.chartTabActive {
+  background-color: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+  color: white;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .page {
+    padding: var(--spacing-4);
+  }
+
+  .headerTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+  }
+
+  .addButton {
+    align-self: stretch;
+  }
+
+  .patientGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--spacing-3);
+  }
+
+  .header {
+    margin-bottom: var(--spacing-4);
+  }
+
+  .title {
+    font-size: var(--font-size-lg);
+  }
+
+  .subtitle {
+    font-size: var(--font-size-xs);
+  }
+
+  .patientCard {
+    padding: var(--spacing-3);
+  }
+
+  .chartTabs {
+    flex-wrap: wrap;
+  }
+}

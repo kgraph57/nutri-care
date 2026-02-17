@@ -1,0 +1,148 @@
+/* Root */
+.container { display: flex; flex-direction: column; gap: var(--spacing-5); }
+
+/* Header */
+.header { display: flex; align-items: center; gap: var(--spacing-2); margin: 0; }
+.headerIcon { color: var(--color-primary-500); flex-shrink: 0; }
+.title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  margin: 0;
+}
+.addButton { margin-left: auto; }
+
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--color-neutral-100); margin: 0; }
+
+/* Current route */
+.currentRouteSection { display: flex; flex-direction: column; gap: var(--spacing-3); }
+.currentRouteHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+}
+.routeLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.routeDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--spacing-3);
+}
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+}
+.detailLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
+}
+.detailValue {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+}
+
+/* Schedule section */
+.scheduleSection { display: flex; flex-direction: column; gap: var(--spacing-2); }
+.scheduleSectionLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+}
+.scheduleDetails {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+.scheduleTag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-700);
+}
+
+/* History list */
+.historySection { display: flex; flex-direction: column; gap: var(--spacing-2); }
+.historySectionLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+}
+.historyList { display: flex; flex-direction: column; gap: var(--spacing-2); }
+.historyEntry {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+}
+.historyDate {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
+  min-width: 80px;
+  flex-shrink: 0;
+}
+.historyRoute {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-700);
+}
+.historySchedule {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-left: auto;
+}
+.historyNotes {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-400);
+  font-style: italic;
+}
+
+/* Empty state */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-6) var(--spacing-4);
+  text-align: center;
+}
+.emptyText { font-size: var(--font-size-sm); color: var(--color-neutral-400); line-height: 1.6; margin: 0; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .routeDetails { grid-template-columns: 1fr; }
+  .currentRouteHeader { flex-direction: column; align-items: flex-start; }
+  .historyEntry { flex-direction: column; align-items: flex-start; gap: var(--spacing-1); }
+  .historySchedule { margin-left: 0; }
+}
+
+/* Print */
+@media print {
+  .addButton { display: none; }
+  .container { gap: var(--spacing-3); }
+  .historyEntry { page-break-inside: avoid; }
+}

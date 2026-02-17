@@ -6,7 +6,10 @@ import {
   bmiCategory,
   calculateBSA,
   calculateIBW,
+  computeCorrectedAgeMonths,
+  pediatricBmiCategory,
 } from "../../utils/bodyMetrics";
+import { isPediatricPatient } from "../../services/pediatricNutritionCalculation";
 import type { Patient } from "../../types";
 import styles from "./PatientProfileCard.module.css";
 
@@ -21,6 +24,8 @@ interface BodyMetrics {
   readonly bsa: number;
   readonly ibw: number;
   readonly hasValidInputs: boolean;
+  readonly isPediatric: boolean;
+  readonly correctedAgeMonths: number | null;
 }
 
 function computeBodyMetrics(patient: Patient): BodyMetrics {
@@ -29,8 +34,25 @@ function computeBodyMetrics(patient: Patient): BodyMetrics {
   const bmiCat = bmiCategory(bmi);
   const bsa = calculateBSA(patient.weight, patient.height);
   const ibw = calculateIBW(patient.height, patient.gender);
+  const isPediatric_ = isPediatricPatient(patient);
 
-  return { bmi, bmiCat, bsa, ibw, hasValidInputs };
+  const correctedAgeMonths =
+    isPediatric_ &&
+    patient.ageInMonths !== undefined &&
+    patient.gestationalAge !== undefined &&
+    patient.gestationalAge < 37
+      ? computeCorrectedAgeMonths(patient.ageInMonths, patient.gestationalAge)
+      : null;
+
+  return {
+    bmi,
+    bmiCat,
+    bsa,
+    ibw,
+    hasValidInputs,
+    isPediatric: isPediatric_,
+    correctedAgeMonths,
+  };
 }
 
 function bmiCategoryClass(category: string): string {
@@ -91,9 +113,14 @@ function MetricCard({
 interface DemographicsZoneProps {
   readonly patient: Patient;
   readonly daysAdmitted: number;
+  readonly metrics: BodyMetrics;
 }
 
-function DemographicsZone({ patient, daysAdmitted }: DemographicsZoneProps) {
+function DemographicsZone({
+  patient,
+  daysAdmitted,
+  metrics,
+}: DemographicsZoneProps) {
   return (
     <div className={styles.demographics}>
       <h2 className={styles.patientName}>{patient.name}</h2>
@@ -102,6 +129,9 @@ function DemographicsZone({ patient, daysAdmitted }: DemographicsZoneProps) {
         <span className={styles.metaItem}>
           <User size={14} />
           {patient.age}歳
+          {patient.ageInMonths !== undefined && patient.ageInMonths < 36 && (
+            <> ({patient.ageInMonths}ヶ月)</>
+          )}
         </span>
         <span className={styles.metaItem}>{patient.gender}</span>
         <span className={styles.metaItem}>
@@ -120,6 +150,27 @@ function DemographicsZone({ patient, daysAdmitted }: DemographicsZoneProps) {
         )}
       </div>
 
+      {/* Pediatric-specific info */}
+      {metrics.isPediatric && (
+        <div className={styles.metaRow}>
+          {patient.gestationalAge !== undefined && (
+            <span className={styles.metaItem}>
+              在胎{patient.gestationalAge}週
+            </span>
+          )}
+          {metrics.correctedAgeMonths !== null && (
+            <span className={styles.metaItem}>
+              修正月齢: {metrics.correctedAgeMonths}ヶ月
+            </span>
+          )}
+          {patient.birthWeight !== undefined && (
+            <span className={styles.metaItem}>
+              出生体重: {patient.birthWeight}g
+            </span>
+          )}
+        </div>
+      )}
+
       <div className={styles.patientTypeBadge}>
         <Badge variant="info">{patient.patientType}</Badge>
       </div>
@@ -133,7 +184,7 @@ interface BodyMetricsZoneProps {
 }
 
 function BodyMetricsZone({ patient, metrics }: BodyMetricsZoneProps) {
-  const { bmi, bmiCat, bsa, ibw, hasValidInputs } = metrics;
+  const { bmi, bmiCat, bsa, ibw, hasValidInputs, isPediatric: isPed } = metrics;
 
   return (
     <div className={styles.bodyMetrics}>
@@ -149,7 +200,12 @@ function BodyMetricsZone({ patient, metrics }: BodyMetricsZoneProps) {
         unit="kg"
         hasValidInputs={patient.weight > 0}
       />
-      <MetricCard label="BMI" value={bmi} unit="" hasValidInputs={hasValidInputs}>
+      <MetricCard
+        label="BMI"
+        value={bmi}
+        unit=""
+        hasValidInputs={hasValidInputs}
+      >
         {bmiCat && (
           <span
             className={`${styles.bmiCategoryBadge} ${bmiCategoryClass(bmiCat)}`}
@@ -158,18 +214,30 @@ function BodyMetricsZone({ patient, metrics }: BodyMetricsZoneProps) {
           </span>
         )}
       </MetricCard>
-      <MetricCard
-        label="BSA"
-        value={bsa}
-        unit="m²"
-        hasValidInputs={hasValidInputs}
-      />
-      <MetricCard
-        label="IBW"
-        value={ibw}
-        unit="kg"
-        hasValidInputs={patient.height > 0}
-      />
+      {!isPed && (
+        <>
+          <MetricCard
+            label="BSA"
+            value={bsa}
+            unit="m²"
+            hasValidInputs={hasValidInputs}
+          />
+          <MetricCard
+            label="IBW"
+            value={ibw}
+            unit="kg"
+            hasValidInputs={patient.height > 0}
+          />
+        </>
+      )}
+      {isPed && patient.birthWeight !== undefined && (
+        <MetricCard
+          label="出生体重"
+          value={patient.birthWeight / 1000}
+          unit="kg"
+          hasValidInputs={true}
+        />
+      )}
     </div>
   );
 }
@@ -252,7 +320,11 @@ export function PatientProfileCard({
   return (
     <Card>
       <div className={styles.profileGrid}>
-        <DemographicsZone patient={patient} daysAdmitted={daysAdmitted} />
+        <DemographicsZone
+          patient={patient}
+          daysAdmitted={daysAdmitted}
+          metrics={metrics}
+        />
         <BodyMetricsZone patient={patient} metrics={metrics} />
         <ClinicalContextZone
           allergies={patient.allergies}

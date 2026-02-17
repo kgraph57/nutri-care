@@ -28,6 +28,21 @@ import { ActiveMenuCard } from "./patient-detail/ActiveMenuCard";
 import { CaloricDebtTracker } from "./patient-detail/CaloricDebtTracker";
 import { FluidBalancePanel } from "./patient-detail/FluidBalancePanel";
 import { StickyActionBar } from "./patient-detail/StickyActionBar";
+import { useFeedingRoute } from "../hooks/useFeedingRoute";
+import { useGrowthData } from "../hooks/useGrowthData";
+import { useToleranceData } from "../hooks/useToleranceData";
+import { useWeaningPlan } from "../hooks/useWeaningPlan";
+import { isPediatricPatient } from "../services/pediatricNutritionCalculation";
+import { FeedingRoutePanel } from "./patient-detail/FeedingRoutePanel";
+import { GrowthSummaryCard } from "./patient-detail/GrowthSummaryCard";
+import { TolerancePanel } from "./patient-detail/TolerancePanel";
+import { WeaningPanel } from "./patient-detail/WeaningPanel";
+import { FeedingRouteForm } from "../components/feeding/FeedingRouteForm";
+import { GrowthEntryForm } from "../components/growth/GrowthEntryForm";
+import { ToleranceEntryForm } from "../components/tolerance/ToleranceEntryForm";
+import type { FeedingRouteEntry } from "../types/feedingRoute";
+import type { GrowthMeasurement } from "../types/growthData";
+import type { ToleranceEntry } from "../types/toleranceData";
 import styles from "./PatientDetailPage.module.css";
 
 /* ---- Helpers ---- */
@@ -149,6 +164,18 @@ export function PatientDetailPage() {
   const [showLabModal, setShowLabModal] = useState(false);
   const [showFluidModal, setShowFluidModal] = useState(false);
 
+  // Pediatric hooks
+  const { getFeedingHistory, addFeedingRoute } = useFeedingRoute();
+  const { getGrowthData, addGrowthMeasurement } = useGrowthData();
+  const { getToleranceHistory, addToleranceEntry } = useToleranceData();
+  const { getWeaningPlan, createWeaningPlan, advanceWeaningPhase } =
+    useWeaningPlan();
+
+  // Pediatric modals
+  const [showFeedingRouteModal, setShowFeedingRouteModal] = useState(false);
+  const [showGrowthModal, setShowGrowthModal] = useState(false);
+  const [showToleranceModal, setShowToleranceModal] = useState(false);
+
   const patient = patientId ? getPatient(patientId) : undefined;
   const patientMenus = useMemo(
     () => (patientId ? getMenusForPatient(patientId) : []),
@@ -191,6 +218,32 @@ export function PatientDetailPage() {
       (m) => new Date(m.createdAt).toISOString().slice(0, 10) === todayKey,
     );
   }, [patientMenus]);
+
+  // Pediatric data
+  const isPediatric = useMemo(
+    () => (patient ? isPediatricPatient(patient) : false),
+    [patient],
+  );
+
+  const feedingHistory = useMemo(
+    () => (patientId ? getFeedingHistory(patientId) : []),
+    [patientId, getFeedingHistory],
+  );
+
+  const growthData = useMemo(
+    () => (patientId ? getGrowthData(patientId) : []),
+    [patientId, getGrowthData],
+  );
+
+  const toleranceHistory = useMemo(
+    () => (patientId ? getToleranceHistory(patientId) : []),
+    [patientId, getToleranceHistory],
+  );
+
+  const weaningPlan = useMemo(
+    () => (patientId ? getWeaningPlan(patientId) : undefined),
+    [patientId, getWeaningPlan],
+  );
 
   const targetEnergy = latestMenu?.requirements?.energy ?? null;
   const targetProtein = latestMenu?.requirements?.protein ?? null;
@@ -242,6 +295,48 @@ export function PatientDetailPage() {
     setShowFluidModal(true);
   }, []);
 
+  const handleFeedingRouteSave = useCallback(
+    (entry: FeedingRouteEntry) => {
+      if (patientId) {
+        addFeedingRoute(patientId, entry);
+      }
+      setShowFeedingRouteModal(false);
+    },
+    [patientId, addFeedingRoute],
+  );
+
+  const handleGrowthSave = useCallback(
+    (measurement: GrowthMeasurement) => {
+      if (patientId) {
+        addGrowthMeasurement(patientId, measurement);
+      }
+      setShowGrowthModal(false);
+    },
+    [patientId, addGrowthMeasurement],
+  );
+
+  const handleToleranceSave = useCallback(
+    (entry: ToleranceEntry) => {
+      if (patientId) {
+        addToleranceEntry(patientId, entry);
+      }
+      setShowToleranceModal(false);
+    },
+    [patientId, addToleranceEntry],
+  );
+
+  const handleCreateWeaningPlan = useCallback(() => {
+    if (patientId && patient) {
+      createWeaningPlan(patientId, patient);
+    }
+  }, [patientId, patient, createWeaningPlan]);
+
+  const handleAdvanceWeaningPhase = useCallback(() => {
+    if (patientId) {
+      advanceWeaningPhase(patientId);
+    }
+  }, [patientId, advanceWeaningPhase]);
+
   if (!patient) {
     return (
       <div className={styles.page}>
@@ -279,6 +374,13 @@ export function PatientDetailPage() {
         />
       </section>
 
+      {/* Growth Summary (pediatric only) */}
+      {isPediatric && patient && (
+        <section className={styles.section}>
+          <GrowthSummaryCard patient={patient} measurements={growthData} />
+        </section>
+      )}
+
       {/* Section 3: Lab Overview Grid (全18検査値) */}
       <section className={styles.section}>
         <LabOverviewGrid
@@ -308,9 +410,30 @@ export function PatientDetailPage() {
             targetProtein={targetProtein}
             daysAdmitted={daysAdmitted}
           />
+          {isPediatric && (
+            <FeedingRoutePanel
+              history={feedingHistory}
+              onAddEntry={() => setShowFeedingRouteModal(true)}
+            />
+          )}
+          {isPediatric && patient && (
+            <WeaningPanel
+              patientId={patientId ?? ""}
+              patient={patient}
+              plan={weaningPlan}
+              onCreatePlan={handleCreateWeaningPlan}
+              onAdvancePhase={handleAdvanceWeaningPhase}
+            />
+          )}
         </div>
 
         <div className={styles.columnRight}>
+          {isPediatric && (
+            <TolerancePanel
+              history={toleranceHistory}
+              onAddEntry={() => setShowToleranceModal(true)}
+            />
+          )}
           <FluidBalancePanel
             history={fluidHistory}
             patientWeight={patient.weight}
@@ -366,6 +489,10 @@ export function PatientDetailPage() {
         onEditLabs={handleEditLabs}
         onOpenAdvisor={handleOpenAdvisor}
         onPrint={handlePrint}
+        isPediatric={isPediatric}
+        onAddTolerance={() => setShowToleranceModal(true)}
+        onAddGrowthEntry={() => setShowGrowthModal(true)}
+        onAddFeedingRoute={() => setShowFeedingRouteModal(true)}
       />
 
       {/* Lab Data Entry Modal */}
@@ -395,6 +522,51 @@ export function PatientDetailPage() {
             patientId={patientId}
             onSave={handleFluidSave}
             onCancel={() => setShowFluidModal(false)}
+          />
+        )}
+      </Modal>
+
+      {/* Feeding Route Form Modal */}
+      <Modal
+        isOpen={showFeedingRouteModal}
+        title="投与ルート登録"
+        onClose={() => setShowFeedingRouteModal(false)}
+      >
+        {patientId && (
+          <FeedingRouteForm
+            patientId={patientId}
+            onSave={handleFeedingRouteSave}
+            onCancel={() => setShowFeedingRouteModal(false)}
+          />
+        )}
+      </Modal>
+
+      {/* Growth Entry Form Modal */}
+      <Modal
+        isOpen={showGrowthModal}
+        title="成長記録入力"
+        onClose={() => setShowGrowthModal(false)}
+      >
+        {patientId && (
+          <GrowthEntryForm
+            patientId={patientId}
+            onSave={handleGrowthSave}
+            onCancel={() => setShowGrowthModal(false)}
+          />
+        )}
+      </Modal>
+
+      {/* Tolerance Entry Form Modal */}
+      <Modal
+        isOpen={showToleranceModal}
+        title="耐性評価入力"
+        onClose={() => setShowToleranceModal(false)}
+      >
+        {patientId && (
+          <ToleranceEntryForm
+            patientId={patientId}
+            onSave={handleToleranceSave}
+            onCancel={() => setShowToleranceModal(false)}
           />
         )}
       </Modal>

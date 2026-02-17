@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
-import { Plus, FlaskConical, Sparkles, Printer } from "lucide-react";
+import {
+  Plus,
+  FlaskConical,
+  Sparkles,
+  Printer,
+  Baby,
+  TrendingUp,
+  Utensils,
+} from "lucide-react";
 import { Button } from "../../components/ui";
 import styles from "./StickyActionBar.module.css";
 
@@ -9,6 +17,10 @@ interface StickyActionBarProps {
   readonly onEditLabs: () => void;
   readonly onOpenAdvisor: () => void;
   readonly onPrint: () => void;
+  readonly isPediatric?: boolean;
+  readonly onAddTolerance?: () => void;
+  readonly onAddGrowthEntry?: () => void;
+  readonly onAddFeedingRoute?: () => void;
 }
 
 export function StickyActionBar({
@@ -17,6 +29,10 @@ export function StickyActionBar({
   onEditLabs,
   onOpenAdvisor,
   onPrint,
+  isPediatric,
+  onAddTolerance,
+  onAddGrowthEntry,
+  onAddFeedingRoute,
 }: StickyActionBarProps) {
   return (
     <div className={styles.actionBar}>
@@ -55,6 +71,39 @@ export function StickyActionBar({
       >
         AIアシスタント
       </Button>
+
+      {isPediatric && onAddTolerance && (
+        <Button
+          variant="ghost"
+          size="sm"
+          icon={<Baby size={14} />}
+          onClick={onAddTolerance}
+        >
+          耐性評価
+        </Button>
+      )}
+
+      {isPediatric && onAddGrowthEntry && (
+        <Button
+          variant="ghost"
+          size="sm"
+          icon={<TrendingUp size={14} />}
+          onClick={onAddGrowthEntry}
+        >
+          成長記録
+        </Button>
+      )}
+
+      {isPediatric && onAddFeedingRoute && (
+        <Button
+          variant="ghost"
+          size="sm"
+          icon={<Utensils size={14} />}
+          onClick={onAddFeedingRoute}
+        >
+          投与ルート
+        </Button>
+      )}
 
       {hasMenus && (
         <Button

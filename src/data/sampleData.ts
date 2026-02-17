@@ -39,7 +39,12 @@ export const samplePatients: Patient[] = [
     height: 162,
     diagnosis: "慢性腎臓病 stage 4（eGFR 22）",
     allergies: [],
-    medications: ["フロセミド", "炭酸水素ナトリウム", "エリスロポエチン", "ARB"],
+    medications: [
+      "フロセミド",
+      "炭酸水素ナトリウム",
+      "エリスロポエチン",
+      "ARB",
+    ],
     notes: "蛋白制限 0.6-0.8g/kg、K制限、P制限。透析導入検討中。",
   },
 
@@ -76,7 +81,8 @@ export const samplePatients: Patient[] = [
     diagnosis: "重症熱傷 40%TBSA（II度-III度）",
     allergies: [],
     medications: ["フェンタニル", "ミダゾラム", "バンコマイシン", "メロペネム"],
-    notes: "Curreri式: 25kcal/kg + 40kcal/%TBSA = 3475kcal。蛋白2g/kg。微量元素大量喪失。",
+    notes:
+      "Curreri式: 25kcal/kg + 40kcal/%TBSA = 3475kcal。蛋白2g/kg。微量元素大量喪失。",
   },
 
   // P006: 重度低栄養・Refeeding高リスク
@@ -94,7 +100,8 @@ export const samplePatients: Patient[] = [
     diagnosis: "重度低栄養（BMI 14.6）、誤嚥性肺炎",
     allergies: ["卵"],
     medications: ["抗生物質", "チアミン(VitB1)"],
-    notes: "BMI<16 & 10日以上経口摂取不良。Refeeding最高リスク。10kcal/kg/日から開始。チアミン先行投与。",
+    notes:
+      "BMI<16 & 10日以上経口摂取不良。Refeeding最高リスク。10kcal/kg/日から開始。チアミン先行投与。",
   },
 
   // P007: DM + 敗血症（インスリン-栄養相互作用テスト）
@@ -111,8 +118,14 @@ export const samplePatients: Patient[] = [
     height: 172,
     diagnosis: "2型糖尿病 + 敗血症（尿路感染由来）",
     allergies: [],
-    medications: ["インスリン（持効型+速効型）", "メロペネム", "ノルアドレナリン", "ヒドロコルチゾン"],
-    notes: "血糖変動大。糖質制限製剤。インスリン-栄養投与同期必須。ステロイド使用中。",
+    medications: [
+      "インスリン（持効型+速効型）",
+      "メロペネム",
+      "ノルアドレナリン",
+      "ヒドロコルチゾン",
+    ],
+    notes:
+      "血糖変動大。糖質制限製剤。インスリン-栄養投与同期必須。ステロイド使用中。",
   },
 
   // P008: ARDS（高蛋白・脂質調整テスト）
@@ -130,7 +143,8 @@ export const samplePatients: Patient[] = [
     diagnosis: "ARDS（COVID-19後）",
     allergies: ["魚介類"],
     medications: ["デキサメタゾン", "ヘパリン", "筋弛緩薬"],
-    notes: "腹臥位管理中。高蛋白(1.5-2g/kg)。ω3脂肪酸含有製剤推奨。permissive underfeeding検討。",
+    notes:
+      "腹臥位管理中。高蛋白(1.5-2g/kg)。ω3脂肪酸含有製剤推奨。permissive underfeeding検討。",
   },
 
   // P009: CABG後ワルファリン（薬剤相互作用 + 心不全テスト）
@@ -147,8 +161,14 @@ export const samplePatients: Patient[] = [
     height: 168,
     diagnosis: "CABG術後、心不全（EF 30%）",
     allergies: [],
-    medications: ["ワルファリン", "フロセミド", "カルベジロール", "エナラプリル"],
-    notes: "Na制限 < 6g/日、水分制限 1500mL/日。ワルファリン-VitK、利尿薬-K/Mg相互作用に注意。",
+    medications: [
+      "ワルファリン",
+      "フロセミド",
+      "カルベジロール",
+      "エナラプリル",
+    ],
+    notes:
+      "Na制限 < 6g/日、水分制限 1500mL/日。ワルファリン-VitK、利尿薬-K/Mg相互作用に注意。",
   },
 
   // P010: サルコペニア（高齢者栄養テスト）
@@ -187,6 +207,8 @@ export const samplePatients: Patient[] = [
     allergies: [],
     medications: ["抗生物質", "デキサメタゾン"],
     notes: "Schofield計算対象。学童期。呼吸器離脱後の栄養アップに注意。",
+    birthDate: "2012-03-10",
+    ageInMonths: 143,
   },
 
   // P011: 3歳 急性脳炎（PICU幼児）
@@ -204,7 +226,10 @@ export const samplePatients: Patient[] = [
     diagnosis: "急性脳炎（痙攣重積後）",
     allergies: ["牛乳"],
     medications: ["フェニトイン", "ミダゾラム", "グリセロール"],
-    notes: "フェニトイン-経腸栄養相互作用あり（投与前後2h中断）。乳糖フリー製品選択。",
+    notes:
+      "フェニトイン-経腸栄養相互作用あり（投与前後2h中断）。乳糖フリー製品選択。",
+    birthDate: "2021-05-15",
+    ageInMonths: 32,
   },
 
   // P012: 早産児 NICU（超低出生体重児）
@@ -222,7 +247,12 @@ export const samplePatients: Patient[] = [
     diagnosis: "早産児（在胎32週）、呼吸窮迫症候群",
     allergies: [],
     medications: ["カフェイン", "サーファクタント"],
-    notes: "出生体重1.8kg。母乳 + 母乳強化パウダー。120-150kcal/kg/日目標。蛋白3.5-4g/kg/日。",
+    notes:
+      "出生体重1.8kg。母乳 + 母乳強化パウダー。120-150kcal/kg/日目標。蛋白3.5-4g/kg/日。",
+    birthDate: "2024-01-26",
+    gestationalAge: 32,
+    birthWeight: 1.8,
+    ageInMonths: 0,
   },
 
   // P013: 8歳 虫垂炎術後（一般小児外科）
@@ -241,6 +271,8 @@ export const samplePatients: Patient[] = [
     allergies: [],
     medications: ["セフメタゾール", "メトロニダゾール", "アセトアミノフェン"],
     notes: "術後3日目から経腸開始予定。消化態製剤から段階的に。",
+    birthDate: "2016-04-20",
+    ageInMonths: 93,
   },
 
   // P014: 15歳 神経性やせ症（Refeeding高リスク小児）
@@ -258,7 +290,10 @@ export const samplePatients: Patient[] = [
     diagnosis: "神経性やせ症（BMI 12.0）、徐脈・低血圧",
     allergies: [],
     medications: ["チアミン(VitB1)", "リン酸Na補充"],
-    notes: "BMI<13、P低値。Refeeding最高リスク。5-10kcal/kg/日から開始。電解質1日2回モニタ。チアミン先行。",
+    notes:
+      "BMI<13、P低値。Refeeding最高リスク。5-10kcal/kg/日から開始。電解質1日2回モニタ。チアミン先行。",
+    birthDate: "2009-08-12",
+    ageInMonths: 185,
   },
 
   // P015: 1歳 先天性心疾患（乳児ICU）
@@ -276,7 +311,11 @@ export const samplePatients: Patient[] = [
     diagnosis: "ファロー四徴症術後",
     allergies: [],
     medications: ["フロセミド", "ジゴキシン", "カプトプリル"],
-    notes: "心不全あり。水分制限 100mL/kg/日。高カロリー密度製剤。利尿薬使用中→K/Mg注意。",
+    notes:
+      "心不全あり。水分制限 100mL/kg/日。高カロリー密度製剤。利尿薬使用中→K/Mg注意。",
+    birthDate: "2023-01-15",
+    ageInMonths: 12,
+    birthWeight: 2.8,
   },
 ];
 

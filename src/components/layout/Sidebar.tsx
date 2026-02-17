@@ -3,6 +3,7 @@ import {
   Stethoscope,
   LayoutDashboard,
   Users,
+  TrendingUp,
   Calculator,
   ClipboardList,
   Archive,
@@ -22,6 +23,7 @@ interface NavItem {
 const NAV_ITEMS: readonly NavItem[] = [
   { icon: LayoutDashboard, label: "ダッシュボード", path: "/" },
   { icon: Users, label: "患者管理", path: "/patients" },
+  { icon: TrendingUp, label: "成長モニタリング", path: "/growth" },
   { icon: Calculator, label: "栄養計算", path: "/calculator" },
   { icon: ClipboardList, label: "メニュー作成", path: "/menu-builder" },
   { icon: Archive, label: "保存メニュー", path: "/menus" },
@@ -35,7 +37,7 @@ function Sidebar() {
     <aside className={styles.sidebar}>
       <div className={styles.brand}>
         <Stethoscope className={styles.brandIcon} size={28} />
-        <span className={styles.brandText}>ICU NutriCare</span>
+        <span className={styles.brandText}>Pedi NutriCare</span>
       </div>
 
       <nav className={styles.nav}>

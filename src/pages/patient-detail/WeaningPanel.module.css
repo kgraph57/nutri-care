@@ -1,0 +1,168 @@
+/* Root */
+.container { display: flex; flex-direction: column; gap: var(--spacing-5); }
+
+/* Header */
+.header { display: flex; align-items: center; gap: var(--spacing-2); margin: 0; }
+.headerIcon { color: var(--color-primary-500); flex-shrink: 0; }
+.title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  margin: 0;
+}
+.headerAction { margin-left: auto; }
+
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--color-neutral-100); margin: 0; }
+
+/* Progress section */
+.progressSection {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-5);
+}
+.progressBarWrapper { flex: 1; }
+.progressCardWrapper { flex-shrink: 0; }
+
+/* Current phase section */
+.currentPhaseSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+.currentPhaseHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+.currentPhaseLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+}
+
+/* Phase details card */
+.phaseDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+}
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+.detailLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-400);
+  font-weight: var(--font-weight-medium);
+}
+.detailValue {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Days info */
+.daysSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-primary-50, #eff6ff);
+  border-radius: var(--radius-md);
+}
+.daysLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-700, #1d4ed8);
+}
+.daysValue {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-700, #1d4ed8);
+}
+
+/* Next milestone */
+.milestoneSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+.milestoneSectionLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+}
+.milestoneCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-warning-50, #fffbeb);
+  border: 1px solid var(--color-warning-200, #fde68a);
+  border-radius: var(--radius-md);
+}
+.milestoneDescription {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-warning-800, #92400e);
+  margin: 0;
+}
+.milestoneDate {
+  font-size: var(--font-size-xs);
+  color: var(--color-warning-600, #d97706);
+}
+.milestoneCriteria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+}
+.milestoneCriteriaTag {
+  font-size: 10px;
+  padding: 1px var(--spacing-2);
+  background: var(--color-warning-100, #fef3c7);
+  border-radius: var(--radius-full, 9999px);
+  color: var(--color-warning-700, #b45309);
+  white-space: nowrap;
+}
+
+/* Timeline section */
+.timelineSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+.timelineSectionLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+}
+
+/* Advance button row */
+.advanceRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Empty state */
+.emptyWrapper {
+  padding: var(--spacing-4) 0;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .progressSection { flex-direction: column; }
+  .phaseDetails { grid-template-columns: 1fr; }
+  .daysSection { flex-direction: column; align-items: flex-start; gap: var(--spacing-1); }
+}
+
+/* Print */
+@media print {
+  .headerAction { display: none; }
+  .advanceRow { display: none; }
+  .container { gap: var(--spacing-3); }
+}

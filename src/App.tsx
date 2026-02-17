@@ -13,6 +13,7 @@ import { SavedMenusPage } from "./pages/SavedMenusPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { ComparisonPage } from "./pages/ComparisonPage";
 import { SimulationPage } from "./pages/SimulationPage";
+import { GrowthMonitoringPage } from "./pages/GrowthMonitoringPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 function AppRoutes() {
@@ -49,6 +50,7 @@ function AppRoutes() {
         <Route path="menus" element={<SavedMenusPage />} />
         <Route path="compare" element={<ComparisonPage />} />
         <Route path="simulation" element={<SimulationPage />} />
+        <Route path="growth" element={<GrowthMonitoringPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>

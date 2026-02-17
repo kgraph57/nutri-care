@@ -34,3 +34,58 @@ export function calculateIBW(heightCm: number, gender: string): number {
   const result = base + 0.91 * (heightCm - 152.4);
   return Math.round(result * 10) / 10;
 }
+
+/* ---- Pediatric-specific utilities ---- */
+
+/**
+ * Pediatric BMI category based on CDC/WHO percentile-based classification.
+ * For children, BMI must be interpreted relative to age/gender percentiles.
+ */
+export function pediatricBmiCategory(percentile: number): string {
+  if (percentile < 3) return "低体重(3%tile未満)";
+  if (percentile < 15) return "やせ傾向";
+  if (percentile < 85) return "普通体重";
+  if (percentile < 95) return "過体重";
+  return "肥満";
+}
+
+/**
+ * Compute corrected age in months for preterm infants.
+ * Correction applies until 24 months of chronological age.
+ */
+export function computeCorrectedAgeMonths(
+  chronologicalAgeMonths: number,
+  gestationalAgeWeeks: number,
+): number {
+  if (chronologicalAgeMonths > 24) return chronologicalAgeMonths;
+  const pretermWeeks = 40 - gestationalAgeWeeks;
+  const correctionMonths = pretermWeeks / 4.33;
+  return Math.max(
+    0,
+    Math.round((chronologicalAgeMonths - correctionMonths) * 10) / 10,
+  );
+}
+
+/**
+ * Calculate age in months from birth date.
+ */
+export function ageInMonthsFromBirthDate(birthDate: string): number {
+  const birth = new Date(birthDate);
+  const now = new Date();
+  const months =
+    (now.getFullYear() - birth.getFullYear()) * 12 +
+    (now.getMonth() - birth.getMonth());
+  return Math.max(0, months);
+}
+
+/**
+ * Weight velocity in g/day (for monitoring infant growth).
+ */
+export function weightVelocity(
+  weight1Kg: number,
+  weight2Kg: number,
+  daysBetween: number,
+): number {
+  if (daysBetween <= 0) return 0;
+  return Math.round((((weight2Kg - weight1Kg) * 1000) / daysBetween) * 10) / 10;
+}

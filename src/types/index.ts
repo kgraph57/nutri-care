@@ -1,4 +1,5 @@
 import type { LabData } from "./labData";
+import type { FeedingRouteType } from "./feedingRoute";
 
 // 患者データの型定義
 export interface Patient {
@@ -17,6 +18,13 @@ export interface Patient {
   medications: string[];
   notes: string;
   labData?: LabData;
+  // 小児固有フィールド (optional、後方互換)
+  readonly birthDate?: string;
+  readonly gestationalAge?: number;
+  readonly correctedAge?: number;
+  readonly birthWeight?: number;
+  readonly ageInMonths?: number;
+  readonly feedingRoute?: FeedingRouteType;
 }
 
 // 食品データの型定義

@@ -1,13 +1,17 @@
-import { useMemo } from 'react';
-import { AlertTriangle, AlertCircle, ShieldAlert } from 'lucide-react';
-import { Card, Badge } from '../../components/ui';
-import { analyzeLabData, getAbnormalFindings } from '../../services/labAnalyzer';
-import { assessRefeedingRisk } from '../../services/refeedingRiskAssessor';
-import type { Patient } from '../../types';
-import type { LabData, LabInterpretation } from '../../types/labData';
-import type { NutritionMenuData } from '../../hooks/useNutritionMenus';
-import type { RefeedingRiskResult } from '../../services/refeedingRiskAssessor';
-import styles from './ClinicalAlertsPanel.module.css';
+import { useMemo } from "react";
+import { AlertTriangle, AlertCircle, ShieldAlert } from "lucide-react";
+import { Card, Badge } from "../../components/ui";
+import {
+  analyzeLabData,
+  getAbnormalFindings,
+} from "../../services/labAnalyzer";
+import { getLabReferencesForPatient } from "../../services/pediatricLabRanges";
+import { assessRefeedingRisk } from "../../services/refeedingRiskAssessor";
+import type { Patient } from "../../types";
+import type { LabData, LabInterpretation } from "../../types/labData";
+import type { NutritionMenuData } from "../../hooks/useNutritionMenus";
+import type { RefeedingRiskResult } from "../../services/refeedingRiskAssessor";
+import styles from "./ClinicalAlertsPanel.module.css";
 
 interface ClinicalAlertsPanelProps {
   readonly patient: Patient;
@@ -35,17 +39,18 @@ function buildAlertGroup(
     };
   }
 
-  const interpretations = analyzeLabData(labData);
+  const references = getLabReferencesForPatient(patient);
+  const interpretations = analyzeLabData(labData, references);
   const abnormal = getAbnormalFindings(interpretations);
 
   const criticalLabs = abnormal.filter(
     (finding) =>
-      finding.status === 'critical-high' || finding.status === 'critical-low',
+      finding.status === "critical-high" || finding.status === "critical-low",
   );
 
   const nonCriticalLabs = abnormal.filter(
     (finding) =>
-      finding.status !== 'critical-high' && finding.status !== 'critical-low',
+      finding.status !== "critical-high" && finding.status !== "critical-low",
   );
 
   return {
@@ -56,7 +61,7 @@ function buildAlertGroup(
 }
 
 function totalAlertCount(group: AlertGroup): number {
-  const refeedingCount = group.refeedingRisk.riskLevel !== 'none' ? 1 : 0;
+  const refeedingCount = group.refeedingRisk.riskLevel !== "none" ? 1 : 0;
   return group.criticalLabs.length + refeedingCount + group.abnormalLabs.length;
 }
 
@@ -67,7 +72,10 @@ function CriticalLabAlert({
 }) {
   return (
     <div className={`${styles.alertItem} ${styles.critical}`}>
-      <AlertCircle size={18} className={`${styles.alertIcon} ${styles.critical}`} />
+      <AlertCircle
+        size={18}
+        className={`${styles.alertIcon} ${styles.critical}`}
+      />
       <div className={styles.alertContent}>
         <span className={`${styles.severityBadge} ${styles.severityCritical}`}>
           重症
@@ -78,16 +86,12 @@ function CriticalLabAlert({
   );
 }
 
-function RefeedingAlert({
-  result,
-}: {
-  readonly result: RefeedingRiskResult;
-}) {
+function RefeedingAlert({ result }: { readonly result: RefeedingRiskResult }) {
   const levelClass =
-    result.riskLevel === 'high' ? styles.high : styles.moderate;
-  const badgeVariant: 'danger' | 'warning' =
-    result.riskLevel === 'high' ? 'danger' : 'warning';
-  const levelLabel = result.riskLevel === 'high' ? '高リスク' : '中リスク';
+    result.riskLevel === "high" ? styles.high : styles.moderate;
+  const badgeVariant: "danger" | "warning" =
+    result.riskLevel === "high" ? "danger" : "warning";
+  const levelLabel = result.riskLevel === "high" ? "高リスク" : "中リスク";
 
   return (
     <div className={`${styles.refeedingSection} ${levelClass}`}>
@@ -159,7 +163,7 @@ export function ClinicalAlertsPanel({
     return null;
   }
 
-  const hasRefeeding = alertGroup.refeedingRisk.riskLevel !== 'none';
+  const hasRefeeding = alertGroup.refeedingRisk.riskLevel !== "none";
 
   return (
     <Card>
