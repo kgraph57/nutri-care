@@ -1,5 +1,11 @@
-import { useMemo } from "react";
-import { AlertTriangle, AlertCircle, ShieldAlert } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+  AlertTriangle,
+  AlertCircle,
+  ShieldAlert,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { Card, Badge } from "../../components/ui";
 import {
   analyzeLabData,
@@ -65,85 +71,107 @@ function totalAlertCount(group: AlertGroup): number {
   return group.criticalLabs.length + refeedingCount + group.abnormalLabs.length;
 }
 
-function CriticalLabAlert({
+function CriticalLabChip({
   finding,
 }: {
   readonly finding: LabInterpretation;
 }) {
   return (
-    <div className={`${styles.alertItem} ${styles.critical}`}>
-      <AlertCircle
-        size={18}
-        className={`${styles.alertIcon} ${styles.critical}`}
-      />
-      <div className={styles.alertContent}>
-        <span className={`${styles.severityBadge} ${styles.severityCritical}`}>
-          重症
-        </span>
-        <p className={styles.alertMessage}>{finding.message}</p>
-      </div>
-    </div>
+    <span className={`${styles.chip} ${styles.chipCritical}`}>
+      <AlertCircle size={12} />
+      {finding.parameter}: {finding.value}
+      {finding.unit ? ` ${finding.unit}` : ""}
+    </span>
   );
 }
 
-function RefeedingAlert({ result }: { readonly result: RefeedingRiskResult }) {
-  const levelClass =
-    result.riskLevel === "high" ? styles.high : styles.moderate;
-  const badgeVariant: "danger" | "warning" =
-    result.riskLevel === "high" ? "danger" : "warning";
-  const levelLabel = result.riskLevel === "high" ? "高リスク" : "中リスク";
-
+function AbnormalLabChip({
+  finding,
+}: {
+  readonly finding: LabInterpretation;
+}) {
   return (
-    <div className={`${styles.refeedingSection} ${levelClass}`}>
-      <div className={styles.refeedingHeader}>
+    <span className={`${styles.chip} ${styles.chipWarning}`}>
+      {finding.parameter}: {finding.value}
+      {finding.unit ? ` ${finding.unit}` : ""}
+    </span>
+  );
+}
+
+function RefeedingChip({ result }: { readonly result: RefeedingRiskResult }) {
+  const isHigh = result.riskLevel === "high";
+  return (
+    <span
+      className={`${styles.chip} ${isHigh ? styles.chipCritical : styles.chipWarning}`}
+    >
+      <ShieldAlert size={12} />
+      Refeeding {isHigh ? "高" : "中"}リスク
+    </span>
+  );
+}
+
+function RefeedingDetail({
+  result,
+}: {
+  readonly result: RefeedingRiskResult;
+}) {
+  const isHigh = result.riskLevel === "high";
+  return (
+    <div
+      className={`${styles.refeedingDetail} ${isHigh ? styles.refeedingHigh : styles.refeedingModerate}`}
+    >
+      <div className={styles.refeedingRow}>
         <ShieldAlert
-          size={18}
-          className={`${styles.refeedingIcon} ${levelClass}`}
+          size={14}
+          className={isHigh ? styles.iconDanger : styles.iconWarning}
         />
-        <h4 className={styles.refeedingTitle}>リフィーディング症候群</h4>
-        <Badge variant={badgeVariant}>{levelLabel}</Badge>
+        <span className={styles.refeedingLabel}>
+          リフィーディング症候群
+        </span>
+        <Badge variant={isHigh ? "danger" : "warning"}>
+          {isHigh ? "高リスク" : "中リスク"}
+        </Badge>
       </div>
-
-      <div>
-        <p className={styles.refeedingSubtitle}>リスク因子</p>
-        <ul className={styles.refeedingList}>
-          {result.reasons.map((reason) => (
-            <li key={reason}>{reason}</li>
-          ))}
-        </ul>
-      </div>
-
-      {result.recommendations.length > 0 && (
+      <div className={styles.refeedingColumns}>
         <div>
-          <p className={styles.refeedingSubtitle}>推奨事項</p>
-          <ul className={styles.refeedingList}>
-            {result.recommendations.map((rec) => (
-              <li key={rec}>{rec}</li>
+          <p className={styles.detailSubtitle}>因子</p>
+          <ul className={styles.detailList}>
+            {result.reasons.map((r) => (
+              <li key={r}>{r}</li>
             ))}
           </ul>
         </div>
-      )}
+        {result.recommendations.length > 0 && (
+          <div>
+            <p className={styles.detailSubtitle}>推奨</p>
+            <ul className={styles.detailList}>
+              {result.recommendations.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
-function AbnormalLabAlert({
+function AlertDetail({
   finding,
+  variant,
 }: {
   readonly finding: LabInterpretation;
+  readonly variant: "critical" | "warning";
 }) {
   return (
-    <div className={`${styles.alertItem} ${styles.warning}`}>
-      <AlertTriangle
-        size={16}
-        className={`${styles.alertIcon} ${styles.warning}`}
-      />
-      <div className={styles.alertContent}>
-        <span className={`${styles.severityBadge} ${styles.severityWarning}`}>
-          注意
-        </span>
-        <p className={styles.alertMessage}>{finding.message}</p>
-      </div>
+    <div className={`${styles.detailRow} ${styles[variant]}`}>
+      {variant === "critical" ? (
+        <AlertCircle size={14} className={styles.iconDanger} />
+      ) : (
+        <AlertTriangle size={14} className={styles.iconWarning} />
+      )}
+      <span className={styles.detailParam}>{finding.parameter}</span>
+      <span className={styles.detailMessage}>{finding.message}</span>
     </div>
   );
 }
@@ -152,6 +180,8 @@ export function ClinicalAlertsPanel({
   patient,
   labData,
 }: ClinicalAlertsPanelProps) {
+  const [expanded, setExpanded] = useState(false);
+
   const alertGroup = useMemo(
     () => buildAlertGroup(patient, labData),
     [patient, labData],
@@ -164,46 +194,66 @@ export function ClinicalAlertsPanel({
   }
 
   const hasRefeeding = alertGroup.refeedingRisk.riskLevel !== "none";
+  const hasCritical = alertGroup.criticalLabs.length > 0;
 
   return (
     <Card>
       <div className={styles.container}>
-        <h3 className={styles.header}>
-          <AlertTriangle size={20} className={styles.headerIcon} />
-          臨床アラート
-          <span className={styles.countBadge}>
-            <Badge variant="danger">{count}</Badge>
-          </span>
-        </h3>
-
-        <div className={styles.alertList}>
-          {/* Priority 1: Critical lab values */}
-          {alertGroup.criticalLabs.map((finding) => (
-            <CriticalLabAlert key={finding.parameter} finding={finding} />
-          ))}
-
-          {/* Priority 2: Refeeding risk */}
-          {hasRefeeding && (
-            <>
-              {alertGroup.criticalLabs.length > 0 && (
-                <hr className={styles.divider} />
-              )}
-              <RefeedingAlert result={alertGroup.refeedingRisk} />
-            </>
+        {/* Compact summary bar — always visible */}
+        <button
+          type="button"
+          className={styles.summaryBar}
+          onClick={() => setExpanded((prev) => !prev)}
+          aria-expanded={expanded}
+        >
+          <AlertTriangle
+            size={16}
+            className={
+              hasCritical ? styles.iconDanger : styles.iconWarning
+            }
+          />
+          <span className={styles.summaryTitle}>臨床アラート</span>
+          <div className={styles.chipRow}>
+            {alertGroup.criticalLabs.map((f) => (
+              <CriticalLabChip key={f.parameter} finding={f} />
+            ))}
+            {hasRefeeding && (
+              <RefeedingChip result={alertGroup.refeedingRisk} />
+            )}
+            {alertGroup.abnormalLabs.map((f) => (
+              <AbnormalLabChip key={f.parameter} finding={f} />
+            ))}
+          </div>
+          <Badge variant={hasCritical ? "danger" : "warning"}>{count}</Badge>
+          {expanded ? (
+            <ChevronUp size={16} className={styles.chevron} />
+          ) : (
+            <ChevronDown size={16} className={styles.chevron} />
           )}
+        </button>
 
-          {/* Priority 3: Non-critical abnormal labs */}
-          {alertGroup.abnormalLabs.length > 0 && (
-            <>
-              {(alertGroup.criticalLabs.length > 0 || hasRefeeding) && (
-                <hr className={styles.divider} />
-              )}
-              {alertGroup.abnormalLabs.map((finding) => (
-                <AbnormalLabAlert key={finding.parameter} finding={finding} />
-              ))}
-            </>
-          )}
-        </div>
+        {/* Expandable detail section */}
+        {expanded && (
+          <div className={styles.detailSection}>
+            {alertGroup.criticalLabs.map((f) => (
+              <AlertDetail
+                key={f.parameter}
+                finding={f}
+                variant="critical"
+              />
+            ))}
+            {hasRefeeding && (
+              <RefeedingDetail result={alertGroup.refeedingRisk} />
+            )}
+            {alertGroup.abnormalLabs.map((f) => (
+              <AlertDetail
+                key={f.parameter}
+                finding={f}
+                variant="warning"
+              />
+            ))}
+          </div>
+        )}
       </div>
     </Card>
   );

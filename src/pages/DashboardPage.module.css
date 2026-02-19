@@ -5,94 +5,31 @@
 }
 
 .header {
-  margin-bottom: var(--spacing-8);
+  margin-bottom: var(--spacing-6);
 }
 
 .title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
-  margin: 0 0 var(--spacing-2) 0;
+  margin: 0 0 var(--spacing-1) 0;
 }
 
 .subtitle {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   color: var(--color-neutral-500);
   margin: 0;
 }
 
-.summaryGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-4);
-  margin-bottom: var(--spacing-8);
-}
-
-.summaryCard {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-4);
-  padding: var(--spacing-5);
-}
-
-.summaryIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-lg);
-  flex-shrink: 0;
-}
-
-.summaryIconPatients {
-  background-color: var(--color-primary-100);
-  color: var(--color-primary-700);
-}
-
-.summaryIconMenus {
-  background-color: var(--color-info-light);
-  color: var(--color-info);
-}
-
-.summaryIconAlerts {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning);
-}
-
-.summaryContent {
-  display: flex;
-  flex-direction: column;
-}
-
-.summaryLabel {
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-500);
-  margin-bottom: var(--spacing-1);
-}
-
-.summaryValue {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
-}
-
-.twoColumn {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-6);
-  margin-bottom: var(--spacing-4);
-}
-
 .section {
-  margin-bottom: var(--spacing-8);
+  margin-bottom: var(--spacing-6);
 }
 
 .sectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--spacing-3);
 }
 
 .sectionTitle {
@@ -105,131 +42,9 @@
   margin: 0;
 }
 
-.menuList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3);
-}
-
-.menuItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-4);
-}
-
-.menuInfo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-1);
-}
-
-.menuName {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-neutral-800);
-}
-
-.menuMeta {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-500);
-}
-
-.menuEnergy {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary-700);
-  white-space: nowrap;
-}
-
-.quickActions {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-4);
-}
-
-.actionLink {
-  text-decoration: none;
-}
-
-/* Simulation progress */
-.simProgressCard {
-  padding: var(--spacing-4);
-  margin-bottom: var(--spacing-4);
-}
-
-.simProgressHeader {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  margin-bottom: var(--spacing-3);
-  color: var(--color-neutral-800);
-}
-
-.simProgressTitle {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  margin: 0;
-}
-
-.simProgressStats {
-  display: flex;
-  gap: var(--spacing-6);
-}
-
-.simProgressStat {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-1);
-}
-
-.simStatValue {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary-600);
-}
-
-.simStatLabel {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
-}
-
-.simWeakCategories {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  margin-top: var(--spacing-3);
-  flex-wrap: wrap;
-}
-
-.simWeakLabel {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
-}
-
-@media (max-width: 768px) {
-  .page {
-    padding: var(--spacing-4);
-  }
-
-  .twoColumn {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-4);
-  }
-
-  .menuItem {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-2);
-  }
-}
-
 @media (max-width: 640px) {
   .page {
-    padding: 0;
+    padding: var(--spacing-4);
   }
 
   .header {
@@ -240,65 +55,11 @@
     font-size: var(--font-size-xl);
   }
 
-  .subtitle {
-    font-size: var(--font-size-sm);
-  }
-
-  .summaryGrid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-3);
-    margin-bottom: var(--spacing-5);
-  }
-
-  .summaryCard {
-    padding: var(--spacing-3);
-    gap: var(--spacing-3);
-  }
-
-  .summaryIcon {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-md);
-  }
-
-  .summaryLabel {
-    font-size: var(--font-size-xs);
-  }
-
-  .summaryValue {
-    font-size: var(--font-size-xl);
-  }
-
   .section {
-    margin-bottom: var(--spacing-5);
+    margin-bottom: var(--spacing-4);
   }
 
   .sectionTitle {
     font-size: var(--font-size-md);
-  }
-
-  .menuList {
-    gap: var(--spacing-2);
-  }
-
-  .menuItem {
-    padding: var(--spacing-3);
-  }
-
-  .menuName {
-    font-size: var(--font-size-sm);
-  }
-
-  .menuMeta {
-    gap: var(--spacing-2);
-    font-size: var(--font-size-xs);
-  }
-
-  .menuEnergy {
-    font-size: var(--font-size-sm);
-  }
-
-  .quickActions {
-    gap: var(--spacing-3);
   }
 }

@@ -4,7 +4,6 @@ import {
   FlaskConical,
   Sparkles,
   Printer,
-  Baby,
   TrendingUp,
   Utensils,
 } from "lucide-react";
@@ -18,7 +17,6 @@ interface StickyActionBarProps {
   readonly onOpenAdvisor: () => void;
   readonly onPrint: () => void;
   readonly isPediatric?: boolean;
-  readonly onAddTolerance?: () => void;
   readonly onAddGrowthEntry?: () => void;
   readonly onAddFeedingRoute?: () => void;
 }
@@ -30,7 +28,6 @@ export function StickyActionBar({
   onOpenAdvisor,
   onPrint,
   isPediatric,
-  onAddTolerance,
   onAddGrowthEntry,
   onAddFeedingRoute,
 }: StickyActionBarProps) {
@@ -71,17 +68,6 @@ export function StickyActionBar({
       >
         AIアシスタント
       </Button>
-
-      {isPediatric && onAddTolerance && (
-        <Button
-          variant="ghost"
-          size="sm"
-          icon={<Baby size={14} />}
-          onClick={onAddTolerance}
-        >
-          耐性評価
-        </Button>
-      )}
 
       {isPediatric && onAddGrowthEntry && (
         <Button
