@@ -36,7 +36,36 @@
   color: var(--color-neutral-900);
   white-space: nowrap;
   overflow: hidden;
-  transition: opacity var(--transition-slow);
+  flex: 1;
+  transition: opacity var(--transition-slow), width var(--transition-slow);
+}
+
+/* ========================================
+   Toggle Button
+   ======================================== */
+.toggleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-sm);
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+  padding: 0;
+  margin-left: auto;
+}
+
+.toggleButton:hover {
+  background-color: var(--color-neutral-200);
+  color: var(--color-neutral-900);
+  border-color: var(--color-neutral-400);
 }
 
 /* ========================================
@@ -96,7 +125,7 @@
 
 .navLabel {
   overflow: hidden;
-  transition: opacity var(--transition-slow);
+  transition: opacity var(--transition-slow), width var(--transition-slow);
 }
 
 /* ========================================
@@ -118,6 +147,37 @@
   visibility: hidden;
   transition: opacity var(--transition-fast), visibility var(--transition-fast);
   z-index: 20;
+}
+
+/* ========================================
+   Collapsed state (manual toggle)
+   ======================================== */
+.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.collapsed .brandText {
+  opacity: 0;
+  width: 0;
+}
+
+.collapsed .navLabel {
+  opacity: 0;
+  width: 0;
+}
+
+.collapsed .navLink {
+  justify-content: center;
+  padding: var(--spacing-3);
+}
+
+.collapsed .navLink:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.collapsed .toggleButton {
+  margin-left: 0;
 }
 
 /* ========================================
@@ -146,6 +206,10 @@
   .navLink:hover .tooltip {
     opacity: 1;
     visibility: visible;
+  }
+
+  .toggleButton {
+    display: none;
   }
 }
 

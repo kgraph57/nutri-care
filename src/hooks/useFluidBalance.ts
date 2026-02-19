@@ -4,13 +4,30 @@ import { sampleFluidBalanceMap } from '../data/sampleFluidBalance'
 
 const FLUID_BALANCE_KEY = 'nutri-care-fluid-balance'
 
+/**
+ * Merge stored data with sample data.
+ * If a patient already has user-entered data, preserve it.
+ * If a patient has no data, seed with sample entries.
+ */
+function mergeWithSampleData(
+  stored: Record<string, FluidBalanceEntry[]>,
+): Record<string, FluidBalanceEntry[]> {
+  const merged = { ...stored }
+  for (const [patientId, sampleEntries] of Object.entries(sampleFluidBalanceMap)) {
+    if (!merged[patientId] || merged[patientId].length === 0) {
+      merged[patientId] = sampleEntries
+    }
+  }
+  return merged
+}
+
 function loadFromStorage(): Record<string, FluidBalanceEntry[]> {
   try {
     const stored = localStorage.getItem(FLUID_BALANCE_KEY)
     if (stored) {
       const parsed: unknown = JSON.parse(stored)
       if (typeof parsed === 'object' && parsed !== null) {
-        return parsed as Record<string, FluidBalanceEntry[]>
+        return mergeWithSampleData(parsed as Record<string, FluidBalanceEntry[]>)
       }
     }
   } catch {

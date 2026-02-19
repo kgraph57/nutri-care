@@ -5,8 +5,10 @@ import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { useLabData } from "../hooks/useLabData";
 import { useFluidBalance } from "../hooks/useFluidBalance";
+import { useToleranceData } from "../hooks/useToleranceData";
 import type { LabData } from "../types/labData";
 import type { FluidBalanceEntry } from "../types/fluidBalance";
+import type { ToleranceEntry } from "../types/toleranceData";
 import {
   EmptyState,
   Modal,
@@ -15,10 +17,14 @@ import {
 import { LabDataForm } from "../components/labs/LabDataForm";
 import { FluidBalanceForm } from "../components/fluid/FluidBalanceForm";
 import { LabTrendChart } from "../components/labs/LabTrendChart";
+import { ToleranceEntryForm } from "../components/tolerance/ToleranceEntryForm";
 import { PatientProfileCard } from "./patient-detail/PatientProfileCard";
 import { NutritionStatusPanel } from "./patient-detail/NutritionStatusPanel";
 import { ActiveMenuCard } from "./patient-detail/ActiveMenuCard";
 import { FluidBalancePanel } from "./patient-detail/FluidBalancePanel";
+import { ClinicalAlertsPanel } from "./patient-detail/ClinicalAlertsPanel";
+import { LabOverviewGrid } from "./patient-detail/LabOverviewGrid";
+import { TolerancePanel } from "./patient-detail/TolerancePanel";
 import { StickyActionBar } from "./patient-detail/StickyActionBar";
 import { useFeedingRoute } from "../hooks/useFeedingRoute";
 import { useGrowthData } from "../hooks/useGrowthData";
@@ -57,8 +63,10 @@ export function PatientDetailPage() {
   const { getMenusForPatient } = useNutritionMenus();
   const { getLabData, getLabHistory, saveLabData } = useLabData();
   const { getFluidHistory, saveFluidBalance } = useFluidBalance();
+  const { getToleranceHistory, saveToleranceEntry } = useToleranceData();
   const [showLabModal, setShowLabModal] = useState(false);
   const [showFluidModal, setShowFluidModal] = useState(false);
+  const [showToleranceModal, setShowToleranceModal] = useState(false);
 
   // Pediatric hooks
   const { getRouteHistory, saveRoute } = useFeedingRoute();
@@ -93,6 +101,11 @@ export function PatientDetailPage() {
   const fluidHistory = useMemo(
     () => (patientId ? getFluidHistory(patientId) : []),
     [patientId, getFluidHistory],
+  );
+
+  const toleranceHistory = useMemo(
+    () => (patientId ? getToleranceHistory(patientId) : []),
+    [patientId, getToleranceHistory],
   );
 
   const latestMenu = useMemo(() => {
@@ -169,6 +182,16 @@ export function PatientDetailPage() {
     setShowFluidModal(true);
   }, []);
 
+  const handleToleranceSave = useCallback(
+    (entry: ToleranceEntry) => {
+      if (patientId) {
+        saveToleranceEntry(patientId, entry);
+      }
+      setShowToleranceModal(false);
+    },
+    [patientId, saveToleranceEntry],
+  );
+
   const handleFeedingRouteSave = useCallback(
     (entry: FeedingRouteEntry) => {
       if (patientId) {
@@ -231,6 +254,15 @@ export function PatientDetailPage() {
         <PatientProfileCard patient={patient} daysAdmitted={daysAdmitted} />
       </section>
 
+      {/* Clinical Alerts — always shown when alerts exist */}
+      <section className={styles.section}>
+        <ClinicalAlertsPanel
+          patient={patient}
+          labData={labData}
+          latestMenu={latestMenu}
+        />
+      </section>
+
       {/* Growth Summary (pediatric only) */}
       {isPediatric && patient && (
         <section className={styles.section}>
@@ -267,9 +299,19 @@ export function PatientDetailPage() {
               onAdvancePhase={handleAdvanceWeaningPhase}
             />
           )}
+          {/* Tolerance Panel: shown for all patients receiving enteral feeding */}
+          <TolerancePanel
+            history={toleranceHistory}
+            onAddEntry={() => setShowToleranceModal(true)}
+          />
         </div>
 
         <div className={styles.columnRight}>
+          <LabOverviewGrid
+            labData={labData}
+            labHistory={labHistory}
+            onEditLabs={handleEditLabs}
+          />
           <FluidBalancePanel
             history={fluidHistory}
             patientWeight={patient.weight}
@@ -321,6 +363,21 @@ export function PatientDetailPage() {
             patientId={patientId}
             onSave={handleFluidSave}
             onCancel={() => setShowFluidModal(false)}
+          />
+        )}
+      </Modal>
+
+      {/* Tolerance Entry Modal */}
+      <Modal
+        isOpen={showToleranceModal}
+        title="経腸栄養耐性評価入力"
+        onClose={() => setShowToleranceModal(false)}
+      >
+        {patientId && (
+          <ToleranceEntryForm
+            patientId={patientId}
+            onSave={handleToleranceSave}
+            onCancel={() => setShowToleranceModal(false)}
           />
         )}
       </Modal>

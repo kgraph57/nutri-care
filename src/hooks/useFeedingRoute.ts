@@ -4,13 +4,30 @@ import { sampleFeedingRouteMap } from '../data/sampleFeedingRoutes'
 
 const FEEDING_ROUTES_KEY = 'nutri-care-feeding-routes'
 
+/**
+ * Merge stored data with sample data.
+ * If a patient already has user-entered data, preserve it.
+ * If a patient has no data, seed with sample entries.
+ */
+function mergeWithSampleData(
+  stored: Record<string, FeedingRouteEntry[]>,
+): Record<string, FeedingRouteEntry[]> {
+  const merged = { ...stored }
+  for (const [patientId, sampleEntries] of Object.entries(sampleFeedingRouteMap)) {
+    if (!merged[patientId] || merged[patientId].length === 0) {
+      merged[patientId] = sampleEntries
+    }
+  }
+  return merged
+}
+
 function loadFromStorage(): Record<string, FeedingRouteEntry[]> {
   try {
     const stored = localStorage.getItem(FEEDING_ROUTES_KEY)
     if (stored) {
       const parsed: unknown = JSON.parse(stored)
       if (typeof parsed === 'object' && parsed !== null) {
-        return parsed as Record<string, FeedingRouteEntry[]>
+        return mergeWithSampleData(parsed as Record<string, FeedingRouteEntry[]>)
       }
     }
   } catch {

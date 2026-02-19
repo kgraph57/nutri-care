@@ -857,6 +857,167 @@ export const sampleMenus: NutritionMenuData[] = [
   },
 
   // ==========================================
+  //  P008 中村あゆみ（48歳, 60kg, ARDS・COVID後） — 高蛋白・ω3強化
+  // ==========================================
+  {
+    id: 'sample-031',
+    patientId: 'P008',
+    patientName: '中村 あゆみ',
+    nutritionType: 'parenteral',
+    menuName: 'Day1 TPN（腹臥位管理中）',
+    items: [
+      {
+        id: 'i-043',
+        productName: 'エルネオパNF1号',
+        manufacturer: '大塚製薬',
+        volume: 1000,
+        frequency: 1,
+      },
+    ],
+    totalEnergy: 560,
+    totalVolume: 1000,
+    requirements: sampleRequirements['P008'],
+    currentIntake: { energy: 560, protein: 20 },
+    notes: '腹臥位管理中、経腸不耐のためTPN先行。デキサメタゾン使用中。',
+    activityLevel: 'bed_rest',
+    stressLevel: 'high',
+    medicalCondition: 'ARDS（COVID-19後）',
+    createdAt: daysAgo(4),
+  },
+  {
+    id: 'sample-032',
+    patientId: 'P008',
+    patientName: '中村 あゆみ',
+    nutritionType: 'enteral',
+    menuName: 'Day2 経腸栄養（少量開始）',
+    items: [
+      {
+        id: 'i-044',
+        productName: 'ペプタメン AF',
+        manufacturer: 'ネスレ',
+        volume: 200,
+        frequency: 3,
+      },
+    ],
+    totalEnergy: 600,
+    totalVolume: 600,
+    requirements: sampleRequirements['P008'],
+    currentIntake: { energy: 600, protein: 38 },
+    notes: 'ω3脂肪酸含有高蛋白製剤。permissive underfeeding段階。腹臥位中も経腸継続。',
+    activityLevel: 'bed_rest',
+    stressLevel: 'high',
+    medicalCondition: 'ARDS（COVID-19後）',
+    createdAt: daysAgo(3),
+  },
+  {
+    id: 'sample-033',
+    patientId: 'P008',
+    patientName: '中村 あゆみ',
+    nutritionType: 'enteral',
+    menuName: 'Day4 経腸栄養（増量）',
+    items: [
+      {
+        id: 'i-045',
+        productName: 'ペプタメン AF',
+        manufacturer: 'ネスレ',
+        volume: 300,
+        frequency: 4,
+      },
+      {
+        id: 'i-046',
+        productName: 'REF-P1',
+        manufacturer: 'クリニコ',
+        volume: 100,
+        frequency: 2,
+      },
+    ],
+    totalEnergy: 1200,
+    totalVolume: 1400,
+    requirements: sampleRequirements['P008'],
+    currentIntake: { energy: 1200, protein: 78 },
+    notes: '高蛋白1.5g/kg/日達成。ω3強化継続。仰臥位と腹臥位交互管理中。',
+    activityLevel: 'bed_rest',
+    stressLevel: 'moderate',
+    medicalCondition: 'ARDS（COVID-19後）',
+    createdAt: daysAgo(1),
+  },
+
+  // ==========================================
+  //  P010 加藤節子（85歳, 42kg, サルコペニア・大腿骨骨折術後）
+  // ==========================================
+  {
+    id: 'sample-034',
+    patientId: 'P010',
+    patientName: '加藤 節子',
+    nutritionType: 'enteral',
+    menuName: 'サルコペニア 蛋白強化食',
+    items: [
+      {
+        id: 'i-047',
+        productName: 'メイバランスMini',
+        manufacturer: '明治',
+        volume: 125,
+        frequency: 4,
+      },
+      {
+        id: 'i-048',
+        productName: 'プロテインパウダー',
+        manufacturer: 'クリニコ',
+        volume: 50,
+        frequency: 3,
+      },
+    ],
+    totalEnergy: 1050,
+    totalVolume: 650,
+    requirements: sampleRequirements['P010'],
+    currentIntake: { energy: 1050, protein: 58 },
+    notes: '蛋白1.5g/kg/日。ビタミンD補充。リハビリ栄養。食欲低下のため少量頻回投与。',
+    activityLevel: 'minimal',
+    stressLevel: 'low',
+    medicalCondition: 'サルコペニア・大腿骨頸部骨折術後',
+    createdAt: daysAgo(3),
+  },
+  {
+    id: 'sample-035',
+    patientId: 'P010',
+    patientName: '加藤 節子',
+    nutritionType: 'enteral',
+    menuName: 'サルコペニア 経腸+経口併用',
+    items: [
+      {
+        id: 'i-049',
+        productName: 'メイバランスMini',
+        manufacturer: '明治',
+        volume: 125,
+        frequency: 3,
+      },
+      {
+        id: 'i-050',
+        productName: 'アイソカルゼリー',
+        manufacturer: 'ネスレ',
+        volume: 80,
+        frequency: 2,
+      },
+      {
+        id: 'i-051',
+        productName: 'プロテインパウダー',
+        manufacturer: 'クリニコ',
+        volume: 40,
+        frequency: 3,
+      },
+    ],
+    totalEnergy: 1200,
+    totalVolume: 695,
+    requirements: sampleRequirements['P010'],
+    currentIntake: { energy: 1200, protein: 65 },
+    notes: 'リハビリ後の蛋白摂取強化。ゼリー経口摂取でQOL向上。目標30kcal/kg/日達成間近。',
+    activityLevel: 'minimal',
+    stressLevel: 'low',
+    medicalCondition: 'サルコペニア・大腿骨頸部骨折術後',
+    createdAt: daysAgo(1),
+  },
+
+  // ==========================================
   //  P015 清水陽向（1歳 心疾患） — 乳児高濃度
   // ==========================================
   {

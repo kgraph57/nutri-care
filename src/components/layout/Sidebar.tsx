@@ -10,6 +10,8 @@ import {
   GitCompareArrows,
   GraduationCap,
   Settings,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import styles from "./Sidebar.module.css";
@@ -32,12 +34,36 @@ const NAV_ITEMS: readonly NavItem[] = [
   { icon: Settings, label: "設定", path: "/settings" },
 ] as const;
 
-function Sidebar() {
+interface SidebarProps {
+  readonly isCollapsed: boolean;
+  readonly onToggle: () => void;
+}
+
+function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
+  const sidebarClassName = [
+    styles.sidebar,
+    isCollapsed ? styles.collapsed : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <aside className={styles.sidebar}>
+    <aside className={sidebarClassName}>
       <div className={styles.brand}>
         <Stethoscope className={styles.brandIcon} size={28} />
         <span className={styles.brandText}>Pedi NutriCare</span>
+        <button
+          className={styles.toggleButton}
+          onClick={onToggle}
+          aria-label={isCollapsed ? "サイドバーを展開" : "サイドバーを折りたたむ"}
+          type="button"
+        >
+          {isCollapsed ? (
+            <ChevronRight size={16} />
+          ) : (
+            <ChevronLeft size={16} />
+          )}
+        </button>
       </div>
 
       <nav className={styles.nav}>

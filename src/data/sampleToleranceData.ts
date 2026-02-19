@@ -66,7 +66,7 @@ const P002_TOLERANCE: ToleranceEntry[] = [
   },
 ]
 
-// ─── P011 中村優（3歳, 脳炎）─── 不安定な経過 (4→6→5→7)
+// ─── P011 木村蒼太（3歳, 脳炎）─── 不安定な経過 (4→6→5→7)
 const P011_TOLERANCE: ToleranceEntry[] = [
   {
     id: 'tol-P011-001',
@@ -138,7 +138,7 @@ const P011_TOLERANCE: ToleranceEntry[] = [
   },
 ]
 
-// ─── P012 山本結衣（早産児, 修正32週）─── 慎重な増量 (6→7→6→8→8)
+// ─── P012 松本凛（早産児, 修正32週）─── 慎重な増量 (6→7→6→8→8)
 const P012_TOLERANCE: ToleranceEntry[] = [
   {
     id: 'tol-P012-001',
@@ -227,7 +227,151 @@ const P012_TOLERANCE: ToleranceEntry[] = [
   },
 ]
 
-// ─── P015 木村蓮（1歳, 心臓手術後）─── 中等度の耐性 (5→6→7)
+// ─── P013 井上大翔（8歳, 虫垂炎術後）─── 術後回復（改善傾向 5→6→8）
+const P013_TOLERANCE: ToleranceEntry[] = [
+  {
+    id: 'tol-P013-001',
+    patientId: 'P013',
+    date: daysAgoDate(3),
+    time: '08:00',
+    gastricResidual: 35,
+    gastricResidualAction: 'reduce',
+    vomiting: 'mild',
+    vomitingEpisodes: 1,
+    abdominalDistension: 'mild',
+    bowelSounds: 'reduced',
+    stoolCount: 0,
+    stoolConsistency: 'none',
+    toleranceScore: 5,
+    feedingAdjustment: 'maintain',
+    notes: '術後3日目、消化態製剤で経腸開始。軽度腹部膨満・腸蠕動音やや減弱。GRV 35mLのため速度維持。',
+  },
+  {
+    id: 'tol-P013-002',
+    patientId: 'P013',
+    date: daysAgoDate(2),
+    time: '08:00',
+    gastricResidual: 18,
+    gastricResidualAction: 'continue',
+    vomiting: 'none',
+    vomitingEpisodes: 0,
+    abdominalDistension: 'none',
+    bowelSounds: 'present',
+    stoolCount: 1,
+    stoolConsistency: 'loose',
+    toleranceScore: 6,
+    feedingAdjustment: 'advance',
+    notes: '腸蠕動音回復、排ガス確認。泥状便1回。腹部ドレーン排液減少傾向。経腸栄養増量へ。',
+  },
+  {
+    id: 'tol-P013-003',
+    patientId: 'P013',
+    date: daysAgoDate(1),
+    time: '08:00',
+    gastricResidual: 10,
+    gastricResidualAction: 'continue',
+    vomiting: 'none',
+    vomitingEpisodes: 0,
+    abdominalDistension: 'none',
+    bowelSounds: 'present',
+    stoolCount: 2,
+    stoolConsistency: 'soft',
+    toleranceScore: 8,
+    feedingAdjustment: 'advance',
+    notes: '消化管機能良好。排便正常化。経腸栄養目標量の80%達成。経口摂取への移行を検討開始。',
+  },
+]
+
+// ─── P014 斎藤結衣（15歳, 神経性やせ症）─── 超低速Refeeding、慎重な耐性管理 (5→5→6→7)
+const P014_TOLERANCE: ToleranceEntry[] = [
+  {
+    id: 'tol-P014-001',
+    patientId: 'P014',
+    date: daysAgoDate(5),
+    time: '09:00',
+    gastricResidual: 20,
+    gastricResidualAction: 'continue',
+    vomiting: 'mild',
+    vomitingEpisodes: 1,
+    abdominalDistension: 'mild',
+    bowelSounds: 'reduced',
+    stoolCount: 0,
+    stoolConsistency: 'none',
+    toleranceScore: 5,
+    feedingAdjustment: 'maintain',
+    notes: 'Refeeding開始5kcal/kg/日。胃食道逆流あり。腸蠕動音やや減弱。嘔気あり1回。速度維持。',
+  },
+  {
+    id: 'tol-P014-002',
+    patientId: 'P014',
+    date: daysAgoDate(4),
+    time: '09:00',
+    gastricResidual: 15,
+    gastricResidualAction: 'continue',
+    vomiting: 'mild',
+    vomitingEpisodes: 1,
+    abdominalDistension: 'none',
+    bowelSounds: 'reduced',
+    stoolCount: 0,
+    stoolConsistency: 'none',
+    toleranceScore: 5,
+    feedingAdjustment: 'maintain',
+    notes: '嘔吐1回（少量）。電解質安定継続。体重変動なし。Refeeding注意継続。増量見送り。',
+  },
+  {
+    id: 'tol-P014-003',
+    patientId: 'P014',
+    date: daysAgoDate(3),
+    time: '09:00',
+    gastricResidual: 10,
+    gastricResidualAction: 'continue',
+    vomiting: 'none',
+    vomitingEpisodes: 0,
+    abdominalDistension: 'none',
+    bowelSounds: 'present',
+    stoolCount: 1,
+    stoolConsistency: 'hard',
+    toleranceScore: 6,
+    feedingAdjustment: 'advance',
+    notes: '嘔吐なし、腸蠕動音改善。硬便1回（便秘傾向あり）。8kcal/kg/日へ増量。緩下剤追加検討。',
+  },
+  {
+    id: 'tol-P014-004',
+    patientId: 'P014',
+    date: daysAgoDate(2),
+    time: '09:00',
+    gastricResidual: 8,
+    gastricResidualAction: 'continue',
+    vomiting: 'none',
+    vomitingEpisodes: 0,
+    abdominalDistension: 'none',
+    bowelSounds: 'present',
+    stoolCount: 1,
+    stoolConsistency: 'soft',
+    toleranceScore: 7,
+    feedingAdjustment: 'advance',
+    notes: '耐性改善良好。排便改善（軟便1回）。10kcal/kg/日へ増量。電解質安定継続中。',
+  },
+  {
+    id: 'tol-P014-005',
+    patientId: 'P014',
+    date: daysAgoDate(1),
+    time: '09:00',
+    gastricResidual: 5,
+    gastricResidualAction: 'continue',
+    vomiting: 'none',
+    vomitingEpisodes: 0,
+    abdominalDistension: 'none',
+    bowelSounds: 'present',
+    stoolCount: 1,
+    stoolConsistency: 'soft',
+    toleranceScore: 7,
+    feedingAdjustment: 'maintain',
+    notes: '耐性良好継続。10kcal/kg/日で安定。体重+0.3kgで目標範囲内。P 2.5mg/dL正常範囲。',
+  },
+]
+
+// ─── P015 清水陽向（1歳, 心臓術後）─── 中等度の耐性 (5→6→7)
 const P015_TOLERANCE: ToleranceEntry[] = [
   {
     id: 'tol-P015-001',
@@ -290,5 +434,7 @@ export const sampleToleranceDataMap: Record<string, ToleranceEntry[]> = {
   P002: P002_TOLERANCE,
   P011: P011_TOLERANCE,
   P012: P012_TOLERANCE,
+  P013: P013_TOLERANCE,
+  P014: P014_TOLERANCE,
   P015: P015_TOLERANCE,
 }
