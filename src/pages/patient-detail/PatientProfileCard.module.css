@@ -1,221 +1,69 @@
-/* ---- Root grid layout ---- */
-.profileGrid {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: var(--spacing-6);
-  align-items: start;
-}
-
 /* ============================================
-   Zone 1 — Demographics (left)
+   Compact header bar — PatientProfileCard
    ============================================ */
-.demographics {
+
+.card {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2);
-  min-width: 0;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-neutral-0, #fff);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-3);
+  flex-wrap: wrap;
+  min-height: 70px;
 }
 
-.patientName {
-  font-size: var(--font-size-xl);
+.name {
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
-  margin: 0;
-  line-height: 1.3;
-}
-
-.metaRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--spacing-3);
-  color: var(--color-neutral-500);
-  font-size: var(--font-size-sm);
-}
-
-.metaItem {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-1);
   white-space: nowrap;
 }
 
-.patientTypeBadge {
-  margin-top: var(--spacing-1);
+.correctedAge {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
 }
 
-/* ============================================
-   Zone 2 — Body Metrics (center)
-   ============================================ */
-.bodyMetrics {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-3);
-  min-width: 0;
+.divider {
+  width: 1px;
+  height: 20px;
+  background: var(--color-neutral-200);
+  flex-shrink: 0;
 }
 
-.metricCard {
+.metric {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--spacing-2) var(--spacing-3);
-  background: var(--color-neutral-50);
-  border-radius: var(--radius-md);
-  text-align: center;
-  min-width: 0;
+  gap: 1px;
+}
+
+.metricValue {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  white-space: nowrap;
 }
 
 .metricLabel {
   font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
-  font-weight: var(--font-weight-medium);
-  margin-bottom: var(--spacing-1);
-}
-
-.metricValue {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
-  line-height: 1.2;
-}
-
-.metricUnit {
-  font-size: var(--font-size-xs);
   color: var(--color-neutral-400);
-  font-weight: var(--font-weight-medium);
-}
-
-.metricEmpty {
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-400);
-  font-weight: var(--font-weight-medium);
-}
-
-.bmiRow {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-1);
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.bmiCategoryBadge {
-  font-size: 10px;
-  padding: 1px var(--spacing-1);
-  border-radius: var(--radius-full);
-  font-weight: var(--font-weight-medium);
   white-space: nowrap;
-  line-height: 1.4;
 }
 
-.bmiUnderweight {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-dark);
-}
-
-.bmiNormal {
-  background-color: var(--color-success-light);
-  color: var(--color-success-dark);
-}
-
-.bmiOverweight {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-dark);
-}
-
-.bmiObese {
-  background-color: var(--color-danger-light);
-  color: var(--color-danger-dark);
-}
-
-/* ============================================
-   Zone 3 — Clinical Context (right)
-   ============================================ */
-.clinicalContext {
+.badges {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3);
-  min-width: 0;
-  max-width: 260px;
-}
-
-.contextSection {
-  display: flex;
-  flex-direction: column;
   gap: var(--spacing-1);
-}
-
-.contextLabel {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-neutral-500);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.pillList {
-  display: flex;
+  margin-left: auto;
+  align-items: center;
   flex-wrap: wrap;
-  gap: var(--spacing-1);
 }
 
-.noneText {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-400);
-}
-
-.notesText {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-600);
-  line-height: 1.5;
-  word-break: break-word;
-}
-
-/* ============================================
-   Responsive — tablet (stack to 2 columns)
-   ============================================ */
-@media (max-width: 768px) {
-  .profileGrid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-4);
-  }
-
-  .bodyMetrics {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .clinicalContext {
-    max-width: none;
-  }
-}
-
-/* ============================================
-   Responsive — mobile (further compress)
-   ============================================ */
-@media (max-width: 640px) {
-  .profileGrid {
-    gap: var(--spacing-3);
-  }
-
-  .patientName {
-    font-size: var(--font-size-lg);
-  }
-
-  .metaRow {
-    gap: var(--spacing-2);
-    font-size: var(--font-size-xs);
-  }
-
-  .bodyMetrics {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-2);
-  }
-
-  .metricCard {
-    padding: var(--spacing-2);
-  }
-
-  .metricValue {
-    font-size: var(--font-size-md);
-  }
+.allergyIcon {
+  color: var(--color-warning-500, #f59e0b);
+  flex-shrink: 0;
 }
