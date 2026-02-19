@@ -33,6 +33,10 @@ import { useGrowthData } from "../hooks/useGrowthData";
 import { useToleranceData } from "../hooks/useToleranceData";
 import { useWeaningPlan } from "../hooks/useWeaningPlan";
 import { isPediatricPatient } from "../services/pediatricNutritionCalculation";
+import {
+  generateDefaultWeaningPlan,
+  advancePlanPhase,
+} from "../services/weaningPlanner";
 import { FeedingRoutePanel } from "./patient-detail/FeedingRoutePanel";
 import { GrowthSummaryCard } from "./patient-detail/GrowthSummaryCard";
 import { TolerancePanel } from "./patient-detail/TolerancePanel";
@@ -165,11 +169,10 @@ export function PatientDetailPage() {
   const [showFluidModal, setShowFluidModal] = useState(false);
 
   // Pediatric hooks
-  const { getFeedingHistory, addFeedingRoute } = useFeedingRoute();
-  const { getGrowthData, addGrowthMeasurement } = useGrowthData();
-  const { getToleranceHistory, addToleranceEntry } = useToleranceData();
-  const { getWeaningPlan, createWeaningPlan, advanceWeaningPhase } =
-    useWeaningPlan();
+  const { getRouteHistory, saveRoute } = useFeedingRoute();
+  const { getGrowthHistory, saveGrowthMeasurement } = useGrowthData();
+  const { getToleranceHistory, saveToleranceEntry } = useToleranceData();
+  const { getActivePlan, savePlan } = useWeaningPlan();
 
   // Pediatric modals
   const [showFeedingRouteModal, setShowFeedingRouteModal] = useState(false);
@@ -226,13 +229,13 @@ export function PatientDetailPage() {
   );
 
   const feedingHistory = useMemo(
-    () => (patientId ? getFeedingHistory(patientId) : []),
-    [patientId, getFeedingHistory],
+    () => (patientId ? getRouteHistory(patientId) : []),
+    [patientId, getRouteHistory],
   );
 
   const growthData = useMemo(
-    () => (patientId ? getGrowthData(patientId) : []),
-    [patientId, getGrowthData],
+    () => (patientId ? getGrowthHistory(patientId) : []),
+    [patientId, getGrowthHistory],
   );
 
   const toleranceHistory = useMemo(
@@ -241,8 +244,8 @@ export function PatientDetailPage() {
   );
 
   const weaningPlan = useMemo(
-    () => (patientId ? getWeaningPlan(patientId) : undefined),
-    [patientId, getWeaningPlan],
+    () => (patientId ? getActivePlan(patientId) : undefined),
+    [patientId, getActivePlan],
   );
 
   const targetEnergy = latestMenu?.requirements?.energy ?? null;
@@ -298,44 +301,46 @@ export function PatientDetailPage() {
   const handleFeedingRouteSave = useCallback(
     (entry: FeedingRouteEntry) => {
       if (patientId) {
-        addFeedingRoute(patientId, entry);
+        saveRoute(patientId, entry);
       }
       setShowFeedingRouteModal(false);
     },
-    [patientId, addFeedingRoute],
+    [patientId, saveRoute],
   );
 
   const handleGrowthSave = useCallback(
     (measurement: GrowthMeasurement) => {
       if (patientId) {
-        addGrowthMeasurement(patientId, measurement);
+        saveGrowthMeasurement(patientId, measurement);
       }
       setShowGrowthModal(false);
     },
-    [patientId, addGrowthMeasurement],
+    [patientId, saveGrowthMeasurement],
   );
 
   const handleToleranceSave = useCallback(
     (entry: ToleranceEntry) => {
       if (patientId) {
-        addToleranceEntry(patientId, entry);
+        saveToleranceEntry(patientId, entry);
       }
       setShowToleranceModal(false);
     },
-    [patientId, addToleranceEntry],
+    [patientId, saveToleranceEntry],
   );
 
   const handleCreateWeaningPlan = useCallback(() => {
     if (patientId && patient) {
-      createWeaningPlan(patientId, patient);
+      const plan = generateDefaultWeaningPlan(patient);
+      savePlan(patientId, plan);
     }
-  }, [patientId, patient, createWeaningPlan]);
+  }, [patientId, patient, savePlan]);
 
   const handleAdvanceWeaningPhase = useCallback(() => {
-    if (patientId) {
-      advanceWeaningPhase(patientId);
+    if (patientId && weaningPlan) {
+      const advanced = advancePlanPhase(weaningPlan);
+      savePlan(patientId, advanced);
     }
-  }, [patientId, advanceWeaningPhase]);
+  }, [patientId, weaningPlan, savePlan]);
 
   if (!patient) {
     return (

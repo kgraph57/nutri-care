@@ -95,7 +95,7 @@ export function WeeklyNutritionChart({ menus }: WeeklyNutritionChartProps) {
               unit=" kcal"
             />
             <Tooltip
-              formatter={(value: number) => [`${value} kcal`, "エネルギー"]}
+              formatter={(value: number | undefined) => [`${value ?? 0} kcal`, "エネルギー"]}
               labelStyle={{ color: "var(--color-neutral-700)" }}
               contentStyle={{
                 borderRadius: 8,

@@ -327,7 +327,7 @@ export function generateFeedback(
     feedback.push({
       type: interaction.severity === 'high' ? 'error' : 'warning',
       category: '薬剤-栄養相互作用',
-      message: interaction.message,
+      message: interaction.interaction,
       detail: interaction.recommendation,
     })
   }

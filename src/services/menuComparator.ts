@@ -60,7 +60,7 @@ export function compareMenus(
     const targets = menus
       .map((m) =>
         m.requirements
-          ? (m.requirements as Record<string, number>)[def.key]
+          ? (m.requirements as unknown as Record<string, number>)[def.key]
           : undefined,
       )
       .filter((t): t is number => t !== undefined);

@@ -6,7 +6,7 @@ import { analyzeLabData, getAbnormalFindings } from './labAnalyzer'
 import { generateRecommendations, generateStrategySummary } from './nutritionAdvisor'
 import { calculateAdequacyScore } from './adequacyScorer'
 import { checkDrugNutrientInteractions } from './drugNutrientChecker'
-import { generateFeedingProtocol } from './feedingProtocol'
+import { generateFeedingProtocol, createProtocolFromRequirements } from './feedingProtocol'
 
 // ── Types ──
 
@@ -127,7 +127,7 @@ function buildRuleBasedAnalysis(
   products: readonly Product[],
 ): string {
   const recommendations = generateRecommendations(patient, labData, nutritionType, products)
-  const interactions = checkDrugNutrientInteractions(patient.medications)
+  const interactions = checkDrugNutrientInteractions(patient.medications, [], nutritionType)
 
   const lines = ['【ルールベース分析】']
 
@@ -145,7 +145,7 @@ function buildRuleBasedAnalysis(
     lines.push('')
     lines.push('薬剤-栄養相互作用:')
     for (const inter of interactions) {
-      lines.push(`  [${inter.severity}] ${inter.drug} ↔ ${inter.nutrient}: ${inter.recommendation}`)
+      lines.push(`  [${inter.severity}] ${inter.drug} ↔ ${inter.interaction}: ${inter.recommendation}`)
     }
   }
 
@@ -153,26 +153,26 @@ function buildRuleBasedAnalysis(
 }
 
 function buildProtocolSummary(
-  patient: Patient,
-  nutritionType: NutritionType,
+  _patient: Patient,
+  _nutritionType: NutritionType,
   requirements: NutritionRequirements,
 ): string {
-  const protocol = generateFeedingProtocol(patient, nutritionType, {
-    targetEnergy: requirements.energy,
-    targetProtein: requirements.protein,
-  })
+  const options = createProtocolFromRequirements(requirements, 1.0)
+  const protocol = generateFeedingProtocol(options)
+
+  const initialRate = protocol.steps.length > 0 ? protocol.steps[0].rate : 0
 
   const lines = [
     '【投与プロトコル】',
-    `初期速度: ${protocol.initialRate} mL/h`,
+    `初期速度: ${initialRate} mL/h`,
     `目標速度: ${protocol.targetRate} mL/h`,
-    `増量: ${protocol.incrementRate} mL/h ごと ${protocol.incrementInterval}h 間隔`,
+    `目標到達日数: ${protocol.daysToTarget}日`,
     '',
     'ステップ:',
   ]
 
   for (const step of protocol.steps.slice(0, 5)) {
-    lines.push(`  Day${step.day}: ${step.rate}mL/h (${step.volume}mL/day) - ${step.notes}`)
+    lines.push(`  Day${step.day}: ${step.rate}mL/h (${step.dailyVolume}mL/day) - ${step.percentOfTarget}%`)
   }
 
   return lines.join('\n')
@@ -188,9 +188,9 @@ export function buildNutritionContext(
   return {
     patientSummary: buildPatientSummary(patient),
     labSummary: buildLabSummary(labData),
-    menuSummary: buildMenuSummary(menu, menu.requirements),
+    menuSummary: menu.requirements ? buildMenuSummary(menu, menu.requirements) : `【メニュー: ${menu.menuName}】\n栄養要件未設定`,
     ruleBasedAnalysis: buildRuleBasedAnalysis(patient, labData, nutritionType, products),
-    protocolSummary: buildProtocolSummary(patient, nutritionType, menu.requirements),
+    protocolSummary: menu.requirements ? buildProtocolSummary(patient, nutritionType, menu.requirements) : '【投与プロトコル】\n栄養要件未設定',
   }
 }
 

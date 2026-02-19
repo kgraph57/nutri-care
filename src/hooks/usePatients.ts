@@ -81,7 +81,7 @@ export function usePatients() {
 
     const fetchPatients = async () => {
       setIsLoading(true)
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('patients')
         .select('*')
         .order('created_at', { ascending: false })
@@ -100,7 +100,7 @@ export function usePatients() {
       if (supabase && user) {
         const { data, error } = await supabase
           .from('patients')
-          .insert(toSnakeCase(patient, user.id))
+          .insert(toSnakeCase(patient, user.id) as never)
           .select()
           .single()
 
@@ -122,7 +122,7 @@ export function usePatients() {
     async (patient: Patient): Promise<void> => {
       if (supabase && user) {
         const { id, ...updates } = toSnakeCase(patient, user.id)
-        await supabase.from('patients').update(updates).eq('id', id)
+        await supabase!.from('patients').update(updates as never).eq('id', id)
         setPatients((prev) =>
           prev.map((p) => (p.id === patient.id ? { ...patient } : p))
         )

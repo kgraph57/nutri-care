@@ -73,7 +73,7 @@ export function LabDataForm({ patientId, initialData, onSave, onCancel }: LabDat
         }
       }
     }
-    onSave(labData as LabData);
+    onSave(labData as unknown as LabData);
   }, [patientId, date, values, onSave]);
 
   const sections = groupBySection(LAB_REFERENCES);
