@@ -9,11 +9,7 @@ import { useToleranceData } from "../hooks/useToleranceData";
 import type { LabData } from "../types/labData";
 import type { FluidBalanceEntry } from "../types/fluidBalance";
 import type { ToleranceEntry } from "../types/toleranceData";
-import {
-  EmptyState,
-  Modal,
-  NutritionTrendChart,
-} from "../components/ui";
+import { EmptyState, Modal, NutritionTrendChart } from "../components/ui";
 import { LabDataForm } from "../components/labs/LabDataForm";
 import { FluidBalanceForm } from "../components/fluid/FluidBalanceForm";
 import { LabTrendChart } from "../components/labs/LabTrendChart";
@@ -67,6 +63,9 @@ export function PatientDetailPage() {
   const [showLabModal, setShowLabModal] = useState(false);
   const [showFluidModal, setShowFluidModal] = useState(false);
   const [showToleranceModal, setShowToleranceModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<
+    "nutrition" | "labs" | "fluids" | "growth"
+  >("nutrition");
 
   // Pediatric hooks
   const { getRouteHistory, saveRoute } = useFeedingRoute();
@@ -263,66 +262,108 @@ export function PatientDetailPage() {
         />
       </section>
 
-      {/* Growth Summary (pediatric only) */}
-      {isPediatric && patient && (
-        <section className={styles.section}>
-          <GrowthSummaryCard patient={patient} measurements={growthData} />
-        </section>
-      )}
+      {/* Tab Bar */}
+      <div className={styles.tabBar}>
+        <button
+          type="button"
+          className={`${styles.tabButton} ${activeTab === "nutrition" ? styles.tabButtonActive : ""}`}
+          onClick={() => setActiveTab("nutrition")}
+        >
+          栄養管理
+        </button>
+        <button
+          type="button"
+          className={`${styles.tabButton} ${activeTab === "labs" ? styles.tabButtonActive : ""}`}
+          onClick={() => setActiveTab("labs")}
+        >
+          検査値
+        </button>
+        <button
+          type="button"
+          className={`${styles.tabButton} ${activeTab === "fluids" ? styles.tabButtonActive : ""}`}
+          onClick={() => setActiveTab("fluids")}
+        >
+          水分・耐性
+        </button>
+        {isPediatric && (
+          <button
+            type="button"
+            className={`${styles.tabButton} ${activeTab === "growth" ? styles.tabButtonActive : ""}`}
+            onClick={() => setActiveTab("growth")}
+          >
+            成長・離乳
+          </button>
+        )}
+      </div>
 
-      {/* Two-Column Layout */}
-      <div className={styles.twoColumn}>
-        <div className={styles.columnLeft}>
+      {/* Tab 1: 栄養管理 */}
+      {activeTab === "nutrition" && (
+        <div className={styles.tabContent}>
           <NutritionStatusPanel
             patient={patient}
             labData={labData}
             latestMenu={latestMenu}
             menus={patientMenus}
           />
-          <ActiveMenuCard
-            latestMenu={latestMenu}
-            todayMenus={todayMenus}
-            patientId={patientId ?? ""}
-          />
-          {isPediatric && (
-            <FeedingRoutePanel
-              history={feedingHistory}
-              onAddEntry={() => setShowFeedingRouteModal(true)}
-            />
-          )}
-          {isPediatric && patient && (
-            <WeaningPanel
+          <div className={styles.tabContentSingle}>
+            <ActiveMenuCard
+              latestMenu={latestMenu}
+              todayMenus={todayMenus}
               patientId={patientId ?? ""}
-              patient={patient}
-              plan={weaningPlan}
-              onCreatePlan={handleCreateWeaningPlan}
-              onAdvancePhase={handleAdvanceWeaningPhase}
             />
-          )}
-          {/* Tolerance Panel: shown for all patients receiving enteral feeding */}
-          <TolerancePanel
-            history={toleranceHistory}
-            onAddEntry={() => setShowToleranceModal(true)}
-          />
+            {isPediatric && (
+              <FeedingRoutePanel
+                history={feedingHistory}
+                onAddEntry={() => setShowFeedingRouteModal(true)}
+              />
+            )}
+            {patientMenus.length >= 2 && (
+              <NutritionTrendChart menus={patientMenus} />
+            )}
+          </div>
         </div>
+      )}
 
-        <div className={styles.columnRight}>
+      {/* Tab 2: 検査値 */}
+      {activeTab === "labs" && (
+        <div className={styles.tabContent}>
           <LabOverviewGrid
             labData={labData}
             labHistory={labHistory}
             onEditLabs={handleEditLabs}
           />
+          {labHistory.length >= 2 && <LabTrendChart history={labHistory} />}
+        </div>
+      )}
+
+      {/* Tab 3: 水分・耐性 */}
+      {activeTab === "fluids" && (
+        <div className={styles.tabContent}>
           <FluidBalancePanel
             history={fluidHistory}
             patientWeight={patient.weight}
             onAddEntry={handleOpenFluidModal}
           />
-          {labHistory.length >= 2 && <LabTrendChart history={labHistory} />}
-          {patientMenus.length >= 2 && (
-            <NutritionTrendChart menus={patientMenus} />
-          )}
+          <TolerancePanel
+            history={toleranceHistory}
+            onAddEntry={() => setShowToleranceModal(true)}
+          />
         </div>
-      </div>
+      )}
+
+      {/* Tab 4: 成長・離乳 (小児のみ) */}
+      {activeTab === "growth" && isPediatric && (
+        <div className={styles.tabContent}>
+          <GrowthSummaryCard patient={patient} measurements={growthData} />
+          <WeaningPanel
+            patientId={patientId ?? ""}
+            patient={patient}
+            plan={weaningPlan}
+            onCreatePlan={handleCreateWeaningPlan}
+            onAdvancePhase={handleAdvanceWeaningPhase}
+          />
+        </div>
+      )}
 
       {/* Sticky Action Bar */}
       <StickyActionBar

@@ -3,12 +3,9 @@ import {
   Stethoscope,
   LayoutDashboard,
   Users,
-  TrendingUp,
   Calculator,
   ClipboardList,
   Archive,
-  GitCompareArrows,
-  GraduationCap,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -25,12 +22,9 @@ interface NavItem {
 const NAV_ITEMS: readonly NavItem[] = [
   { icon: LayoutDashboard, label: "ダッシュボード", path: "/" },
   { icon: Users, label: "患者管理", path: "/patients" },
-  { icon: TrendingUp, label: "成長モニタリング", path: "/growth" },
   { icon: Calculator, label: "栄養計算", path: "/calculator" },
   { icon: ClipboardList, label: "メニュー作成", path: "/menu-builder" },
   { icon: Archive, label: "保存メニュー", path: "/menus" },
-  { icon: GitCompareArrows, label: "メニュー比較", path: "/compare" },
-  { icon: GraduationCap, label: "症例演習", path: "/simulation" },
   { icon: Settings, label: "設定", path: "/settings" },
 ] as const;
 
@@ -40,10 +34,7 @@ interface SidebarProps {
 }
 
 function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
-  const sidebarClassName = [
-    styles.sidebar,
-    isCollapsed ? styles.collapsed : "",
-  ]
+  const sidebarClassName = [styles.sidebar, isCollapsed ? styles.collapsed : ""]
     .filter(Boolean)
     .join(" ");
 
@@ -55,14 +46,12 @@ function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
         <button
           className={styles.toggleButton}
           onClick={onToggle}
-          aria-label={isCollapsed ? "サイドバーを展開" : "サイドバーを折りたたむ"}
+          aria-label={
+            isCollapsed ? "サイドバーを展開" : "サイドバーを折りたたむ"
+          }
           type="button"
         >
-          {isCollapsed ? (
-            <ChevronRight size={16} />
-          ) : (
-            <ChevronLeft size={16} />
-          )}
+          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
       </div>
 

@@ -153,6 +153,44 @@
   border-radius: var(--radius-full);
 }
 
+/* ---- Tab navigation ---- */
+.tabBar {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--color-neutral-200);
+  margin-bottom: var(--spacing-4);
+}
+.tabButton {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  white-space: nowrap;
+}
+.tabButton:hover {
+  color: var(--color-neutral-900);
+}
+.tabButtonActive {
+  color: var(--color-primary-600);
+  border-bottom-color: var(--color-primary-500);
+}
+.tabContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+}
+.tabContentSingle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
 /* ---- Responsive ---- */
 @media (max-width: 1024px) {
   .twoColumn {
@@ -163,6 +201,13 @@
 @media (max-width: 768px) {
   .twoColumn {
     grid-template-columns: 1fr;
+  }
+  .tabContent {
+    grid-template-columns: 1fr;
+  }
+  .tabButton {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-xs);
   }
 }
 
