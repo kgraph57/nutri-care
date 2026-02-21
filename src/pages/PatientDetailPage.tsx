@@ -33,6 +33,7 @@ import {
 import { FeedingRoutePanel } from "./patient-detail/FeedingRoutePanel";
 import { GrowthSummaryCard } from "./patient-detail/GrowthSummaryCard";
 import { WeaningPanel } from "./patient-detail/WeaningPanel";
+import { NutritionPhaseContextCard } from "./patient-detail/NutritionPhaseContextCard";
 import { FeedingRouteForm } from "../components/feeding/FeedingRouteForm";
 import { GrowthEntryForm } from "../components/growth/GrowthEntryForm";
 import type { FeedingRouteEntry } from "../types/feedingRoute";
@@ -299,12 +300,22 @@ export function PatientDetailPage() {
       {/* Tab 1: 栄養管理 */}
       {activeTab === "nutrition" && (
         <div className={styles.tabContent}>
+          {/* フェーズ・目標（最上部） */}
+          <NutritionPhaseContextCard
+            patient={patient}
+            daysAdmitted={daysAdmitted}
+            weaningPlan={weaningPlan}
+          />
+
+          {/* 栄養ステータス（充足度・推奨） */}
           <NutritionStatusPanel
             patient={patient}
             labData={labData}
             latestMenu={latestMenu}
             menus={patientMenus}
           />
+
+          {/* 現在の投与プラン・ルート・トレンド */}
           <div className={styles.tabContentSingle}>
             <ActiveMenuCard
               latestMenu={latestMenu}

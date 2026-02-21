@@ -1,44 +1,44 @@
-import { useMemo } from 'react'
-import { ArrowRightLeft, Plus, ChevronRight, Target } from 'lucide-react'
-import { Card, Button, Badge, EmptyState } from '../../components/ui'
-import { ProgressBar } from '../../components/ui/ProgressBar'
-import { WeaningPhaseTimeline } from '../../components/weaning/WeaningPhaseTimeline'
-import { WeaningProgressCard } from '../../components/weaning/WeaningProgressCard'
-import type { Patient } from '../../types'
-import type { WeaningPlan } from '../../types/weaningPlan'
-import { WEANING_PHASE_LABELS } from '../../types/weaningPlan'
-import { calculateWeaningProgress } from '../../services/weaningPlanner'
-import styles from './WeaningPanel.module.css'
+import { useMemo } from "react";
+import { ArrowRightLeft, Plus, ChevronRight, Target } from "lucide-react";
+import { Card, Button, Badge, EmptyState } from "../../components/ui";
+import { ProgressBar } from "../../components/ui/ProgressBar";
+import { WeaningPhaseTimeline } from "../../components/weaning/WeaningPhaseTimeline";
+import { WeaningProgressCard } from "../../components/weaning/WeaningProgressCard";
+import type { Patient } from "../../types";
+import type { WeaningPlan } from "../../types/weaningPlan";
+import { WEANING_PHASE_LABELS } from "../../types/weaningPlan";
+import { calculateWeaningProgress } from "../../services/weaningPlanner";
+import styles from "./WeaningPanel.module.css";
 
 /* ---- Props ---- */
 
 interface WeaningPanelProps {
-  readonly patientId: string
-  readonly patient: Patient
-  readonly plan?: WeaningPlan
-  readonly onCreatePlan: () => void
-  readonly onAdvancePhase: () => void
+  readonly patientId: string;
+  readonly patient: Patient;
+  readonly plan?: WeaningPlan;
+  readonly onCreatePlan: () => void;
+  readonly onAdvancePhase: () => void;
 }
 
 /* ---- Helpers ---- */
 
-function getBadgeVariant(onTrack: boolean): 'success' | 'warning' {
-  return onTrack ? 'success' : 'warning'
+function getBadgeVariant(onTrack: boolean): "success" | "warning" {
+  return onTrack ? "success" : "warning";
 }
 
 function getTrackLabel(onTrack: boolean): string {
-  return onTrack ? '順調' : '遅延あり'
+  return onTrack ? "順調" : "遅延あり";
 }
 
 function formatDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  return `${month}/${day}`
+  const date = new Date(dateStr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}/${day}`;
 }
 
 function findCurrentPhaseConfig(plan: WeaningPlan) {
-  return plan.phases.find((p) => p.phase === plan.currentPhase)
+  return plan.phases.find((p) => p.phase === plan.currentPhase);
 }
 
 function formatNutritionSplit(
@@ -46,11 +46,11 @@ function formatNutritionSplit(
   oral: number,
   parenteral: number,
 ): string {
-  const parts: string[] = []
-  if (enteral > 0) parts.push(`経腸 ${enteral}%`)
-  if (oral > 0) parts.push(`経口 ${oral}%`)
-  if (parenteral > 0) parts.push(`静脈 ${parenteral}%`)
-  return parts.join(' / ')
+  const parts: string[] = [];
+  if (enteral > 0) parts.push(`経腸 ${enteral}%`);
+  if (oral > 0) parts.push(`経口 ${oral}%`);
+  if (parenteral > 0) parts.push(`静脈 ${parenteral}%`);
+  return parts.join(" / ");
 }
 
 /* ---- Empty state ---- */
@@ -58,7 +58,7 @@ function formatNutritionSplit(
 function WeaningEmptyState({
   onCreatePlan,
 }: {
-  readonly onCreatePlan: () => void
+  readonly onCreatePlan: () => void;
 }) {
   return (
     <div className={styles.emptyWrapper}>
@@ -67,17 +67,13 @@ function WeaningEmptyState({
         title="離脱計画がありません"
         description="栄養経路の離脱・移行計画を作成して、段階的な移行をサポートします"
         action={
-          <Button
-            size="sm"
-            icon={<Plus size={16} />}
-            onClick={onCreatePlan}
-          >
+          <Button size="sm" icon={<Plus size={16} />} onClick={onCreatePlan}>
             計画作成
           </Button>
         }
       />
     </div>
-  )
+  );
 }
 
 /* ---- Main component ---- */
@@ -92,20 +88,18 @@ export function WeaningPanel({
   const progress = useMemo(
     () => (plan ? calculateWeaningProgress(plan) : null),
     [plan],
-  )
+  );
 
   const currentPhaseConfig = useMemo(
     () => (plan ? findCurrentPhaseConfig(plan) : null),
     [plan],
-  )
+  );
 
-  const currentPhaseLabel = plan
-    ? WEANING_PHASE_LABELS[plan.currentPhase]
-    : ''
+  const currentPhaseLabel = plan ? WEANING_PHASE_LABELS[plan.currentPhase] : "";
 
   // Suppress unused-var warnings for required props
-  void patientId
-  void patient
+  void patientId;
+  void patient;
 
   /* No plan: empty state */
   if (!plan || !progress) {
@@ -119,11 +113,11 @@ export function WeaningPanel({
           <WeaningEmptyState onCreatePlan={onCreatePlan} />
         </div>
       </Card>
-    )
+    );
   }
 
-  const isCompleted = plan.currentPhase === 'completed'
-  const totalDays = progress.daysElapsed + progress.daysRemaining
+  const isCompleted = plan.currentPhase === "completed";
+  const totalDays = progress.daysElapsed + progress.daysRemaining;
 
   return (
     <Card>
@@ -133,15 +127,20 @@ export function WeaningPanel({
           <ArrowRightLeft size={20} className={styles.headerIcon} />
           <h3 className={styles.title}>離脱・移行計画</h3>
           <div className={styles.headerAction}>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={onCreatePlan}
-            >
+            <Button size="sm" variant="ghost" onClick={onCreatePlan}>
               編集
             </Button>
           </div>
         </div>
+
+        {/* Phase timeline — shown at top for at-a-glance overview */}
+        <WeaningPhaseTimeline
+          phases={plan.phases}
+          currentPhase={plan.currentPhase}
+          progress={progress}
+        />
+
+        <hr className={styles.divider} />
 
         {/* Overall progress */}
         <div className={styles.progressSection}>
@@ -178,9 +177,7 @@ export function WeaningPanel({
             <div className={styles.phaseDetails}>
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>フェーズ名</span>
-                <span className={styles.detailValue}>
-                  {currentPhaseLabel}
-                </span>
+                <span className={styles.detailValue}>{currentPhaseLabel}</span>
               </div>
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>栄養配分</span>
@@ -201,7 +198,7 @@ export function WeaningPanel({
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>進行基準</span>
                 <span className={styles.detailValue}>
-                  {currentPhaseConfig.advanceCriteria.join('、')}
+                  {currentPhaseConfig.advanceCriteria.join("、")}
                 </span>
               </div>
             </div>
@@ -225,7 +222,10 @@ export function WeaningPanel({
           <>
             <div className={styles.milestoneSection}>
               <span className={styles.milestoneSectionLabel}>
-                <Target size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} />
+                <Target
+                  size={14}
+                  style={{ verticalAlign: "middle", marginRight: 4 }}
+                />
                 次のマイルストーン
               </span>
               <div className={styles.milestoneCard}>
@@ -250,16 +250,6 @@ export function WeaningPanel({
           </>
         )}
 
-        {/* Phase timeline */}
-        <div className={styles.timelineSection}>
-          <span className={styles.timelineSectionLabel}>フェーズタイムライン</span>
-          <WeaningPhaseTimeline
-            phases={plan.phases}
-            currentPhase={plan.currentPhase}
-            progress={progress}
-          />
-        </div>
-
         {/* Advance phase button */}
         {!isCompleted && (
           <>
@@ -278,5 +268,5 @@ export function WeaningPanel({
         )}
       </div>
     </Card>
-  )
+  );
 }

@@ -1,0 +1,200 @@
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.timelineItem {
+  display: flex;
+  gap: var(--spacing-4);
+  position: relative;
+}
+
+.timelineDate {
+  flex-shrink: 0;
+  width: 80px;
+  text-align: right;
+}
+
+.timelineDateDay {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+}
+
+.timelineDateTime {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+.timelineDot {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  margin-top: 4px;
+  border: 2px solid white;
+  box-shadow: var(--shadow-sm);
+}
+
+.dotLow {
+  background: var(--color-success);
+}
+
+.dotModerate {
+  background: var(--color-info);
+}
+
+.dotHigh {
+  background: var(--color-warning);
+}
+
+.dotCritical {
+  background: var(--color-danger);
+}
+
+.timelineContent {
+  flex: 1;
+  padding: var(--spacing-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background: white;
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast);
+}
+
+.timelineContent:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.timelineHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
+}
+
+.timelineScore {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.timelineFeedingBadge {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px var(--spacing-2);
+  border-radius: var(--radius-full);
+}
+
+.timelineMetrics {
+  display: flex;
+  gap: var(--spacing-4);
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+}
+
+.timelineWarnings {
+  margin-top: var(--spacing-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+}
+
+.timelineWarningTag {
+  font-size: 10px;
+  padding: 1px var(--spacing-2);
+  border-radius: var(--radius-full);
+  background: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+.empty {
+  text-align: center;
+  padding: var(--spacing-8);
+  color: var(--color-neutral-500);
+  font-size: var(--font-size-sm);
+}
+
+/* Trend Card */
+
+.trendCard {
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background: white;
+}
+
+.trendHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-3);
+}
+
+.trendTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+}
+
+.trendDays {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+.trendGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-3);
+}
+
+.trendItem {
+  text-align: center;
+}
+
+.trendLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-bottom: var(--spacing-1);
+}
+
+.trendValue {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+}
+
+.trendImproving {
+  color: var(--color-success);
+}
+
+.trendStable {
+  color: var(--color-neutral-600);
+}
+
+.trendWorsening {
+  color: var(--color-danger);
+}
+
+.chartContainer {
+  margin-top: var(--spacing-4);
+  height: 200px;
+}
+
+@media (max-width: 640px) {
+  .timelineDate {
+    width: 60px;
+  }
+
+  .timelineMetrics {
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
+  .trendGrid {
+    grid-template-columns: 1fr;
+  }
+}

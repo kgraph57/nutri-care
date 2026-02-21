@@ -1,52 +1,56 @@
-import { useState, useMemo } from 'react'
-import { Plus, Package, AlertCircle, Loader2 } from 'lucide-react'
-import { Card, SearchInput, EmptyState } from '../../components/ui'
-import styles from './ProductSelector.module.css'
+import { useState, useMemo } from "react";
+import { Plus, Package, AlertCircle, Loader2, Info } from "lucide-react";
+import { Card, SearchInput, EmptyState } from "../../components/ui";
+import { DrugInfoModal } from "../../components/DrugInfoModal";
+import styles from "./ProductSelector.module.css";
 
 interface ProductSelectorProps {
-  readonly products: Record<string, string | number>[]
-  readonly categories: string[]
-  readonly isLoading: boolean
-  readonly error: string | null
-  readonly onAddProduct: (product: Record<string, string | number>) => void
+  readonly products: Record<string, string | number>[];
+  readonly categories: string[];
+  readonly isLoading: boolean;
+  readonly error: string | null;
+  readonly onAddProduct: (product: Record<string, string | number>) => void;
 }
 
 function filterProducts(
   products: Record<string, string | number>[],
   searchTerm: string,
-  selectedCategory: string
+  selectedCategory: string,
 ): Record<string, string | number>[] {
-  const lowerSearch = searchTerm.toLowerCase()
+  const lowerSearch = searchTerm.toLowerCase();
 
   return products.filter((product) => {
-    const name = String(product['製剤名'] ?? '').toLowerCase()
-    const maker = String(product['メーカー'] ?? '').toLowerCase()
-    const category = String(product['カテゴリ'] ?? '').toLowerCase()
+    const name = String(product["製剤名"] ?? "").toLowerCase();
+    const maker = String(product["メーカー"] ?? "").toLowerCase();
+    const category = String(product["カテゴリ"] ?? "").toLowerCase();
 
     const matchesSearch =
-      searchTerm === '' ||
+      searchTerm === "" ||
       name.includes(lowerSearch) ||
       maker.includes(lowerSearch) ||
-      category.includes(lowerSearch)
+      category.includes(lowerSearch);
 
     const matchesCategory =
-      selectedCategory === '' || String(product['カテゴリ'] ?? '') === selectedCategory
+      selectedCategory === "" ||
+      String(product["カテゴリ"] ?? "") === selectedCategory;
 
-    return matchesSearch && matchesCategory
-  })
+    return matchesSearch && matchesCategory;
+  });
 }
 
 function ProductCard({
   product,
   onAdd,
+  onInfo,
 }: {
-  readonly product: Record<string, string | number>
-  readonly onAdd: () => void
+  readonly product: Record<string, string | number>;
+  readonly onAdd: () => void;
+  readonly onInfo: () => void;
 }) {
-  const name = String(product['製剤名'] ?? '')
-  const maker = String(product['メーカー'] ?? '')
-  const category = String(product['カテゴリ'] ?? '')
-  const energy = product['エネルギー[kcal/ml]'] ?? 0
+  const name = String(product["製剤名"] ?? "");
+  const maker = String(product["メーカー"] ?? "");
+  const category = String(product["カテゴリ"] ?? "");
+  const energy = product["エネルギー[kcal/ml]"] ?? 0;
 
   return (
     <div
@@ -55,9 +59,9 @@ function ProductCard({
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onAdd()
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onAdd();
         }
       }}
     >
@@ -70,18 +74,31 @@ function ProductCard({
           エネルギー: {energy}kcal/ml
         </span>
       </div>
-      <button
-        className={styles.addButton}
-        onClick={(e) => {
-          e.stopPropagation()
-          onAdd()
-        }}
-        aria-label={`${name}を追加`}
-      >
-        <Plus size={14} />
-      </button>
+      <div className={styles.cardActions}>
+        <button
+          className={styles.infoButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            onInfo();
+          }}
+          aria-label={`${name}の薬品情報`}
+          title="薬品情報"
+        >
+          <Info size={14} />
+        </button>
+        <button
+          className={styles.addButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            onAdd();
+          }}
+          aria-label={`${name}を追加`}
+        >
+          <Plus size={14} />
+        </button>
+      </div>
     </div>
-  )
+  );
 }
 
 export function ProductSelector({
@@ -91,13 +108,17 @@ export function ProductSelector({
   error,
   onAddProduct,
 }: ProductSelectorProps) {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('')
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [infoProduct, setInfoProduct] = useState<Record<
+    string,
+    string | number
+  > | null>(null);
 
   const filteredProducts = useMemo(
     () => filterProducts(products, searchTerm, selectedCategory),
-    [products, searchTerm, selectedCategory]
-  )
+    [products, searchTerm, selectedCategory],
+  );
 
   return (
     <Card className={styles.card}>
@@ -155,12 +176,18 @@ export function ProductSelector({
           !error &&
           filteredProducts.map((product, index) => (
             <ProductCard
-              key={`${String(product['製剤名'])}-${index}`}
+              key={`${String(product["製剤名"])}-${index}`}
               product={product}
               onAdd={() => onAddProduct(product)}
+              onInfo={() => setInfoProduct(product)}
             />
           ))}
       </div>
+      <DrugInfoModal
+        isOpen={infoProduct !== null}
+        onClose={() => setInfoProduct(null)}
+        product={infoProduct}
+      />
     </Card>
-  )
+  );
 }

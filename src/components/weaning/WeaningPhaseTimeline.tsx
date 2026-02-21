@@ -5,7 +5,6 @@ import type {
   WeaningPhase,
   WeaningProgress,
 } from '../../types/weaningPlan'
-import { WEANING_PHASE_LABELS } from '../../types/weaningPlan'
 import styles from './WeaningPhaseTimeline.module.css'
 
 /* ---- Props ---- */
@@ -16,7 +15,7 @@ interface WeaningPhaseTimelineProps {
   readonly progress: WeaningProgress
 }
 
-/* ---- Helpers ---- */
+/* ---- Status ---- */
 
 type PhaseStatus = 'completed' | 'current' | 'future'
 
@@ -25,6 +24,7 @@ function resolvePhaseStatus(
   currentPhase: WeaningPhase,
   phases: readonly WeaningPhaseConfig[],
 ): PhaseStatus {
+  if (currentPhase === 'completed') return 'completed'
   const phaseIndex = phases.findIndex((p) => p.phase === phase)
   const currentIndex = phases.findIndex((p) => p.phase === currentPhase)
   if (phaseIndex < 0 || currentIndex < 0) return 'future'
@@ -33,128 +33,88 @@ function resolvePhaseStatus(
   return 'future'
 }
 
-function getDotClass(status: PhaseStatus): string {
-  switch (status) {
-    case 'completed':
-      return styles.dotCompleted
-    case 'current':
-      return styles.dotCurrent
-    case 'future':
-      return styles.dotFuture
-  }
+/* ---- Short labels for compact display ---- */
+
+const SHORT_PHASE_LABELS: Record<WeaningPhase, string> = {
+  assessment: '評価',
+  trophic: '微量経腸',
+  advancing: '増量',
+  'full-enteral': '全量経腸',
+  'oral-introduction': '経口導入',
+  'oral-transition': '経口移行',
+  'full-oral': '完全経口',
+  completed: '完了',
 }
 
-function getLineClass(status: PhaseStatus): string {
-  switch (status) {
-    case 'completed':
-      return styles.lineCompleted
-    case 'current':
-      return styles.lineCurrent
-    case 'future':
-      return styles.lineFuture
-  }
-}
+/* ---- Step node ---- */
 
-function getNameClass(status: PhaseStatus): string {
-  switch (status) {
-    case 'current':
-      return styles.phaseNameCurrent
-    case 'future':
-      return styles.phaseNameFuture
-    default:
-      return ''
-  }
-}
-
-function formatPercent(enteral: number, oral: number, parenteral: number): string {
-  const parts: string[] = []
-  if (enteral > 0) parts.push(`経腸${enteral}%`)
-  if (oral > 0) parts.push(`経口${oral}%`)
-  if (parenteral > 0) parts.push(`静脈${parenteral}%`)
-  return parts.join(' / ')
-}
-
-/* ---- Sub-component: TimelineNode ---- */
-
-function TimelineNode({
+function StepNode({
   config,
   status,
+  prevStatus,
+  isFirst,
   isLast,
 }: {
   readonly config: WeaningPhaseConfig
   readonly status: PhaseStatus
+  readonly prevStatus: PhaseStatus | null
+  readonly isFirst: boolean
   readonly isLast: boolean
 }) {
-  const dotClass = getDotClass(status)
-  const lineClass = getLineClass(status)
-  const nameClass = getNameClass(status)
-  const showDetails = status === 'completed' || status === 'current'
+  const leftStatus = isFirst ? null : prevStatus
+  const rightStatus = isLast ? null : status
 
   return (
-    <div className={styles.node}>
-      {/* Vertical line + dot */}
-      <div className={styles.lineColumn}>
-        <div className={`${styles.dot} ${dotClass}`}>
-          {status === 'completed' && (
-            <Check size={10} className={styles.checkIcon} />
-          )}
+    <div className={styles.step} aria-current={status === 'current' ? 'step' : undefined}>
+      {/* Connector row: [left line] [dot] [right line] */}
+      <div className={styles.connectorRow}>
+        <div
+          className={`${styles.halfLine} ${
+            leftStatus === null
+              ? styles.lineInvisible
+              : leftStatus === 'completed'
+                ? styles.lineCompleted
+                : leftStatus === 'current'
+                  ? styles.lineCurrent
+                  : styles.lineFuture
+          }`}
+        />
+        <div
+          className={`${styles.dot} ${
+            status === 'completed'
+              ? styles.dotCompleted
+              : status === 'current'
+                ? styles.dotCurrent
+                : styles.dotFuture
+          }`}
+        >
+          {status === 'completed' && <Check size={8} className={styles.checkIcon} />}
+          {status === 'current' && <div className={styles.currentInner} />}
         </div>
         <div
-          className={`${styles.line} ${isLast ? styles.lineHidden : lineClass}`}
+          className={`${styles.halfLine} ${
+            rightStatus === null
+              ? styles.lineInvisible
+              : rightStatus === 'completed'
+                ? styles.lineCompleted
+                : rightStatus === 'current'
+                  ? styles.lineCurrent
+                  : styles.lineFuture
+          }`}
         />
       </div>
 
-      {/* Content */}
-      <div className={styles.content}>
-        <div className={styles.phaseHeader}>
-          <span className={`${styles.phaseName} ${nameClass}`}>
-            {WEANING_PHASE_LABELS[config.phase]}
-          </span>
-        </div>
-
-        {showDetails && (
-          <div className={styles.details}>
-            <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>配分:</span>
-              <span className={styles.detailValue}>
-                {formatPercent(
-                  config.enteralPercent,
-                  config.oralPercent,
-                  config.parenteralPercent,
-                )}
-              </span>
-            </div>
-            <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>期間:</span>
-              <span className={styles.detailValue}>
-                {config.durationDays}日間
-              </span>
-            </div>
-
-            {status === 'current' && config.advanceCriteria.length > 0 && (
-              <div className={styles.criteriaList}>
-                {config.advanceCriteria.map((criterion) => (
-                  <span
-                    key={criterion}
-                    className={`${styles.criteriaTag} ${styles.criteriaTagCurrent}`}
-                  >
-                    {criterion}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {status === 'completed' && config.advanceCriteria.length > 0 && (
-              <div className={styles.criteriaList}>
-                {config.advanceCriteria.map((criterion) => (
-                  <span key={criterion} className={styles.criteriaTag}>
-                    {criterion}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+      {/* Label */}
+      <div
+        className={`${styles.stepLabel} ${
+          status === 'completed'
+            ? styles.labelCompleted
+            : status === 'current'
+              ? styles.labelCurrent
+              : styles.labelFuture
+        }`}
+      >
+        {SHORT_PHASE_LABELS[config.phase]}
       </div>
     </div>
   )
@@ -167,7 +127,9 @@ export function WeaningPhaseTimeline({
   currentPhase,
   progress,
 }: WeaningPhaseTimelineProps) {
-  const statusMap = useMemo(
+  void progress
+
+  const nodes = useMemo(
     () =>
       phases.map((cfg) => ({
         config: cfg,
@@ -176,27 +138,16 @@ export function WeaningPhaseTimeline({
     [phases, currentPhase],
   )
 
-  // If plan is completed, mark all as completed
-  const resolvedNodes = useMemo(() => {
-    if (currentPhase === 'completed') {
-      return statusMap.map((node) => ({
-        ...node,
-        status: 'completed' as PhaseStatus,
-      }))
-    }
-    return statusMap
-  }, [statusMap, currentPhase])
-
-  void progress // progress available for future enhancements
-
   return (
-    <div className={styles.container}>
-      {resolvedNodes.map((node, idx) => (
-        <TimelineNode
+    <div className={styles.stepper}>
+      {nodes.map((node, idx) => (
+        <StepNode
           key={node.config.phase}
           config={node.config}
           status={node.status}
-          isLast={idx === resolvedNodes.length - 1}
+          prevStatus={idx > 0 ? nodes[idx - 1].status : null}
+          isFirst={idx === 0}
+          isLast={idx === nodes.length - 1}
         />
       ))}
     </div>

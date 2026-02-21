@@ -3,7 +3,11 @@ import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { Save, Utensils, Download } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
-import { useNutritionDatabase } from "../hooks/useNutritionDatabase";
+import {
+  useNutritionDatabase,
+  useAllProducts,
+} from "../hooks/useNutritionDatabase";
+import { AutoGeneratePanel } from "../components/auto-menu/AutoGeneratePanel";
 import { useLabData } from "../hooks/useLabData";
 import {
   calculateNutritionRequirements,
@@ -292,6 +296,8 @@ export function MenuBuilderPage() {
 
   const { products, categories, isLoading, error } =
     useNutritionDatabase(nutritionType);
+  const { products: allProducts, isLoading: allProductsLoading } =
+    useAllProducts();
 
   // Load saved items into editor when in edit mode and products are available
   useEffect(() => {
@@ -523,6 +529,31 @@ export function MenuBuilderPage() {
     setShowDraftBanner(false);
   }, [clearDraft]);
 
+  const handleAutoMenuApply = useCallback(
+    (
+      items: Array<{
+        product: Record<string, string | number>;
+        volume: number;
+        frequency: number;
+      }>,
+      nutritionType: NutritionType,
+      condition: string,
+      generatedMenuName: string,
+    ) => {
+      const newItems: MenuItemState[] = items.map((item) => ({
+        id: generateItemId(String(item.product["製剤名"] ?? "")),
+        product: item.product,
+        volume: item.volume,
+        frequency: item.frequency,
+      }));
+      setMenuItems(newItems);
+      setNutritionType(nutritionType);
+      setMedicalCondition(condition);
+      setMenuName(generatedMenuName);
+    },
+    [],
+  );
+
   const handleApplyTemplate = useCallback(
     (
       items: Array<{
@@ -588,6 +619,15 @@ export function MenuBuilderPage() {
           savedAt={draft.savedAt}
           onRestore={handleRestoreDraft}
           onDiscard={handleDiscardDraft}
+        />
+      )}
+
+      {selectedPatient && (
+        <AutoGeneratePanel
+          patient={selectedPatient}
+          allProducts={allProducts}
+          isLoading={allProductsLoading}
+          onApply={handleAutoMenuApply}
         />
       )}
 

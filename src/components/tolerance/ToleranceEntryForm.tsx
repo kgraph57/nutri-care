@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { Button, Badge } from "../../components/ui";
+import { Button, Badge } from "../ui";
 import type {
   ToleranceEntry,
   VomitingSeverity,

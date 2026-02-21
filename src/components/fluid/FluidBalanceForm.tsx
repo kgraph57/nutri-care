@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Button } from '../../components/ui';
+import { Button } from '../ui';
 import type { FluidBalanceEntry, FluidInput, FluidOutput } from '../../types/fluidBalance';
 import { computeTotalInput, computeTotalOutput } from '../../types/fluidBalance';
 import styles from './FluidBalanceForm.module.css';

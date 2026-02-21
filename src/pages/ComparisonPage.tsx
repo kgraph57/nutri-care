@@ -1,11 +1,44 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Check, GitCompareArrows } from "lucide-react";
+import { Check, GitCompareArrows, Table2, Radar } from "lucide-react";
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  Radar as RechartsRadar,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { compareMenus } from "../services/menuComparator";
 import type { MenuComparisonResult } from "../services/menuComparator";
 import { Card, Button, Badge, EmptyState } from "../components/ui";
 import styles from "./ComparisonPage.module.css";
+
+const CHART_COLORS = ["#3B82F6", "#16A34A", "#D97706", "#EC4899"] as const;
+
+const RADAR_AXES = [
+  { key: "energy", label: "エネルギー" },
+  { key: "protein", label: "タンパク質" },
+  { key: "fat", label: "脂質" },
+  { key: "carbs", label: "炭水化物" },
+  { key: "sodium", label: "Na" },
+  { key: "potassium", label: "K" },
+] as const;
+
+function buildRadarData(result: MenuComparisonResult) {
+  return RADAR_AXES.map(({ key, label }) => {
+    const values =
+      result.nutrients.find((n) => n.nutrient === key)?.values ??
+      result.menus.map(() => 0);
+    const maxVal = Math.max(...values, 1);
+    const entry: Record<string, string | number> = { axis: label };
+    values.forEach((v, i) => {
+      entry[`m${i}`] = Math.round((v / maxVal) * 100);
+    });
+    return entry;
+  });
+}
 
 function formatDate(isoString: string): string {
   return new Date(isoString).toLocaleDateString("ja-JP", {
@@ -14,7 +47,11 @@ function formatDate(isoString: string): string {
   });
 }
 
-function ComparisonTable({ result }: { readonly result: MenuComparisonResult }) {
+function ComparisonTable({
+  result,
+}: {
+  readonly result: MenuComparisonResult;
+}) {
   return (
     <div className={styles.tableWrap}>
       <table className={styles.table}>
@@ -95,6 +132,37 @@ function ComparisonTable({ result }: { readonly result: MenuComparisonResult }) 
   );
 }
 
+type ViewMode = "table" | "radar";
+
+function RadarChartView({ result }: { readonly result: MenuComparisonResult }) {
+  const radarData = buildRadarData(result);
+
+  return (
+    <div className={styles.chartContainer}>
+      <p className={styles.chartNote}>
+        各栄養素を選択メニュー内の最大値を100として正規化して表示
+      </p>
+      <ResponsiveContainer width="100%" height={380}>
+        <RadarChart data={radarData}>
+          <PolarGrid />
+          <PolarAngleAxis dataKey="axis" tick={{ fontSize: 13 }} />
+          {result.menus.map((menu, i) => (
+            <RechartsRadar
+              key={menu.id}
+              name={menu.menuName}
+              dataKey={`m${i}`}
+              stroke={CHART_COLORS[i % CHART_COLORS.length]}
+              fill={CHART_COLORS[i % CHART_COLORS.length]}
+              fillOpacity={0.25}
+            />
+          ))}
+          <Legend />
+        </RadarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
 export function ComparisonPage() {
   const { menus } = useNutritionMenus();
   const [searchParams] = useSearchParams();
@@ -103,6 +171,7 @@ export function ComparisonPage() {
   const [selectedIds, setSelectedIds] = useState<readonly string[]>(
     preselected.filter((id) => menus.some((m) => m.id === id)),
   );
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
 
   const toggleMenu = (id: string) => {
     setSelectedIds((prev) => {
@@ -180,7 +249,29 @@ export function ComparisonPage() {
 
       {result ? (
         <section>
-          <ComparisonTable result={result} />
+          <div className={styles.viewToggle}>
+            <Button
+              variant={viewMode === "table" ? "primary" : "ghost"}
+              size="sm"
+              onClick={() => setViewMode("table")}
+            >
+              <Table2 size={15} />
+              表で比較
+            </Button>
+            <Button
+              variant={viewMode === "radar" ? "primary" : "ghost"}
+              size="sm"
+              onClick={() => setViewMode("radar")}
+            >
+              <Radar size={15} />
+              レーダーチャート
+            </Button>
+          </div>
+          {viewMode === "table" ? (
+            <ComparisonTable result={result} />
+          ) : (
+            <RadarChartView result={result} />
+          )}
         </section>
       ) : (
         selectedIds.length > 0 && (

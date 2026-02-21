@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { Button } from '../../components/ui';
+import { Button } from '../ui';
 import type {
   FeedingRouteEntry,
   FeedingRouteType,

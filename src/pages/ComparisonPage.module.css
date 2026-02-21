@@ -156,6 +156,32 @@
   margin-left: var(--spacing-1);
 }
 
+.viewToggle {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+}
+
+.viewToggle button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.chartContainer {
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-6);
+}
+
+.chartNote {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  text-align: center;
+  margin: 0 0 var(--spacing-4) 0;
+}
+
 @media (max-width: 640px) {
   .page {
     padding: 0;

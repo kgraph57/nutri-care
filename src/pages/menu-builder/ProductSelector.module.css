@@ -99,6 +99,33 @@
   color: var(--color-neutral-400);
 }
 
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  flex-shrink: 0;
+}
+
+.infoButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.infoButton:hover {
+  background-color: var(--color-neutral-200);
+  color: var(--color-neutral-700);
+}
+
 .addButton {
   display: flex;
   align-items: center;

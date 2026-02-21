@@ -5,10 +5,14 @@ import {
   Users,
   Calculator,
   ClipboardList,
+  ClipboardCheck,
   Archive,
   Settings,
   ChevronLeft,
   ChevronRight,
+  GitCompareArrows,
+  FlaskConical,
+  LayoutTemplate,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import styles from "./Sidebar.module.css";
@@ -25,6 +29,10 @@ const NAV_ITEMS: readonly NavItem[] = [
   { icon: Calculator, label: "栄養計算", path: "/calculator" },
   { icon: ClipboardList, label: "メニュー作成", path: "/menu-builder" },
   { icon: Archive, label: "保存メニュー", path: "/menus" },
+  { icon: GitCompareArrows, label: "メニュー比較", path: "/compare" },
+  { icon: FlaskConical, label: "栄養剤比較", path: "/product-compare" },
+  { icon: LayoutTemplate, label: "テンプレート", path: "/templates" },
+  { icon: ClipboardCheck, label: "デイリーラウンド", path: "/daily-round" },
   { icon: Settings, label: "設定", path: "/settings" },
 ] as const;
 
