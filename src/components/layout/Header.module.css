@@ -44,6 +44,23 @@
   background-color: var(--color-neutral-100);
 }
 
+.githubLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  color: var(--color-neutral-500);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.githubLink:hover {
+  color: var(--color-neutral-900);
+  background-color: var(--color-neutral-100);
+}
+
 .themeToggle {
   display: flex;
   align-items: center;

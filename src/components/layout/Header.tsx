@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { LogOut, Moon, Sun } from "lucide-react";
+import { Github, LogOut, Moon, Sun } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
 import { isSupabaseConfigured } from "../../lib/supabase";
@@ -47,6 +47,15 @@ function Header() {
         <time className={styles.date} dateTime={today.toISOString()}>
           {formatDate(today)}
         </time>
+        <a
+          href="https://github.com/kgraph57/nutri-care"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.githubLink}
+          title="GitHub リポジトリ"
+        >
+          <Github size={16} />
+        </a>
         <button
           type="button"
           className={styles.themeToggle}
