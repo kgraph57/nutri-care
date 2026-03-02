@@ -25,7 +25,7 @@ import { checkDrugNutrientInteractions } from "../services/drugNutrientChecker";
 import type { NutritionType } from "../types";
 import type { LabData } from "../types/labData";
 import { RequirementsConfig } from "./menu-builder/RequirementsConfig";
-import { ProductSelector } from "./menu-builder/ProductSelector";
+import { ProductGrid } from "./menu-builder/ProductGrid";
 import { MenuComposition } from "./menu-builder/MenuComposition";
 import { NutritionAnalysisPanel } from "./menu-builder/NutritionAnalysisPanel";
 import { AdvisorPanel } from "../components/advisor/AdvisorPanel";
@@ -420,6 +420,21 @@ export function MenuBuilderPage() {
     [],
   );
 
+  const toggleProduct = useCallback(
+    (product: Record<string, string | number>) => {
+      const productName = String(product["製剤名"] ?? "");
+      const existingItem = menuItems.find(
+        (item) => String(item.product["製剤名"] ?? "") === productName,
+      );
+      if (existingItem) {
+        removeProduct(existingItem.id);
+      } else {
+        addProduct(product);
+      }
+    },
+    [menuItems, addProduct, removeProduct],
+  );
+
   const handleSave = useCallback(() => {
     if (!selectedPatient || menuItems.length === 0) {
       return;
@@ -664,12 +679,16 @@ export function MenuBuilderPage() {
               onApplyTemplate={handleApplyTemplate}
             />
 
-            <ProductSelector
+            <ProductGrid
               products={products}
-              categories={categories}
               isLoading={isLoading}
               error={error}
-              onAddProduct={addProduct}
+              menuItems={menuItems}
+              nutritionType={nutritionType}
+              onToggleProduct={toggleProduct}
+              onRemoveProduct={removeProduct}
+              onUpdateProduct={updateProduct}
+              currentIntake={currentIntake}
             />
 
             <MenuInfoSection
