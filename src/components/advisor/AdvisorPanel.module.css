@@ -257,6 +257,47 @@
   margin-top: var(--spacing-3);
 }
 
+/* AI Lab Narrative */
+.narrativeCard {
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.narrativeText {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.narrativeTrend {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-500);
+}
+
+.narrativeSuggestion {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-600);
+  background-color: var(--color-primary-50);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-primary-400);
+}
+
+.narrativeLoading {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-400);
+  text-align: center;
+  padding: var(--spacing-2);
+}
+
 @media (max-width: 640px) {
   .panel {
     padding: var(--spacing-3);

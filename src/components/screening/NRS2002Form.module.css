@@ -1,0 +1,381 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+}
+
+/* ── ステップインジケーター ── */
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+}
+
+.stepDot {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-500);
+  background-color: var(--color-neutral-200);
+  transition: all var(--transition-fast);
+}
+
+.stepDotActive {
+  background-color: var(--color-primary-500);
+  color: white;
+}
+
+.stepLine {
+  width: 48px;
+  height: 2px;
+  background-color: var(--color-neutral-300);
+}
+
+/* ── スコア表示 ── */
+
+.scoreDisplay {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--color-neutral-100);
+  border-radius: var(--radius-md);
+}
+
+.scoreLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+  font-weight: var(--font-weight-medium);
+}
+
+.scoreValue {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-700);
+  line-height: 1;
+}
+
+.scoreMax {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+}
+
+/* ── セクション ── */
+
+.sectionTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+  margin: 0 0 var(--spacing-2) 0;
+  padding-bottom: var(--spacing-1);
+  border-bottom: 1px solid var(--color-neutral-200);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.sectionIcon {
+  color: var(--color-primary-500);
+}
+
+.hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin: 0 0 var(--spacing-3) 0;
+}
+
+.bmiNote {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  margin-left: var(--spacing-1);
+}
+
+/* ── 初回スクリーニング質問 ── */
+
+.questionList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+}
+
+.questionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-3);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.questionLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-800);
+}
+
+.toggleGroup {
+  display: flex;
+  gap: var(--spacing-1);
+}
+
+.toggleButton {
+  padding: var(--spacing-1) var(--spacing-3);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  background: white;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.toggleButton:hover {
+  border-color: var(--color-neutral-400);
+}
+
+.toggleYes {
+  background-color: var(--color-warning-light);
+  border-color: var(--color-warning);
+  color: var(--color-warning-dark);
+}
+
+.toggleNo {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+  color: var(--color-success-dark);
+}
+
+/* ── 初回結果メッセージ ── */
+
+.resultNoRisk {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  background-color: var(--color-success-light);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-success);
+  color: var(--color-success-dark);
+  margin-bottom: var(--spacing-4);
+}
+
+.resultAtRisk {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  background-color: var(--color-warning-light);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-warning);
+  color: var(--color-warning-dark);
+  margin-bottom: var(--spacing-4);
+}
+
+.resultTitle {
+  margin: 0 0 var(--spacing-1) 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.resultDescription {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ── ラジオカードグループ ── */
+
+.radioSection {
+  margin-bottom: var(--spacing-4);
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.radioCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: white;
+}
+
+.radioCard:hover {
+  border-color: var(--color-neutral-400);
+  background-color: var(--color-neutral-50);
+}
+
+.radioCardSelected {
+  border-color: var(--color-primary-500);
+  background-color: var(--color-primary-50);
+}
+
+.radioCardSelected:hover {
+  border-color: var(--color-primary-500);
+  background-color: var(--color-primary-50);
+}
+
+.radioInput {
+  margin-top: 2px;
+  accent-color: var(--color-primary-500);
+}
+
+.radioContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.radioHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+}
+
+.radioScore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-neutral-200);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-700);
+}
+
+.radioLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+}
+
+.radioDescription {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ── 年齢調整 ── */
+
+.ageAdjustment {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+  margin-bottom: var(--spacing-4);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  cursor: pointer;
+}
+
+.checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary-500);
+}
+
+.ageNote {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+/* ── リスク判定バナー ── */
+
+.riskBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-4);
+}
+
+.riskHigh {
+  background-color: var(--color-danger-light);
+  border: 1px solid var(--color-danger);
+}
+
+.riskMedium {
+  background-color: var(--color-warning-light);
+  border: 1px solid var(--color-warning);
+}
+
+.riskLow {
+  background-color: var(--color-success-light);
+  border: 1px solid var(--color-success);
+}
+
+.riskLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+}
+
+.riskValue {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-800);
+}
+
+.riskScore {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+/* ── アクション ── */
+
+.actions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+@media (max-width: 640px) {
+  .questionRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+  }
+
+  .ageAdjustment {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .riskBanner {
+    flex-wrap: wrap;
+  }
+}

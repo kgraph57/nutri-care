@@ -14,10 +14,10 @@ const baseAdultPatient: Patient = {
   name: "成人太郎",
   age: 45,
   gender: "男性",
-  ward: "ICU",
+  ward: "3A",
   admissionDate: "2025-01-01",
   dischargeDate: "",
-  patientType: "adult",
+  patientType: "一般病棟",
   weight: 70,
   height: 170,
   diagnosis: "",
@@ -62,7 +62,11 @@ describe("getLabReferencesForPatient — adult patients", () => {
   });
 
   it("returns standard LAB_REFERENCES for exactly age 18 with non-pediatric type", () => {
-    const patient: Patient = { ...baseAdultPatient, age: 18, patientType: "adult" };
+    const patient: Patient = {
+      ...baseAdultPatient,
+      age: 18,
+      patientType: "adult",
+    };
     const result = getLabReferencesForPatient(patient);
     expect(result).toBe(LAB_REFERENCES);
   });

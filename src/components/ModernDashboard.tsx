@@ -143,7 +143,7 @@ const ModernDashboard: React.FC<ModernDashboardProps> = ({
               margin: 0,
             }}
           >
-            ICU栄養管理システム
+            NutriCare 栄養管理システム
           </h1>
           <nav style={{ display: "flex", gap: "24px" }}>
             {["Overview", "Patients", "Nutrition", "Reports", "Settings"].map(

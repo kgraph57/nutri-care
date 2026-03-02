@@ -13,6 +13,7 @@ import {
   GitCompareArrows,
   FlaskConical,
   LayoutTemplate,
+  ShieldCheck,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import styles from "./Sidebar.module.css";
@@ -33,6 +34,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { icon: FlaskConical, label: "栄養剤比較", path: "/product-compare" },
   { icon: LayoutTemplate, label: "テンプレート", path: "/templates" },
   { icon: ClipboardCheck, label: "デイリーラウンド", path: "/daily-round" },
+  { icon: ShieldCheck, label: "栄養スクリーニング", path: "/screening" },
   { icon: Settings, label: "設定", path: "/settings" },
 ] as const;
 

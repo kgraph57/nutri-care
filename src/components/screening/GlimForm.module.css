@@ -1,0 +1,308 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+}
+
+/* ── 前回スクリーニング情報 ── */
+
+.previousInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--color-info-light);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-info);
+  color: var(--color-info-dark);
+  font-size: var(--font-size-xs);
+}
+
+/* ── 2カラムレイアウト ── */
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-5);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.columnTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+  margin: 0;
+  padding-bottom: var(--spacing-2);
+  border-bottom: 2px solid var(--color-neutral-200);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.columnIcon {
+  color: var(--color-primary-500);
+}
+
+/* ── 基準ブロック ── */
+
+.criteriaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  cursor: pointer;
+}
+
+.checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary-500);
+  flex-shrink: 0;
+}
+
+.checkLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-800);
+}
+
+.subFields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding-left: var(--spacing-6);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.unit {
+  font-weight: var(--font-weight-normal);
+  color: var(--color-neutral-400);
+}
+
+.input {
+  width: 100%;
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 2px var(--color-primary-100);
+}
+
+.select {
+  width: 100%;
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  background-color: white;
+  outline: none;
+  font-family: var(--font-family);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.select:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 2px var(--color-primary-100);
+}
+
+.textarea {
+  width: 100%;
+  padding: var(--spacing-2);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  outline: none;
+  font-family: var(--font-family);
+  resize: vertical;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+.textarea:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 2px var(--color-primary-100);
+}
+
+/* ── 自動値表示 ── */
+
+.autoValue {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+  padding-left: var(--spacing-6);
+}
+
+.autoTag {
+  display: inline-block;
+  margin-left: var(--spacing-1);
+  padding: 0 var(--spacing-1);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-info-light);
+  color: var(--color-info-dark);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.threshold {
+  color: var(--color-neutral-400);
+  margin-left: var(--spacing-1);
+}
+
+.noData {
+  color: var(--color-neutral-400);
+  font-style: italic;
+}
+
+/* ── 基準判定ステータス ── */
+
+.criteriaStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.criteriaMet {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning-dark);
+  border: 1px solid var(--color-warning);
+}
+
+.criteriaNotMet {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-500);
+  border: 1px solid var(--color-neutral-200);
+}
+
+/* ── 診断結果バナー ── */
+
+.diagnosisBanner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-lg);
+}
+
+.diagnosisPositive {
+  background-color: var(--color-danger-light);
+  border: 2px solid var(--color-danger);
+}
+
+.diagnosisNegative {
+  background-color: var(--color-success-light);
+  border: 2px solid var(--color-success);
+}
+
+.diagnosisHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.diagnosisPositive .diagnosisHeader {
+  color: var(--color-danger-dark);
+}
+
+.diagnosisNegative .diagnosisHeader {
+  color: var(--color-success-dark);
+}
+
+.diagnosisTitle {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.severityBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: white;
+  border-radius: var(--radius-md);
+  width: fit-content;
+}
+
+.severityDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+}
+
+.severityText {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+}
+
+.diagnosisDetail {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+}
+
+/* ── アクション ── */
+
+.actions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+@media (max-width: 768px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .subFields {
+    padding-left: var(--spacing-3);
+  }
+
+  .input,
+  .select {
+    font-size: 16px;
+  }
+}

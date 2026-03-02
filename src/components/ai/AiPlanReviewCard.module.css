@@ -1,0 +1,187 @@
+.card {
+  padding: var(--spacing-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background-color: white;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-3);
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0;
+}
+
+.reviewButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-primary-300);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary-50);
+  color: var(--color-primary-600);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.reviewButton:hover {
+  background-color: var(--color-primary-100);
+}
+
+.reviewButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Score bar */
+.scoreSection {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+}
+
+.scoreValue {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  min-width: 48px;
+}
+
+.scoreExcellent { color: var(--color-success); }
+.scoreGood { color: #22c55e; }
+.scoreWarning { color: var(--color-warning); }
+.scorePoor { color: var(--color-danger); }
+
+.scoreBar {
+  flex: 1;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-neutral-100);
+  overflow: hidden;
+}
+
+.scoreBarFill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.6s ease-out;
+}
+
+/* Summary */
+.summary {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  margin: 0 0 var(--spacing-3) 0;
+  line-height: 1.5;
+}
+
+/* Issues */
+.issueList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+}
+
+.issue {
+  display: flex;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}
+
+.issueCritical {
+  background-color: rgba(239, 68, 68, 0.06);
+  border-left: 3px solid var(--color-danger);
+}
+
+.issueWarning {
+  background-color: rgba(245, 158, 11, 0.06);
+  border-left: 3px solid var(--color-warning);
+}
+
+.issueInfo {
+  background-color: rgba(59, 130, 246, 0.06);
+  border-left: 3px solid var(--color-info);
+}
+
+.issueContent {
+  flex: 1;
+}
+
+.issueMessage {
+  color: var(--color-neutral-700);
+  font-weight: var(--font-weight-medium);
+}
+
+.issueSuggestion {
+  color: var(--color-neutral-500);
+  margin-top: 2px;
+}
+
+.issueArea {
+  font-size: 10px;
+  color: var(--color-neutral-400);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Strengths */
+.strengthList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.strength {
+  font-size: var(--font-size-xs);
+  color: var(--color-success);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  color: var(--color-neutral-400);
+  font-size: var(--font-size-sm);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-neutral-200);
+  border-top-color: var(--color-primary-500);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error */
+.error {
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  padding: var(--spacing-2);
+  background-color: rgba(239, 68, 68, 0.06);
+  border-radius: var(--radius-sm);
+}

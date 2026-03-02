@@ -17,6 +17,7 @@ import { MenuTemplatesPage } from "./pages/MenuTemplatesPage";
 import { SimulationPage } from "./pages/SimulationPage";
 import { GrowthMonitoringPage } from "./pages/GrowthMonitoringPage";
 import { DailyRoundPage } from "./pages/DailyRoundPage";
+import { ScreeningPage } from "./pages/ScreeningPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 function AppRoutes() {
@@ -57,6 +58,7 @@ function AppRoutes() {
         <Route path="simulation" element={<SimulationPage />} />
         <Route path="growth" element={<GrowthMonitoringPage />} />
         <Route path="daily-round" element={<DailyRoundPage />} />
+        <Route path="screening" element={<ScreeningPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>

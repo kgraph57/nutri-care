@@ -1,16 +1,16 @@
-import type { NutritionRequirements } from '../types'
+import type { NutritionRequirements } from "../types";
 
 /**
- * 患者ごとの栄養必要量（ASPEN/ESPEN ICUガイドラインに基づく）
+ * 患者ごとの栄養必要量（ASPEN/ESPENガイドラインに基づく）
  *
  * エネルギー・蛋白質は疾患・体重に応じた目標値
  * 脂質 = エネルギーの30% / 9 kcal/g
  * 炭水化物 = 残余エネルギー / 4 kcal/g
- * 電解質は標準ICU範囲（疾患別調整あり）
+ * 電解質は標準範囲（疾患別調整あり）
  */
 export const sampleRequirements: Record<string, NutritionRequirements> = {
   // P001: 65yo M, 70kg, 170cm, AMI post-PCI — 25 kcal/kg, protein 1.2g/kg
-  'P001': {
+  P001: {
     energy: 1750,
     protein: 84.0,
     fat: 58.3,
@@ -30,7 +30,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P002: 12yo F, 35kg, pediatric severe pneumonia — 60 kcal/kg, protein 1.5g/kg
-  'P002': {
+  P002: {
     energy: 2100,
     protein: 52.0,
     fat: 70.0,
@@ -51,7 +51,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
 
   // P003: 72yo M, 58kg, CKD stage 4 — 25 kcal/kg, protein 0.6g/kg (renal restriction)
   // K reduced to 0.5 mEq/kg, P reduced to 0.4 mEq/kg
-  'P003': {
+  P003: {
     energy: 1450,
     protein: 35.0,
     fat: 48.3,
@@ -72,7 +72,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
 
   // P004: 58yo F, 62kg, cirrhosis — 25 kcal/kg, protein 0.8g/kg (hepatic)
   // Na reduced to 0.8 mEq/kg (ascites management)
-  'P004': {
+  P004: {
     energy: 1550,
     protein: 50.0,
     fat: 51.7,
@@ -92,7 +92,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P005: 35yo M, 75kg, 40% burn — 40 kcal/kg, protein 2.0g/kg
-  'P005': {
+  P005: {
     energy: 3000,
     protein: 150.0,
     fat: 100.0,
@@ -112,7 +112,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P006: 78yo F, 32kg, refeeding high risk — 10 kcal/kg initial, protein 0.6g/kg
-  'P006': {
+  P006: {
     energy: 320,
     protein: 19.0,
     fat: 10.7,
@@ -132,7 +132,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P007: 55yo M, 88kg, DM+sepsis — 25 kcal/kg, protein 1.5g/kg
-  'P007': {
+  P007: {
     energy: 2200,
     protein: 132.0,
     fat: 73.3,
@@ -152,7 +152,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P008: 48yo F, 55kg, ARDS — 25 kcal/kg, protein 1.5g/kg
-  'P008': {
+  P008: {
     energy: 1375,
     protein: 82.0,
     fat: 45.8,
@@ -173,7 +173,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
 
   // P009: 70yo M, 65kg, CABG+heart failure — 22 kcal/kg, protein 1.0g/kg
   // Na reduced to 0.8 mEq/kg (fluid/Na restriction)
-  'P009': {
+  P009: {
     energy: 1430,
     protein: 65.0,
     fat: 47.7,
@@ -193,7 +193,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P010: 85yo F, 45kg, sarcopenia — 30 kcal/kg, protein 1.5g/kg
-  'P010': {
+  P010: {
     energy: 1350,
     protein: 67.0,
     fat: 45.0,
@@ -213,7 +213,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P011: 3yo M, 14kg, encephalitis — 80 kcal/kg, protein 1.5g/kg
-  'P011': {
+  P011: {
     energy: 1120,
     protein: 21.0,
     fat: 37.3,
@@ -233,7 +233,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P012: 0yo F, 1.8kg, preterm 32wk — 120 kcal/kg, protein 4.0g/kg
-  'P012': {
+  P012: {
     energy: 216,
     protein: 7.2,
     fat: 7.2,
@@ -253,7 +253,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P013: 8yo M, 25kg, appendix perforation — 60 kcal/kg, protein 1.5g/kg
-  'P013': {
+  P013: {
     energy: 1500,
     protein: 37.0,
     fat: 50.0,
@@ -273,7 +273,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
   },
 
   // P014: 15yo F, 30kg, anorexia nervosa — 5 kcal/kg initial, protein 0.6g/kg
-  'P014': {
+  P014: {
     energy: 150,
     protein: 18.0,
     fat: 5.0,
@@ -294,7 +294,7 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
 
   // P015: 1yo M, 7.5kg, TOF post-op — 100 kcal/kg, protein 2.5g/kg
   // Na reduced to 0.8 mEq/kg (cardiac fluid management)
-  'P015': {
+  P015: {
     energy: 750,
     protein: 19.0,
     fat: 25.0,
@@ -312,4 +312,4 @@ export const sampleRequirements: Record<string, NutritionRequirements> = {
     iodine: 11.3,
     selenium: 7.5,
   },
-}
+};

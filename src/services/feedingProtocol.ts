@@ -29,7 +29,7 @@ export interface ProtocolOptions {
 
 /**
  * Generate a feeding advancement protocol.
- * Standard ICU practice: start at 25% of target, advance by 25%/day.
+ * Standard practice: start at 25% of target, advance by 25%/day.
  * High risk (refeeding): start at 10-15 kcal/kg/day, advance 10-20%/day.
  */
 export function generateFeedingProtocol(

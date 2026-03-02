@@ -23,9 +23,7 @@ interface CompactMetrics {
 
 function computeCompactMetrics(patient: Patient): CompactMetrics {
   const hasValidInputs = patient.weight > 0 && patient.height > 0;
-  const bmi = hasValidInputs
-    ? calculateBMI(patient.weight, patient.height)
-    : 0;
+  const bmi = hasValidInputs ? calculateBMI(patient.weight, patient.height) : 0;
   const isPediatric_ = isPediatricPatient(patient);
 
   const correctedAgeMonths =
@@ -102,7 +100,7 @@ export function PatientProfileCard({
       {/* 入院日数 */}
       <div className={styles.metric}>
         <span className={styles.metricValue}>Day {daysAdmitted}</span>
-        <span className={styles.metricLabel}>ICU 入院</span>
+        <span className={styles.metricLabel}>入院</span>
       </div>
 
       {/* バッジ + アレルギー警告 */}

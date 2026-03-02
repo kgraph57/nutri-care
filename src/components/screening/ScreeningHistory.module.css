@@ -1,0 +1,164 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+  margin: 0 0 var(--spacing-1) 0;
+}
+
+/* ── エントリーリスト ── */
+
+.entries {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background: white;
+  font-family: var(--font-family);
+  text-align: left;
+  width: 100%;
+  transition: all var(--transition-fast);
+  cursor: default;
+}
+
+.entryClickable {
+  cursor: pointer;
+}
+
+.entryClickable:hover {
+  background-color: var(--color-neutral-50);
+  border-color: var(--color-neutral-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.entryClickable:active {
+  background-color: var(--color-neutral-100);
+}
+
+/* ── 日付 ── */
+
+.date {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-700);
+  min-width: 44px;
+  flex-shrink: 0;
+}
+
+/* ── ツールバッジ ── */
+
+.toolBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--spacing-2);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+  min-width: 64px;
+  justify-content: center;
+}
+
+.toolNrs {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+.toolMna {
+  background-color: var(--color-info-light);
+  color: var(--color-info-dark);
+}
+
+.toolGlim {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+/* ── スコア ── */
+
+.score {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+  min-width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ── リスクバッジ ── */
+
+.riskBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--spacing-2);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.riskGreen {
+  background-color: var(--color-success-light);
+  color: var(--color-success-dark);
+}
+
+.riskYellow {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+.riskRed {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger-dark);
+}
+
+/* ── 空状態 ── */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-10) var(--spacing-4);
+  gap: var(--spacing-3);
+}
+
+.emptyIcon {
+  color: var(--color-neutral-300);
+}
+
+.emptyText {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-400);
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .entry {
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2);
+  }
+
+  .toolBadge {
+    min-width: auto;
+  }
+
+  .riskBadge {
+    margin-left: 0;
+  }
+}

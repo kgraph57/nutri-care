@@ -33,6 +33,7 @@ import { LabDataForm } from "../components/labs/LabDataForm";
 import { FeedingProtocolView } from "../components/protocol/FeedingProtocolView";
 import { TemplateSelector } from "../components/templates/TemplateSelector";
 import { DraftRecoveryBanner } from "../components/ui/DraftRecoveryBanner";
+import { AiGenerateButton } from "../components/ai/AiGenerateButton";
 import { useMenuDraft } from "../hooks/useMenuDraft";
 import { exportMenuCsv } from "../utils/csvExporter";
 import styles from "./MenuBuilderPage.module.css";
@@ -569,6 +570,33 @@ export function MenuBuilderPage() {
     [],
   );
 
+  const handleAiPlanApply = useCallback(
+    (
+      items: Array<{
+        product: Record<string, string | number>;
+        volume: number;
+        frequency: number;
+      }>,
+      rationale: string,
+    ) => {
+      const newItems: MenuItemState[] = items.map((item) => ({
+        id: generateItemId(String(item.product["製剤名"] ?? "")),
+        product: item.product,
+        volume: item.volume,
+        frequency: item.frequency,
+      }));
+      setMenuItems(newItems);
+      if (!menuName) {
+        const typeLabel = nutritionType === "enteral" ? "経腸栄養" : "静脈栄養";
+        setMenuName(`AI${typeLabel}プラン`);
+      }
+      if (!notes) {
+        setNotes(rationale);
+      }
+    },
+    [menuName, notes, nutritionType],
+  );
+
   const handleApplyTemplate = useCallback(
     (
       items: Array<{
@@ -643,6 +671,16 @@ export function MenuBuilderPage() {
           allProducts={allProducts}
           isLoading={allProductsLoading}
           onApply={handleAutoMenuApply}
+        />
+      )}
+
+      {selectedPatient && !allProductsLoading && (
+        <AiGenerateButton
+          patient={selectedPatient}
+          products={products}
+          nutritionType={nutritionType}
+          labData={patientLabData}
+          onApply={handleAiPlanApply}
         />
       )}
 

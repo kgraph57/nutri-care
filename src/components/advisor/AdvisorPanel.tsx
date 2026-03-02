@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { Sparkles, ChevronDown, Plus, Bot } from "lucide-react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { Sparkles, ChevronDown, Plus, Bot, Stethoscope } from "lucide-react";
 import { Card } from "../ui";
 import { AiChatPanel } from "../ai/AiChatPanel";
 import type { Patient, NutritionType } from "../../types";
@@ -12,11 +12,17 @@ import {
   generateRecommendations,
   generateStrategySummary,
 } from "../../services/nutritionAdvisor";
-import { isApiKeyConfigured } from "../../lib/anthropic";
+import { createAnthropicClient, isApiKeyConfigured } from "../../lib/anthropic";
 import {
   buildNutritionContext,
   buildClinicalSystemPrompt,
+  type NutritionContext,
 } from "../../services/aiContextBuilder";
+import { AiPlanReviewCard } from "../ai/AiPlanReviewCard";
+import {
+  generateLabNarrative,
+  type LabNarrative,
+} from "../../services/aiLabNarrative";
 import styles from "./AdvisorPanel.module.css";
 
 type Product = Record<string, string | number>;
@@ -100,9 +106,9 @@ export function AdvisorPanel({
     [labData],
   );
 
-  const clinicalPrompt = useMemo(() => {
-    if (!labData) return "";
-    const ctx = buildNutritionContext(
+  const nutritionContext: NutritionContext | null = useMemo(() => {
+    if (!labData) return null;
+    return buildNutritionContext(
       patient,
       labData,
       {
@@ -142,8 +148,40 @@ export function AdvisorPanel({
       products,
       nutritionType,
     );
-    return buildClinicalSystemPrompt(ctx);
   }, [patient, labData, nutritionType, products]);
+
+  const clinicalPrompt = useMemo(() => {
+    if (!nutritionContext) return "";
+    return buildClinicalSystemPrompt(nutritionContext);
+  }, [nutritionContext]);
+
+  const anthropicClient = useMemo(
+    () => (isApiKeyConfigured() ? createAnthropicClient() : null),
+    [],
+  );
+
+  const [labNarrative, setLabNarrative] = useState<LabNarrative | null>(null);
+  const [narrativeLoading, setNarrativeLoading] = useState(false);
+
+  const fetchNarrative = useCallback(async () => {
+    if (!anthropicClient || !labData) return;
+    setNarrativeLoading(true);
+    try {
+      const result = await generateLabNarrative(anthropicClient, labData);
+      setLabNarrative(result);
+    } catch {
+      // Silently fail - narrative is optional enhancement
+    } finally {
+      setNarrativeLoading(false);
+    }
+  }, [anthropicClient, labData]);
+
+  // Auto-fetch narrative when lab data changes and API key is configured
+  useEffect(() => {
+    if (anthropicClient && labData) {
+      fetchNarrative();
+    }
+  }, [anthropicClient, labData, fetchNarrative]);
 
   const abnormalCount = abnormal.length;
 
@@ -191,6 +229,32 @@ export function AdvisorPanel({
           {/* Strategy summary */}
           <p className={styles.strategy}>{strategy}</p>
 
+          {/* AI Lab Narrative */}
+          {labNarrative && (
+            <div className={styles.section}>
+              <h4 className={styles.sectionTitle}>
+                <Stethoscope size={12} />
+                AI回診メモ
+              </h4>
+              <div className={styles.narrativeCard}>
+                <p className={styles.narrativeText}>
+                  {labNarrative.narrative}
+                </p>
+                <div className={styles.narrativeTrend}>
+                  {labNarrative.trend_summary}
+                </div>
+                <div className={styles.narrativeSuggestion}>
+                  {labNarrative.today_suggestion}
+                </div>
+              </div>
+            </div>
+          )}
+          {narrativeLoading && (
+            <div className={styles.narrativeLoading}>
+              AI回診メモを生成中...
+            </div>
+          )}
+
           {/* Lab interpretations */}
           {abnormal.length > 0 && (
             <div className={styles.section}>
@@ -229,6 +293,13 @@ export function AdvisorPanel({
             <p className={styles.emptyState}>
               該当する推奨製品が見つかりませんでした
             </p>
+          )}
+
+          {anthropicClient && nutritionContext && (
+            <AiPlanReviewCard
+              client={anthropicClient}
+              context={nutritionContext}
+            />
           )}
 
           {isApiKeyConfigured() && (

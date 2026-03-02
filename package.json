@@ -1,7 +1,7 @@
 {
-  "name": "icu-picu-nutrition-management",
+  "name": "nutri-care",
   "version": "2.0.0",
-  "description": "ICU・PICU包括的栄養管理システム - 重症患者栄養管理専用ツール",
+  "description": "包括的臨床栄養管理システム - 全科対応の栄養管理ツール",
   "main": "src/App.tsx",
   "scripts": {
     "dev": "vite",
@@ -11,15 +11,15 @@
     "test:watch": "vitest"
   },
   "keywords": [
-    "ICU",
-    "PICU",
     "nutrition",
     "medical",
     "healthcare",
-    "critical-care",
+    "clinical-nutrition",
     "nutrition-management",
     "hospital",
-    "patient-care"
+    "patient-care",
+    "enteral",
+    "parenteral"
   ],
   "author": "Manus AI Agent",
   "license": "Medical Use Only",
@@ -54,12 +54,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/icu-picu-nutrition-management.git"
+    "url": "https://github.com/kgraph57/nutri-care.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/icu-picu-nutrition-management/issues"
+    "url": "https://github.com/kgraph57/nutri-care/issues"
   },
-  "homepage": "https://your-org.github.io/icu-picu-nutrition-management",
+  "homepage": "https://kgraph57.github.io/nutri-care",
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"

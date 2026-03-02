@@ -35,7 +35,7 @@ const ACTIVITY_FACTORS = {
   veryActive: 1.9, // 非常に激しい運動
 };
 
-// ストレス係数（ICU患者用）
+// ストレス係数（重症度別）
 const STRESS_FACTORS = {
   mild: 1.0, // 軽度ストレス
   moderate: 1.2, // 中等度ストレス

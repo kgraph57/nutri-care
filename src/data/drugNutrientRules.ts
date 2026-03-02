@@ -10,7 +10,7 @@ export interface DrugNutrientRule {
 }
 
 /**
- * Evidence-based drug-nutrient interaction rules for ICU nutrition management.
+ * Evidence-based drug-nutrient interaction rules for clinical nutrition management.
  */
 export const DRUG_NUTRIENT_RULES: readonly DrugNutrientRule[] = [
   // ── Warfarin ↔ Vitamin K ──
@@ -57,8 +57,7 @@ export const DRUG_NUTRIENT_RULES: readonly DrugNutrientRule[] = [
     ],
     nutrientKeywords: ["Mg", "マグネシウム", "magnesium"],
     severity: "medium",
-    interaction:
-      "ループ利尿薬はマグネシウムの尿中排泄も増加させます。",
+    interaction: "ループ利尿薬はマグネシウムの尿中排泄も増加させます。",
     recommendation:
       "血清Mg値をモニタリングし、低下傾向があればMg補充を検討してください。",
   },
@@ -76,7 +75,14 @@ export const DRUG_NUTRIENT_RULES: readonly DrugNutrientRule[] = [
       "ノボラピッド",
       "ヒューマログ",
     ],
-    nutrientKeywords: ["炭水化物", "糖", "ブドウ糖", "グルコース", "glucose", "carbs"],
+    nutrientKeywords: [
+      "炭水化物",
+      "糖",
+      "ブドウ糖",
+      "グルコース",
+      "glucose",
+      "carbs",
+    ],
     severity: "high",
     interaction:
       "インスリン投与中の患者では、栄養投与の中断により重篤な低血糖を来す危険があります。",
@@ -157,7 +163,14 @@ export const DRUG_NUTRIENT_RULES: readonly DrugNutrientRule[] = [
       "dexamethasone",
       "hydrocortisone",
     ],
-    nutrientKeywords: ["炭水化物", "糖", "ブドウ糖", "グルコース", "glucose", "carbs"],
+    nutrientKeywords: [
+      "炭水化物",
+      "糖",
+      "ブドウ糖",
+      "グルコース",
+      "glucose",
+      "carbs",
+    ],
     severity: "medium",
     interaction:
       "ステロイドはインスリン抵抗性を増大させ、高血糖を引き起こします。",

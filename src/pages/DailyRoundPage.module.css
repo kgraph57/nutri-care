@@ -28,6 +28,13 @@
   color: var(--color-primary-500);
 }
 
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+}
+
 .patientSelector {
   display: flex;
   align-items: center;
@@ -80,6 +87,12 @@
   padding: var(--spacing-4);
 }
 
+.fullWidth {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
 .detailModal {
   max-height: 80vh;
   overflow-y: auto;
@@ -88,5 +101,10 @@
 @media (max-width: 960px) {
   .layout {
     grid-template-columns: 1fr;
+  }
+
+  .headerControls {
+    width: 100%;
+    justify-content: space-between;
   }
 }

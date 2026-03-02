@@ -6,6 +6,7 @@ import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { useLabData } from "../hooks/useLabData";
 import { useFluidBalance } from "../hooks/useFluidBalance";
 import { useToleranceData } from "../hooks/useToleranceData";
+import { useScreeningData } from "../hooks/useScreeningData";
 import type { LabData } from "../types/labData";
 import type { FluidBalanceEntry } from "../types/fluidBalance";
 import type { ToleranceEntry } from "../types/toleranceData";
@@ -34,6 +35,7 @@ import { FeedingRoutePanel } from "./patient-detail/FeedingRoutePanel";
 import { GrowthSummaryCard } from "./patient-detail/GrowthSummaryCard";
 import { WeaningPanel } from "./patient-detail/WeaningPanel";
 import { NutritionPhaseContextCard } from "./patient-detail/NutritionPhaseContextCard";
+import { ScreeningSummaryPanel } from "./patient-detail/ScreeningSummaryPanel";
 import { FeedingRouteForm } from "../components/feeding/FeedingRouteForm";
 import { GrowthEntryForm } from "../components/growth/GrowthEntryForm";
 import type { FeedingRouteEntry } from "../types/feedingRoute";
@@ -67,6 +69,9 @@ export function PatientDetailPage() {
   const [activeTab, setActiveTab] = useState<
     "nutrition" | "labs" | "fluids" | "growth"
   >("nutrition");
+
+  // Screening hook
+  const { getScreeningHistory } = useScreeningData();
 
   // Pediatric hooks
   const { getRouteHistory, saveRoute } = useFeedingRoute();
@@ -142,6 +147,11 @@ export function PatientDetailPage() {
   const weaningPlan = useMemo(
     () => (patientId ? getActivePlan(patientId) : undefined),
     [patientId, getActivePlan],
+  );
+
+  const screeningHistory = useMemo(
+    () => (patientId ? getScreeningHistory(patientId) : []),
+    [patientId, getScreeningHistory],
   );
 
   const handleLabSave = useCallback(
@@ -313,6 +323,12 @@ export function PatientDetailPage() {
             labData={labData}
             latestMenu={latestMenu}
             menus={patientMenus}
+          />
+
+          {/* 栄養スクリーニング状況 */}
+          <ScreeningSummaryPanel
+            patient={patient}
+            screeningHistory={screeningHistory}
           />
 
           {/* 現在の投与プラン・ルート・トレンド */}

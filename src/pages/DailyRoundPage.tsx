@@ -22,6 +22,9 @@ import {
   RoundTimeline,
   TrendCard,
 } from "../components/daily-round/RoundTimeline";
+import { ViewTabs, type ViewMode } from "../components/daily-round/ViewTabs";
+import { NutritionFlowChart } from "../components/daily-round/NutritionFlowChart";
+import { RoundComparisonTable } from "../components/daily-round/RoundComparisonTable";
 import { Button, Modal } from "../components/ui";
 import styles from "./DailyRoundPage.module.css";
 
@@ -60,6 +63,7 @@ export function DailyRoundPage() {
   const [selectedEntry, setSelectedEntry] = useState<DailyRoundEntry | null>(
     null,
   );
+  const [activeView, setActiveView] = useState<ViewMode>("timeline");
 
   const patient = useMemo(
     () => patients.find((p) => p.id === selectedPatientId),
@@ -147,40 +151,106 @@ export function DailyRoundPage() {
           <ClipboardList size={24} className={styles.pageIcon} />
           デイリーラウンド
         </h1>
-        <div className={styles.patientSelector}>
-          <select
-            className={styles.patientSelect}
-            value={selectedPatientId}
-            onChange={(e) => {
-              setSelectedPatientId(e.target.value);
-              setShowForm(false);
-              setSelectedEntry(null);
-            }}
-          >
-            {patients.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name} ({p.ward})
-              </option>
-            ))}
-          </select>
-          <Button
-            variant="primary"
-            size="sm"
-            icon={<Plus size={16} />}
-            onClick={() => {
-              setShowForm(true);
-              setSelectedEntry(null);
-            }}
-          >
-            新規評価
-          </Button>
+        <div className={styles.headerControls}>
+          <ViewTabs activeView={activeView} onChangeView={setActiveView} />
+          <div className={styles.patientSelector}>
+            <select
+              className={styles.patientSelect}
+              value={selectedPatientId}
+              onChange={(e) => {
+                setSelectedPatientId(e.target.value);
+                setShowForm(false);
+                setSelectedEntry(null);
+              }}
+            >
+              {patients.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name} ({p.ward})
+                </option>
+              ))}
+            </select>
+            <Button
+              variant="primary"
+              size="sm"
+              icon={<Plus size={16} />}
+              onClick={() => {
+                setShowForm(true);
+                setSelectedEntry(null);
+                setActiveView("timeline");
+              }}
+            >
+              新規評価
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* メインレイアウト */}
-      <div className={styles.layout}>
-        {/* 左カラム: フォーム or 最新プラン */}
-        <div className={styles.column}>
+      {/* ビュー別コンテンツ */}
+      {activeView === "timeline" && (
+        <div className={styles.layout}>
+          {/* 左カラム: フォーム or 最新プラン */}
+          <div className={styles.column}>
+            {showForm ? (
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <FileText size={16} />
+                  アセスメント入力
+                </div>
+                <div className={styles.sectionBody}>
+                  <AssessmentForm
+                    patientId={selectedPatientId}
+                    onSave={handleSaveAssessment}
+                    onCancel={() => setShowForm(false)}
+                  />
+                </div>
+              </div>
+            ) : latestRound && latestScore ? (
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <TrendingUp size={16} />
+                  最新の栄養プラン ({latestRound.date})
+                </div>
+                <div className={styles.sectionBody}>
+                  <AdjustedPlanPanel
+                    plan={latestRound.adjustedPlan}
+                    score={latestScore}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className={styles.section}>
+                <div className={styles.sectionBody}>
+                  <p>
+                    「新規評価」ボタンからアセスメントを入力してください。
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* トレンド */}
+            {history.length >= 2 && <TrendCard entries={history} />}
+          </div>
+
+          {/* 右カラム: タイムライン */}
+          <div className={styles.column}>
+            <div className={styles.section}>
+              <div className={styles.sectionHeader}>
+                <History size={16} />
+                回診履歴 ({history.length}件)
+              </div>
+              <div className={styles.sectionBody}>
+                <RoundTimeline
+                  entries={history}
+                  onSelect={handleSelectEntry}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeView === "flow" && (
+        <div className={styles.fullWidth}>
           {showForm ? (
             <div className={styles.section}>
               <div className={styles.sectionHeader}>
@@ -195,52 +265,39 @@ export function DailyRoundPage() {
                 />
               </div>
             </div>
-          ) : latestRound && latestScore ? (
-            <div className={styles.section}>
-              <div className={styles.sectionHeader}>
-                <TrendingUp size={16} />
-                最新の栄養プラン ({latestRound.date})
-              </div>
-              <div className={styles.sectionBody}>
-                <AdjustedPlanPanel
-                  plan={latestRound.adjustedPlan}
-                  score={latestScore}
-                />
-              </div>
-            </div>
           ) : (
-            <div className={styles.section}>
-              <div className={styles.sectionBody}>
-                <p>
-                  「新規評価」ボタンからアセスメントを入力してください。
-                </p>
+            <>
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <TrendingUp size={16} />
+                  栄養フロー ({history.length}件)
+                </div>
+                <div className={styles.sectionBody}>
+                  <NutritionFlowChart entries={history} />
+                </div>
               </div>
-            </div>
+              {history.length >= 2 && <TrendCard entries={history} />}
+            </>
           )}
-
-          {/* トレンド */}
-          {history.length >= 2 && <TrendCard entries={history} />}
         </div>
+      )}
 
-        {/* 右カラム: タイムライン */}
-        <div className={styles.column}>
+      {activeView === "compare" && (
+        <div className={styles.fullWidth}>
           <div className={styles.section}>
             <div className={styles.sectionHeader}>
               <History size={16} />
-              回診履歴 ({history.length}件)
+              栄養比較
             </div>
             <div className={styles.sectionBody}>
-              <RoundTimeline
-                entries={history}
-                onSelect={handleSelectEntry}
-              />
+              <RoundComparisonTable entries={history} />
             </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* 詳細モーダル */}
-      {selectedEntry && selectedScore && (
+      {/* 詳細モーダル（タイムラインモードのみ） */}
+      {activeView === "timeline" && selectedEntry && selectedScore && (
         <Modal
           isOpen={true}
           onClose={() => setSelectedEntry(null)}

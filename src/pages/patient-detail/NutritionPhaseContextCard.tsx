@@ -14,7 +14,7 @@ interface NutritionPhaseContextCardProps {
   readonly weaningPlan?: WeaningPlan;
 }
 
-/* ---- ICU general phase (no formal plan) ---- */
+/* ---- General nutrition phase (no formal plan) ---- */
 
 interface IcuPhase {
   readonly name: string;
@@ -109,9 +109,12 @@ function FormalPlanView({ plan }: { readonly plan: WeaningPlan }) {
               栄養配分
             </span>
             <span className={styles.targetValue}>
-              {currentConfig.enteralPercent > 0 && `経腸 ${currentConfig.enteralPercent}%`}
-              {currentConfig.oralPercent > 0 && ` 経口 ${currentConfig.oralPercent}%`}
-              {currentConfig.parenteralPercent > 0 && ` 静脈 ${currentConfig.parenteralPercent}%`}
+              {currentConfig.enteralPercent > 0 &&
+                `経腸 ${currentConfig.enteralPercent}%`}
+              {currentConfig.oralPercent > 0 &&
+                ` 経口 ${currentConfig.oralPercent}%`}
+              {currentConfig.parenteralPercent > 0 &&
+                ` 静脈 ${currentConfig.parenteralPercent}%`}
             </span>
           </div>
           <div className={styles.targetItem}>
@@ -140,7 +143,7 @@ function FormalPlanView({ plan }: { readonly plan: WeaningPlan }) {
   );
 }
 
-/* ---- Component for general ICU phase (no formal plan) ---- */
+/* ---- Component for general nutrition phase (no formal plan) ---- */
 
 function GeneralPhaseView({
   phase,
@@ -153,7 +156,9 @@ function GeneralPhaseView({
     <div className={styles.generalPlan}>
       <div className={styles.phaseRow}>
         <div className={styles.phaseLeft}>
-          <span className={styles.phaseLabel}>ICU栄養フェーズ（入院{daysAdmitted}日目）</span>
+          <span className={styles.phaseLabel}>
+            栄養フェーズ（入院{daysAdmitted}日目）
+          </span>
           <span className={styles.phaseName}>{phase.name}</span>
         </div>
         <Badge variant={phase.variant}>{phase.name}</Badge>

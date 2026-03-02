@@ -191,7 +191,7 @@ export function PatientForm({ patient, onSave, onCancel }: PatientFormProps) {
             value={formData.ward}
             onChange={(e) => updateField("ward", e.target.value)}
             required
-            placeholder="例: ICU-1"
+            placeholder="例: 3A-1"
           />
         </div>
 

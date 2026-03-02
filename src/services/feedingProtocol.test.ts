@@ -8,7 +8,7 @@ import type { NutritionRequirements } from "../types";
 
 // ── Standard protocol ──
 
-describe("generateFeedingProtocol — standard ICU", () => {
+describe("generateFeedingProtocol — standard protocol", () => {
   const standardOptions: ProtocolOptions = {
     targetVolume: 1600,
     energyDensity: 1.0,

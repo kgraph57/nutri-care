@@ -1,0 +1,157 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ── ヘッダー ── */
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+}
+
+/* ── スコアバッジ ── */
+
+.scoreBadge {
+  flex-shrink: 0;
+}
+
+.scoreRing {
+  display: block;
+}
+
+.scoreProgress {
+  transition: stroke-dashoffset var(--transition-normal);
+}
+
+.scoreText {
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-family);
+}
+
+/* ── カード情報 ── */
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.toolRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.toolName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-800);
+}
+
+.dateTime {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+.riskLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ── 展開ボタン ── */
+
+.expandButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.expandButton:hover {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-800);
+}
+
+/* ── 推奨事項 ── */
+
+.recommendations {
+  padding: 0 var(--spacing-4) var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-100);
+}
+
+.recTitle {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-600);
+  margin: var(--spacing-3) 0 var(--spacing-2) 0;
+}
+
+.recList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.recItem {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-700);
+  padding-left: var(--spacing-3);
+  position: relative;
+  line-height: var(--line-height-relaxed);
+}
+
+.recItem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-400);
+}
+
+/* ── GLIM診断ボタン ── */
+
+.glimAction {
+  padding: var(--spacing-2) var(--spacing-4) var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-100);
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .cardHeader {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .recommendations {
+    padding: 0 var(--spacing-3) var(--spacing-2);
+  }
+}

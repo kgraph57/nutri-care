@@ -1,0 +1,272 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+}
+
+/* ── スコアバー ── */
+
+.scoreBar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-4);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.scoreCircle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  border: 3px solid;
+  flex-shrink: 0;
+}
+
+.scoreValue {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.scoreMax {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-400);
+  line-height: 1;
+}
+
+.scoreInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.riskLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.scoreSummary {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+/* ── セクション ── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+  margin: 0;
+  padding-bottom: var(--spacing-1);
+  border-bottom: 1px solid var(--color-neutral-200);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.sectionLetter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-500);
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+}
+
+.bmiAuto {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-neutral-500);
+  margin-left: auto;
+}
+
+/* ── ラジオグループ ── */
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.radioCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: white;
+}
+
+.radioCard:hover {
+  border-color: var(--color-neutral-400);
+  background-color: var(--color-neutral-50);
+}
+
+.radioCardSelected {
+  border-color: var(--color-primary-500);
+  background-color: var(--color-primary-50);
+}
+
+.radioCardSelected:hover {
+  border-color: var(--color-primary-500);
+  background-color: var(--color-primary-50);
+}
+
+.radioInput {
+  accent-color: var(--color-primary-500);
+  flex-shrink: 0;
+}
+
+.radioScore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-neutral-200);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-700);
+  flex-shrink: 0;
+}
+
+.radioLabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+}
+
+/* ── BMI/下腿 切り替え ── */
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-1);
+}
+
+.toggleCalf {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-100);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.toggleCalf:hover {
+  background-color: var(--color-neutral-200);
+}
+
+.toggleOn {
+  color: var(--color-primary-500);
+}
+
+.toggleOff {
+  color: var(--color-neutral-400);
+}
+
+.toggleHint {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-400);
+}
+
+/* ── 下腿入力 ── */
+
+.calfInput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.calfField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  max-width: 200px;
+}
+
+.calfLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.unit {
+  font-weight: var(--font-weight-normal);
+  color: var(--color-neutral-400);
+}
+
+.input {
+  width: 100%;
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 2px var(--color-primary-100);
+}
+
+/* ── アクション ── */
+
+.actions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+@media (max-width: 640px) {
+  .scoreBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .toggleRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .input {
+    font-size: 16px;
+  }
+}

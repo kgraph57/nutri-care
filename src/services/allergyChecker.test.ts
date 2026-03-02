@@ -7,7 +7,7 @@ const basePatient: Patient = {
   name: "テスト太郎",
   age: 60,
   gender: "男性",
-  ward: "ICU",
+  ward: "3A",
   admissionDate: "2025-01-01",
   dischargeDate: "",
   patientType: "adult",

@@ -1,126 +1,168 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
-import { Bot, ChevronDown, AlertCircle, Trash2 } from 'lucide-react'
-import { createAnthropicClient, isApiKeyConfigured } from '../../lib/anthropic'
+import { useState, useCallback, useRef, useEffect } from "react";
+import { Bot, ChevronDown, AlertCircle, Trash2 } from "lucide-react";
+import { createAnthropicClient, isApiKeyConfigured } from "../../lib/anthropic";
 import {
   streamChatResponse,
+  streamChatWithTools,
   CLINICAL_QUICK_ACTIONS,
   EDUCATION_QUICK_ACTIONS,
-} from '../../services/aiChatService'
-import type { ChatMessage as ChatMessageType, QuickAction } from '../../services/aiChatService'
-import { useAiChat } from '../../hooks/useAiChat'
-import { useSettings } from '../../hooks/useSettings'
-import { ChatMessage } from './ChatMessage'
-import { ChatInput } from './ChatInput'
-import { QuickActions } from './QuickActions'
-import styles from './AiChatPanel.module.css'
+} from "../../services/aiChatService";
+import type {
+  ChatMessage as ChatMessageType,
+  QuickAction,
+  ChatToolCall,
+} from "../../services/aiChatService";
+import type Anthropic from "@anthropic-ai/sdk";
+import { useAiChat } from "../../hooks/useAiChat";
+import { useSettings } from "../../hooks/useSettings";
+import { ChatMessage } from "./ChatMessage";
+import { ChatInput } from "./ChatInput";
+import { QuickActions } from "./QuickActions";
+import styles from "./AiChatPanel.module.css";
 
 interface AiChatPanelProps {
-  readonly mode: 'clinical' | 'education'
-  readonly systemPrompt: string
-  readonly contextId: string
+  readonly mode: "clinical" | "education";
+  readonly systemPrompt: string;
+  readonly contextId: string;
+  readonly tools?: readonly Anthropic.Messages.Tool[];
+  readonly onToolCall?: (toolCall: ChatToolCall) => void;
 }
 
 const TITLE_MAP: Readonly<Record<string, string>> = {
-  clinical: 'AI アシスタント',
-  education: 'AI チューター',
-}
+  clinical: "AI アシスタント",
+  education: "AI チューター",
+};
 
-export function AiChatPanel({ mode, systemPrompt, contextId }: AiChatPanelProps) {
-  const [isOpen, setIsOpen] = useState(true)
-  const [isStreaming, setIsStreaming] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const abortRef = useRef<AbortController | null>(null)
+export function AiChatPanel({
+  mode,
+  systemPrompt,
+  contextId,
+  tools,
+  onToolCall,
+}: AiChatPanelProps) {
+  const [isOpen, setIsOpen] = useState(true);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
-  const { settings } = useSettings()
+  const { settings } = useSettings();
   const { messages, addMessage, updateLastAssistantMessage, clearMessages } =
-    useAiChat(contextId)
+    useAiChat(contextId);
 
   const quickActions =
-    mode === 'clinical' ? CLINICAL_QUICK_ACTIONS : EDUCATION_QUICK_ACTIONS
+    mode === "clinical" ? CLINICAL_QUICK_ACTIONS : EDUCATION_QUICK_ACTIONS;
 
-  const apiKeyReady = isApiKeyConfigured()
+  const apiKeyReady = isApiKeyConfigured();
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   // Cancel streaming on unmount
   useEffect(() => {
     return () => {
-      abortRef.current?.abort()
-    }
-  }, [])
+      abortRef.current?.abort();
+    };
+  }, []);
 
   const handleSend = useCallback(
     async (content: string) => {
-      const client = createAnthropicClient()
-      if (!client) return
+      const client = createAnthropicClient();
+      if (!client) return;
 
-      addMessage('user', content)
+      addMessage("user", content);
 
       // Create a placeholder assistant message
-      addMessage('assistant', '')
-      setIsStreaming(true)
+      addMessage("assistant", "");
+      setIsStreaming(true);
 
-      const controller = new AbortController()
-      abortRef.current = controller
+      const controller = new AbortController();
+      abortRef.current = controller;
 
       // Build message list including the new user message
       const allMessages: readonly ChatMessageType[] = [
         ...messages,
-        { role: 'user' as const, content, timestamp: new Date().toISOString() },
-      ]
+        { role: "user" as const, content, timestamp: new Date().toISOString() },
+      ];
 
-      let accumulated = ''
+      let accumulated = "";
 
       try {
-        await streamChatResponse(client, {
-          systemPrompt,
-          messages: allMessages,
-          model: settings.aiModel,
-          onChunk: (chunk) => {
-            accumulated = accumulated + chunk
-            updateLastAssistantMessage(accumulated)
-          },
-          signal: controller.signal,
-        })
+        const hasTools = tools && tools.length > 0;
+
+        if (hasTools) {
+          await streamChatWithTools(client, {
+            systemPrompt,
+            messages: allMessages,
+            model: settings.aiModel,
+            tools,
+            onChunk: (chunk) => {
+              accumulated = accumulated + chunk;
+              updateLastAssistantMessage(accumulated);
+            },
+            onToolUse: (toolCall) => {
+              onToolCall?.(toolCall);
+              accumulated =
+                accumulated + `\n\n_[${toolCall.toolName} を実行しました]_`;
+              updateLastAssistantMessage(accumulated);
+            },
+            signal: controller.signal,
+          });
+        } else {
+          await streamChatResponse(client, {
+            systemPrompt,
+            messages: allMessages,
+            model: settings.aiModel,
+            onChunk: (chunk) => {
+              accumulated = accumulated + chunk;
+              updateLastAssistantMessage(accumulated);
+            },
+            signal: controller.signal,
+          });
+        }
       } catch (error) {
-        if (controller.signal.aborted) return
+        if (controller.signal.aborted) return;
 
         const errorMessage =
-          error instanceof Error ? error.message : '不明なエラーが発生しました'
-        updateLastAssistantMessage(
-          `エラーが発生しました: ${errorMessage}`,
-        )
+          error instanceof Error ? error.message : "不明なエラーが発生しました";
+        updateLastAssistantMessage(`エラーが発生しました: ${errorMessage}`);
       } finally {
-        setIsStreaming(false)
-        abortRef.current = null
+        setIsStreaming(false);
+        abortRef.current = null;
       }
     },
-    [messages, systemPrompt, settings.aiModel, addMessage, updateLastAssistantMessage],
-  )
+    [
+      messages,
+      systemPrompt,
+      settings.aiModel,
+      tools,
+      onToolCall,
+      addMessage,
+      updateLastAssistantMessage,
+    ],
+  );
 
   const handleQuickAction = useCallback(
     (action: QuickAction) => {
-      handleSend(action.prompt)
+      handleSend(action.prompt);
     },
     [handleSend],
-  )
+  );
 
   const handleToggle = useCallback(() => {
-    setIsOpen((prev) => !prev)
-  }, [])
+    setIsOpen((prev) => !prev);
+  }, []);
 
   const handleClear = useCallback(
     (e: React.MouseEvent) => {
-      e.stopPropagation()
-      clearMessages()
+      e.stopPropagation();
+      clearMessages();
     },
     [clearMessages],
-  )
+  );
 
-  const title = TITLE_MAP[mode] ?? 'AI アシスタント'
+  const title = TITLE_MAP[mode] ?? "AI アシスタント";
 
   return (
     <div className={styles.panel}>
@@ -144,7 +186,7 @@ export function AiChatPanel({ mode, systemPrompt, contextId }: AiChatPanelProps)
           )}
           <ChevronDown
             size={16}
-            className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}
+            className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`}
           />
         </div>
       </div>
@@ -170,7 +212,7 @@ export function AiChatPanel({ mode, systemPrompt, contextId }: AiChatPanelProps)
                     isStreaming={
                       isStreaming &&
                       index === messages.length - 1 &&
-                      msg.role === 'assistant'
+                      msg.role === "assistant"
                     }
                   />
                 ))}
@@ -189,9 +231,7 @@ export function AiChatPanel({ mode, systemPrompt, contextId }: AiChatPanelProps)
                 onSend={handleSend}
                 disabled={isStreaming}
                 placeholder={
-                  isStreaming
-                    ? '応答を生成中...'
-                    : 'メッセージを入力...'
+                  isStreaming ? "応答を生成中..." : "メッセージを入力..."
                 }
               />
             </>
@@ -199,7 +239,7 @@ export function AiChatPanel({ mode, systemPrompt, contextId }: AiChatPanelProps)
         </div>
       )}
     </div>
-  )
+  );
 }
 
 // ── API key not configured notice ──
@@ -216,5 +256,5 @@ function ApiKeyNotice() {
         </span>
       </p>
     </div>
-  )
+  );
 }

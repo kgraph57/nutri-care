@@ -1,0 +1,186 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.empty {
+  text-align: center;
+  padding: var(--spacing-8);
+  color: var(--color-neutral-500);
+}
+
+/* ── 横スクロール ── */
+
+.flowScroll {
+  overflow-x: auto;
+  padding: var(--spacing-3) 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.flowTrack {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  min-width: min-content;
+  padding: 0 var(--spacing-2);
+}
+
+.nodeGroup {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ── コネクタ矢印 ── */
+
+.connector {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-1);
+  color: var(--color-neutral-300);
+}
+
+/* ── ノード ── */
+
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-3);
+  border: 2px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 90px;
+  position: relative;
+  font-family: var(--font-family);
+}
+
+.node:hover {
+  border-color: var(--color-primary-300);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.nodeSelected {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 2px 12px rgba(var(--color-primary-500-rgb, 59, 130, 246), 0.2);
+  background: var(--color-primary-50, #eff6ff);
+}
+
+.nodeDate {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-medium);
+}
+
+.nodeScore {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+/* ── エネルギー充足率バー ── */
+
+.energyBar {
+  width: 100%;
+  height: 4px;
+  background: var(--color-neutral-200);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.energyFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.energyLabel {
+  font-size: 10px;
+  color: var(--color-neutral-500);
+}
+
+/* ── Feeding バッジ ── */
+
+.feedingBadge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.badgeAdvance {
+  background: var(--color-success-light);
+  color: var(--color-success-dark);
+}
+
+.badgeMaintain {
+  background: var(--color-info-light);
+  color: var(--color-info-dark);
+}
+
+.badgeReduce {
+  background: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+.badgeHold {
+  background: var(--color-danger-light);
+  color: var(--color-danger-dark);
+}
+
+/* ── 警告ドット ── */
+
+.warningDot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-danger);
+}
+
+/* ── 詳細パネル ── */
+
+.detailPanel {
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  background: white;
+  overflow: hidden;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-neutral-50);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.detailDate {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+}
+
+.detailClose {
+  border: none;
+  background: transparent;
+  color: var(--color-neutral-500);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family);
+}
+
+.detailClose:hover {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+}

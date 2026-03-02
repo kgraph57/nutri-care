@@ -4,7 +4,7 @@ import {
   Users,
   ClipboardList,
   Archive,
-  GraduationCap,
+  ShieldCheck,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import styles from "./BottomNav.module.css";
@@ -20,7 +20,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { icon: Users, label: "患者", path: "/patients" },
   { icon: ClipboardList, label: "作成", path: "/menu-builder" },
   { icon: Archive, label: "メニュー", path: "/menus" },
-  { icon: GraduationCap, label: "演習", path: "/simulation" },
+  { icon: ShieldCheck, label: "スクリーニング", path: "/screening" },
 ] as const;
 
 function BottomNav() {

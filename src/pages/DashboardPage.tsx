@@ -1,7 +1,8 @@
-import { Users } from "lucide-react";
+import { Users, ShieldCheck } from "lucide-react";
 import { usePatients } from "../hooks/usePatients";
 import { useNutritionMenus } from "../hooks/useNutritionMenus";
 import { PatientStatusGrid } from "../components/dashboard/PatientStatusGrid";
+import { ScreeningStatusWidget } from "../components/dashboard/ScreeningStatusWidget";
 import styles from "./DashboardPage.module.css";
 
 export function DashboardPage() {
@@ -23,6 +24,16 @@ export function DashboardPage() {
           </h2>
         </div>
         <PatientStatusGrid patients={patients} menus={menus} />
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>
+            <ShieldCheck size={18} />
+            栄養スクリーニング状況
+          </h2>
+        </div>
+        <ScreeningStatusWidget patients={patients} />
       </section>
     </div>
   );
